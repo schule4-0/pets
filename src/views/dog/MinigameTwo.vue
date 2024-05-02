@@ -1,8 +1,46 @@
+<template>
+  <!-- item list -->
+  <div class="item-zone">
+    <div><h3>items</h3></div>
+
+    <!-- Use the Item component for each item -->
+    <Item
+      v-for="item in getList(1)"
+      :key="item.id"
+      :id="item.id"
+      :title="item.title"
+      :correct="item.correct"
+      :list="item.list"
+    />
+  </div>
+
+  <!-- destination -->
+  <div class="drop-zone" @drop="onDrop($event, 2)" @dragenter.prevent @dragover.prevent>
+    <div><h3>Rucksack</h3></div>
+    <div class="drag-el" draggable="false">
+      <!-- Render items for the second list -->
+      <Item
+        v-for="item in getList(2)"
+        :key="item.id"
+        :id="item.id"
+        :title="item.title"
+        :correct="item.correct"
+        :list="item.list"
+      />
+    </div>
+  </div>
+</template>
+
 <script>
 import { ref } from 'vue'
+import Item from '../../components/DragItem.vue'
 
 export default {
+  components: {
+    Item // Register the Item component
+  },
   setup() {
+    // item list
     const items = ref([
       { id: 0, title: 'Leine', correct: true, list: 1 },
       { id: 1, title: 'Mülltüte', correct: true, list: 1 },
@@ -14,7 +52,7 @@ export default {
 
     // get the items for a specific list
     const getList = (list) => {
-      return items.value.filter((item) => item.list == list)
+      return items.value.filter((item) => item.list === list)
     }
 
     // start event handler for drag
@@ -49,46 +87,7 @@ export default {
 }
 </script>
 
-<template>
-  <!-- item list -->
-  <div class="item-zone" @drop="onDrop($event, 1)" @dragenter.prevent @dragover.prevent>
-    <div><h3>items</h3></div>
-
-    <div
-      v-for="item in getList(1)"
-      :key="item.id"
-      class="drag-el"
-      draggable="true"
-      @dragstart="startDrag($event, item)"
-    >
-      {{ item.title }}
-    </div>
-  </div>
-
-  <!-- destination -->
-  <div class="drop-zone" @drop="onDrop($event, 2)" @dragenter.prevent @dragover.prevent>
-    <div><h3>Rucksack</h3></div>
-    <div
-      v-for="item in getList(2)"
-      :key="item.id"
-      class="drag-el"
-      draggable="false"
-      @dragstart="startDrag($event, item)"
-    >
-      {{ item.title }}
-    </div>
-  </div>
-</template>
-
 <style>
-#app {
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-smoothing: grayscale;
-  text-align: center;
-  color: beige;
-}
-
 .drop-zone {
   width: 250px;
   height: 250px;
@@ -100,13 +99,5 @@ export default {
   justify-content: space-around;
   flex-wrap: wrap;
   flex-direction: row;
-}
-
-.drag-el {
-  background-color: aquamarine;
-  color: rgb(144, 92, 92);
-  width: 100px;
-  height: 50px;
-  margin: 5px;
 }
 </style>

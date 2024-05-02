@@ -1,35 +1,31 @@
 <template>
-  <div class="square" :class="{ active: isActive }">
-    <span>{{ text }}</span>
+  <div class="drag-el" draggable="true" @dragstart="startDrag">
+    {{ title }}
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    text: {
-      type: String,
-      required: true
-    },
-    isActive: {
-      type: Boolean,
-      default: false
+    id: Number,
+    title: String,
+    correct: Boolean,
+    list: Number
+  },
+  methods: {
+    startDrag(event) {
+      event.dataTransfer.setData('itemID', this.id)
     }
   }
 }
 </script>
 
-<style scoped>
-.square {
+<style>
+.drag-el {
+  background-color: aquamarine;
+  color: rgb(144, 92, 92);
   width: 100px;
-  height: 100px;
-  background-color: #ccc;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.active {
-  background-color: #ff0000;
+  height: 50px;
+  margin: 5px;
 }
 </style>
