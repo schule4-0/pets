@@ -72,16 +72,29 @@ export default {
         // logic for correct item
         droppedItem.list = list
         console.log('richtiges Item')
+        checkWin()
       } else {
         // logic for wrong item
         console.log('falsches Item')
       }
     }
 
+    // winnig condition
+    // won when no correct item in list 1 left
+    const checkWin = () => {
+      const correctItems = items.value.filter((item) => item.correct)
+      const correctItemsInList1 = correctItems.filter((item) => item.list === 1)
+
+      if (correctItemsInList1.length === 0) {
+        console.log('gewonnen')
+      }
+    }
+
     return {
       getList,
       onDrop,
-      startDrag
+      startDrag,
+      checkWin
     }
   }
 }
