@@ -11,29 +11,29 @@
       :title="item.title"
       :correct="item.correct"
       :list="item.list"
+      :draggable="true"
     />
   </div>
 
   <!-- destination -->
   <div class="drop-zone" @drop="onDrop($event, 2)" @dragenter.prevent @dragover.prevent>
     <div><h3>Rucksack</h3></div>
-    <div class="drag-el" draggable="false">
-      <!-- Render items for the second list -->
-      <Item
-        v-for="item in getList(2)"
-        :key="item.id"
-        :id="item.id"
-        :title="item.title"
-        :correct="item.correct"
-        :list="item.list"
-      />
-    </div>
+    <!-- Render items for the second list -->
+    <Item
+      v-for="item in getList(2)"
+      :key="item.id"
+      :id="item.id"
+      :title="item.title"
+      :correct="item.correct"
+      :list="item.list"
+      :draggable="false"
+    />
   </div>
 </template>
 
 <script>
 import { ref } from 'vue'
-import Item from '../../components/DragItem.vue'
+import Item from '../../components/DragNDrop/DragItem.vue'
 
 export default {
   components: {

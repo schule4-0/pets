@@ -1,5 +1,5 @@
 <template>
-  <div class="drag-el" draggable="true" @dragstart="startDrag">
+  <div class="drag-el" :draggable="draggable" @dragstart="startDrag">
     {{ title }}
   </div>
 </template>
@@ -10,7 +10,8 @@ export default {
     id: Number,
     title: String,
     correct: Boolean,
-    list: Number
+    list: Number,
+    draggable: Boolean
   },
   methods: {
     startDrag(event) {
