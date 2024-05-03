@@ -44,10 +44,6 @@ const router = useRouter()
 
 const selectPet = (pet: string) => {
   selectedPet.value = pet
-  goToPetStages()
-}
-
-const goToPetStages = () => {
   if (selectedPet.value) {
     router.push(`/pets/${selectedPet.value}/stages/1`)
   }

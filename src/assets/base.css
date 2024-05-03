@@ -41,6 +41,7 @@
 }
 
 body {
+  padding: 40px;
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
@@ -49,6 +50,7 @@ body {
     background-color 0.5s;
   line-height: 1.6;
   font-family:
+    'Jua',
     Inter,
     -apple-system,
     BlinkMacSystemFont,
