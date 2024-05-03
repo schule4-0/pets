@@ -56,12 +56,12 @@ const selectPet = (pet: string) => {
   display: flex;
   flex-direction: column;
   align-items: left;
-  font-size: 50px;
+  font-size: 30px;
   line-height: 100%;
 
   h1 {
-    font-size: 80px;
-    padding: 40px 0;
+    font-size: 3rm;
+    padding: 25px 0 20px 0;
   }
 
   p {
@@ -72,14 +72,14 @@ const selectPet = (pet: string) => {
     display: flex;
 
     img {
-      width: 75px;
+      width: 5%;
       margin: 15px 0 15px 40px;
     }
   }
 }
 
 .pet-selection {
-  margin-top: 40px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
 
@@ -87,30 +87,25 @@ const selectPet = (pet: string) => {
     background-color: rgb(231, 231, 231);
     box-shadow: 3px 3px 15px rgb(186, 186, 186);
     width: 31%;
-    position: relative;
-
     img {
       width: 100%;
-      height: 400px;
+      height: 200px;
       object-fit: cover;
       background-position: center;
     }
   }
 
   .pet-tile-name {
-    font-size: 40px;
-    padding: 15px;
+    font-size: 30px;
+    padding: 5px 15px;
     display: flex;
     justify-content: space-between;
-
-    p {
-      padding-top: 10px;
-    }
+    align-items: flex-start;
 
     img {
-      max-width: 10%;
+      width: 10%;
       height: auto;
-      margin: 15px;
+      margin: 10px 15px 15px 15px;
     }
   }
 }
