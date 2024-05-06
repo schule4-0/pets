@@ -5,15 +5,14 @@ import catImg from '@/assets/cat.png';
 export interface Pet {
   name: string;
   image: string;
-  englishName: string; // for routing?
+  englishName: string;
 }
 
 const pets: Pet[] = [
   { name: 'Hund', image: dogImg, englishName:'dog'},
   { name: 'Kaninchen', image: bunnyImg, englishName: 'rabbit'},
-  { name: 'Katze', image: catImg, englishName: 'cat' }, // placeholder image
-  { name: 'Fisch', image: dogImg, englishName: 'fish' } // placeholder image
-  // Add more pets here
+  { name: 'Katze', image: catImg, englishName: 'cat' },
+  { name: 'Fisch', image: dogImg, englishName: 'fish' }
 ];
 
 export default pets;
