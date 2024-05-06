@@ -1,5 +1,5 @@
 <template>
-  <div class="pet-selection" @click="selectPet">
+  <div class="pet-selection" @click="handlePetSelected">
     <div class="pet-card">
       <img :src="pet.image" :alt="pet.name">
       <div class="pet-card-name">
@@ -20,14 +20,8 @@ const props = defineProps<{
 
 const router = useRouter();
 
-const selectPet = () => {
-  handlePetSelected(props.pet);
-};
-
-const handlePetSelected = (selectedPet: Pet) => {
-  if (selectedPet.name) {
-    router.push(`/pets/${selectedPet.englishName}/stages/1`);
-  }
+const handlePetSelected = () => {
+  router.push(`/pets/${props.pet.englishName}/stages/1`);
 };
 </script>
 
