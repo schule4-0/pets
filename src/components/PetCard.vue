@@ -21,7 +21,7 @@ const props = defineProps<{
 const router = useRouter();
 
 const selectPet = () => {
-  handlePetSelected(props.pet); // Call handlePetSelected directly
+  handlePetSelected(props.pet);
 };
 
 const handlePetSelected = (selectedPet: Pet) => {
