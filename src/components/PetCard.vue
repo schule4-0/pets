@@ -4,7 +4,6 @@
       <img :src="pet.image" :alt="pet.name">
       <div class="pet-card-name">
         <p>{{ pet.name }}</p>
-        <img src="../assets/icon_audio.svg" alt="Audio">
       </div>
     </div>
   </div>
