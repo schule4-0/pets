@@ -4,6 +4,7 @@
       <img :src="pet.image" :alt="pet.name">
       <div class="pet-card-name">
         <p>{{ pet.name }}</p>
+        <img src="../assets/icon_arrow.png">
       </div>
     </div>
   </div>
@@ -54,7 +55,7 @@ const handlePetSelected = () => {
     img {
       width: 10%;
       height: auto;
-      margin: 10px 15px 15px 15px;
+      margin: 10px 0 15px 15px;
     }
   }
 }
