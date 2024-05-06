@@ -1,6 +1,6 @@
 <template>
-  <div class="pet-selection">
-    <div class="pet-card" @click="selectPet">
+  <div class="pet-selection" @click="selectPet">
+    <div class="pet-card">
       <img :src="pet.image" :alt="pet.name">
       <div class="pet-card-name">
         <p>{{ pet.name }}</p>
@@ -10,34 +10,38 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import type { Pet } from '@/config/petsConfig';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
-  pet: { name: string; image: string };
+  pet: Pet;
 }>();
 
-const emit = defineEmits(['pet-selected']);
+const router = useRouter();
 
 const selectPet = () => {
-  emit('pet-selected', props.pet); 
+  handlePetSelected(props.pet); // Call handlePetSelected directly
+};
+
+const handlePetSelected = (selectedPet: Pet) => {
+  if (selectedPet.name) {
+    router.push(`/pets/${selectedPet.englishName}/stages/1`);
+  }
 };
 </script>
 
 
 <style scoped>
 .pet-selection {
+  width: 31%;
   margin-top: 20px;
-  display: flex;
-  justify-content: space-around;
 
   .pet-card {
     background-color: rgb(231, 231, 231);
     box-shadow: 3px 3px 15px rgb(186, 186, 186);
-    width: 80%;
     border-radius: 5px;
-    margin: 20px;
+
     img {
       width: 100%;
       height: 200px;

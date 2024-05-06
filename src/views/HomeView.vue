@@ -1,35 +1,31 @@
 <template>
-  <div class="home-container">
-    <div class="header-box">
-      <h1>Mein erstes Haustier</h1>
-      <img src="../assets/icon_audio.svg" alt="Audio">
+  <div class="home-view">
+    <div class="home-container">
+      <div class="header-box">
+        <h1>Mein erstes Haustier</h1>
+        <img src="../assets/icon_audio.svg" alt="Audio">
+      </div>
+
+      <p>Bereit, in die Welt der Haustiere einzutauchen?
+      <br>Tippe auf das Tier, das dich am meisten interessiert!</p>
     </div>
 
-    <p>Bereit, in die Welt der Haustiere einzutauchen?
-    <br>Tippe auf das Tier, das dich am meisten interessiert!</p>
-  </div>
-
-  <div class="pet-cards">
-      <PetCardComponent v-for="(pet, index) in pets" :key="index" :pet="pet" @pet-selected="handlePetSelected" />
+    <div class="pet-cards">
+        <PetCardComponent v-for="(pet, index) in pets" :key="index" :pet="pet"/>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import PetCardComponent from '@/components/PetCardComponent.vue';
+import PetCardComponent from '@/components/PetCard.vue';
 import pets from '@/config/petsConfig';
-
-const router = useRouter()
-
-const handlePetSelected = (selectedPet: any) => {
-  if (selectedPet.name) {
-    router.push(`/pets/${selectedPet.englishName}/stages/1`) // only works for dog
-  }
-};
-
 </script>
 
 <style scoped>
+.home-view {
+  padding: 40px;
+}
+
 .home-container {
   margin: auto;
   display: flex;
@@ -49,18 +45,19 @@ const handlePetSelected = (selectedPet: any) => {
 
   .header-box {
     display: flex;
+    align-items: center;
 
     img {
       width: 5%;
       margin: 15px 0 15px 40px;
+      fill: var(--color-text);
     }
   }
 }
 
 .pet-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
-
 </style>
