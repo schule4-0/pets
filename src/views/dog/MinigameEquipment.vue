@@ -37,8 +37,8 @@ const { goToNextStage } = useStageNavigator()
 const mascotPopup = useMascotStore()
 
 const items = ref<DraggableItemType[]>([
-  { id: 1, type: 'accepted', content: 'Accepted', initialX: 50, initialY: 50, x: 50, y: 50 },
-  { id: 2, type: 'rejected', content: 'Rejected', initialX: 50, initialY: 250, x: 50, y: 250 }
+  { id: 1, type: 'accepted', content: 'Accepted', initialX: 50, initialY: 50 },
+  { id: 2, type: 'rejected', content: 'Rejected', initialX: 50, initialY: 250 }
 ])
 
 const removeItem = (id: number) => {
