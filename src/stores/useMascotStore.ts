@@ -1,18 +1,27 @@
 import { defineStore } from 'pinia'
+import type { Message } from '@/config/mascotMessages'
 
 export const useMascotStore = defineStore('popup', {
   state: () => ({
-    message: '',
-    show: false
+    showMascot: false,
+    messageShown: false, //TODO: maybe derive from empty message
+    message: {} as Message
   }),
   actions: {
-    showMessage(message: string) {
+    setMessage(message: Message) {
       this.message = message
-      this.show = true
-
-      setTimeout(() => {
-        this.show = false
-      }, 3000)
+    },
+    showMascotItem() {
+      this.showMascot = true
+    },
+    hideMascotItem() {
+      this.showMascot = false
+    },
+    showMessage() {
+      this.messageShown = true
+    },
+    hideMessage() {
+      this.messageShown = false
     }
   }
 })
