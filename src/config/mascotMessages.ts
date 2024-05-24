@@ -38,6 +38,18 @@ const mascotMessages: MascotMessages = {
       message1: {
         content: '2.Spiel'
       }
+    },
+    stage3: {
+      introduction: {
+        content:
+          'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'
+      },
+      rockyIsShapooed: {
+        content: 'Rocky ist jetzt mit genug Shapoo eingedeckt, Zeit ihn abzuwaschen!'
+      },
+      gameCompleted: {
+        content: 'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen.'
+      }
     }
   }
 }

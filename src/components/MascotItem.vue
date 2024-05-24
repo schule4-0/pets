@@ -20,8 +20,8 @@ const { messageShown, message } = storeToRefs(mascot)
 
 const speech = new SpeechSynthesisUtterance()
 speech.lang = 'de'
-speech.rate = 0.7
-speech.pitch = 1.3
+speech.rate = 1.0
+speech.pitch = 0.9
 
 //read the message aloud when a message is shown or the message changes
 //TODO: replace with mascot.$subscribe
