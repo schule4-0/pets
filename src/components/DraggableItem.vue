@@ -1,18 +1,19 @@
 <template>
   <div
+    ref="elementRef"
     :data-id="props.id"
     :data-type="props.type"
     :class="`draggable ${props.type}`"
     @mousedown="startDrag"
     @touchstart="startDrag"
     :style="{
-      left: `${position.x}px`,
-      top: `${position.y}px`,
+      left: `${position.x}%`,
+      top: `${position.y}%`,
       transition: transitionStyle
     }"
     style="cursor: grab"
   >
-    {{ props.content }}
+    <img v-if="props.image" :src="props.image" alt="Draggable Image" class="images" />
   </div>
 </template>
 
@@ -23,10 +24,11 @@ import { useDraggable } from '@/composables/useDraggable'
 export interface DraggableItemType {
   id: number
   type: 'accepted' | 'rejected'
-  content: string
+  image: string
   initialX: number
   initialY: number
 }
+
 const props = defineProps<DraggableItemType>()
 
 const position = ref({
@@ -34,15 +36,21 @@ const position = ref({
   y: props.initialY
 })
 
-const { startDrag, transitionStyle } = useDraggable(position)
+// Create a ref for the element
+const elementRef = ref<HTMLElement | null>(null)
+
+// Pass the element ref to the useDraggable composable
+const { startDrag, transitionStyle } = useDraggable(position, elementRef)
 </script>
 
 <style scoped>
 .draggable {
   position: absolute;
-  padding: 10px;
-  border: 2px solid black;
-  border-radius: 5px;
+  padding: 1vw;
   user-select: none;
+}
+.images {
+  width: 5vw;
+  height: 5vw;
 }
 </style>

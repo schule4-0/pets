@@ -1,14 +1,26 @@
-import { type Ref, nextTick, ref, computed } from 'vue'
+import { type Ref, nextTick, ref, computed, onMounted } from 'vue'
 
-export function useDraggable(position: Ref<{ x: number; y: number }>) {
+export function useDraggable(
+  position: Ref<{ x: number; y: number }>,
+  elementRef: Ref<HTMLElement | null>
+) {
   const initialX = position.value.x
   const initialY = position.value.y
-  // State to track whether the item is returning to its original position
   const isReturning = ref(false)
 
-  // Apply smooth transition when returning
   const transitionStyle = computed(() => {
     return isReturning.value ? 'left 0.5s ease, top 0.5s ease' : 'none'
+  })
+
+  // Track element dimensions
+  const elementWidth = ref(0)
+  const elementHeight = ref(0)
+
+  onMounted(() => {
+    if (elementRef.value) {
+      elementWidth.value = elementRef.value.offsetWidth
+      elementHeight.value = elementRef.value.offsetHeight
+    }
   })
 
   function startDrag(event: MouseEvent | TouchEvent) {
@@ -17,8 +29,8 @@ export function useDraggable(position: Ref<{ x: number; y: number }>) {
     const cursorInitialX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
     const cursorInitialY = event instanceof TouchEvent ? event.touches[0].clientY : event.clientY
 
-    const startX = cursorInitialX - position.value.x
-    const startY = cursorInitialY - position.value.y
+    const startX = (position.value.x / window.innerWidth) * 100
+    const startY = (position.value.y / window.innerHeight) * 100
 
     const onMove = (moveEvent: MouseEvent | TouchEvent) => {
       moveEvent.preventDefault()
@@ -28,8 +40,12 @@ export function useDraggable(position: Ref<{ x: number; y: number }>) {
       const moveY =
         moveEvent instanceof TouchEvent ? moveEvent.touches[0].clientY : moveEvent.clientY
 
-      position.value.x = moveX - startX
-      position.value.y = moveY - startY
+      position.value.x =
+        ((moveX - startX) / window.innerWidth) * 100 -
+        ((elementWidth.value / window.innerWidth) * 100) / 2
+      position.value.y =
+        ((moveY - startY) / window.innerHeight) * 100 -
+        ((elementHeight.value / window.innerHeight) * 100) / 3
     }
 
     const onEnd = () => {
@@ -41,13 +57,12 @@ export function useDraggable(position: Ref<{ x: number; y: number }>) {
       isReturning.value = true
       nextTick().then(() => {
         if (isReturning.value) {
-          // Check if still needs to return after possible external handling
           position.value.x = initialX
           position.value.y = initialY
 
           setTimeout(() => {
-            isReturning.value = false // Reset the state after transition
-          }, 500) // Match this duration with the CSS transition
+            isReturning.value = false
+          }, 500)
         }
       })
     }

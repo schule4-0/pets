@@ -1,5 +1,7 @@
 <template>
-  <div ref="dropArea" class="drop-area">Drop items here</div>
+  <div ref="dropArea" class="drop-area">
+    <img src="@/assets/backpack.png" alt="Backpack" class="drop-area" />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -9,20 +11,22 @@ const emit = defineEmits(['droppedInArea'])
 const dropArea = ref<HTMLElement | null>(null)
 
 const handleDropEvent = (event: MouseEvent | TouchEvent) => {
-  const clientX = event instanceof TouchEvent ? event.changedTouches[0].clientX : event.clientX
-  const clientY = event instanceof TouchEvent ? event.changedTouches[0].clientY : event.clientY
+  let clientX = event instanceof TouchEvent ? event.changedTouches[0].clientX : event.clientX
+  let clientY = event instanceof TouchEvent ? event.changedTouches[0].clientY : event.clientY
+  let target = event.target as HTMLElement
 
-  const target = event.target as HTMLElement
-  const id = parseInt(target.dataset.id || '-1')
-  const type = target.dataset.type as 'accepted' | 'rejected'
+  while (target && !target.dataset.id) {
+    target = target.parentElement as HTMLElement
+  }
+
+  const id = parseInt(target?.dataset.id || '-1')
+  const type = target?.dataset.type as 'accepted' | 'rejected'
 
   const bounds = dropArea.value?.getBoundingClientRect()
-  const isWithin =
-    bounds &&
-    clientX >= bounds.left &&
-    clientX <= bounds.right &&
-    clientY >= bounds.top &&
-    clientY <= bounds.bottom
+  const isWithin = clientX >= (bounds?.left || 0)
+  clientX <= (bounds?.right || 0)
+  clientY >= (bounds?.top || 0)
+  clientY <= (bounds?.bottom || 0)
 
   if (isWithin && id !== -1) {
     emit('droppedInArea', { id, x: clientX, y: clientY, type })
@@ -42,12 +46,10 @@ onUnmounted(() => {
 
 <style scoped>
 .drop-area {
-  width: 300px;
-  height: 200px;
-  border: 2px dashed grey;
+  width: 10vw;
+  height: 10vw;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
 }
 </style>
