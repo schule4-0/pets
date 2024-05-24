@@ -29,15 +29,24 @@
 import { ref } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
+import { onMounted } from 'vue'
 import ExampleComponent from '@/components/ExampleComponent.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import { useMascotStore } from '@/stores/useMascotStore'
 import boneImg from '../../assets/bone.png'
 import bookImg from '../../assets/book.png'
+import mascotMessages from '@/config/mascotMessages'
+import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
 
-const mascotPopup = useMascotStore()
+const mascot = useMascotStore()
+//TODO: dynamic loading of correct messages according to route
+const equipmentMessages = mascotMessages.dog.stage1
+const generalMessages = mascotMessages.general.expressions
+
+onMounted(() => {
+  mascot.setMessage(equipmentMessages.message2)
+})
 
 const items = ref<DraggableItemType[]>([
   { id: 1, type: 'accepted', image: boneImg, initialX: 10, initialY: 80 },
@@ -56,13 +65,16 @@ const handleDropInArea = (item: {
   console.log('handleDropInArea', item)
   if (item.type === 'accepted') {
     removeItem(item.id)
-    mascotPopup.showMessage('Richtig!')
+    mascot.setMessage(generalMessages.correct)
     console.log('Richtig!')
   } else {
-    mascotPopup.showMessage('Das stimmt leider nicht!')
+    mascot.setMessage(generalMessages.wrong)
     console.log('Das stimmt leider nicht!')
   }
 }
+onMounted(() => {
+  mascot.setMessage(equipmentMessages.message2)
+})
 </script>
 
 <style scoped>

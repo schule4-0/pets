@@ -1,10 +1,5 @@
 <template>
   <main>
-    <!-- Mascot -->
-    <transition name="slide-up">
-      <div v-if="popup.show" class="mascot">{{ popup.message }}</div>
-    </transition>
-
     <!-- Main game content displayed through router-view -->
     <div class="game-content">
       <RouterView />
@@ -15,13 +10,15 @@
       <button @click="goBack">Zurück</button>
     </div>
     <div class="overlay-top-right">
-      <button @click="showMascot('Hi! Ich bin das Maskottchen!')">Maskottchen öffnen</button>
+      <!--for demonstration only-->
+      <button @click="toggleMascot">Maskottchen</button>
+      <button @click="toggleMascotMessage">Maskottchen Nachricht</button>
     </div>
     <div class="overlay-bottom-left">
       <button>Overlay button 3</button>
     </div>
-    <div class="overlay-bottom-right">
-      <button>Overlay button 4</button>
+    <div class="mascot">
+      <mascot-item />
     </div>
   </main>
 </template>
@@ -29,16 +26,30 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useMascotStore } from '@/stores/useMascotStore'
+import MascotItem from '@/components/MascotItem.vue'
 
 const router = useRouter()
-const popup = useMascotStore()
+const mascot = useMascotStore()
 
 function goBack() {
   router.back()
 }
 
-function showMascot(message: string) {
-  popup.showMessage(message)
+//for demonstration only
+function toggleMascot() {
+  if (mascot.showMascot) {
+    mascot.hideMascotItem()
+  } else {
+    mascot.showMascotItem()
+  }
+}
+//for demonstration only
+function toggleMascotMessage() {
+  if (mascot.messageShown) {
+    mascot.hideMessage()
+  } else {
+    mascot.showMessage()
+  }
 }
 </script>
 
@@ -97,23 +108,8 @@ button {
 .mascot {
   position: fixed;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: black;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
+  right: 10%;
   z-index: 1050;
   opacity: 1;
-}
-
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.5s ease-out;
-}
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translate(-50%, 100%);
 }
 </style>
