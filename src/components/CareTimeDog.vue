@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, type Ref } from 'vue'
-import { useBubbles } from '@/composables/useBubbles'
-import { useDog } from '@/composables/useDog'
+import { ref, watch } from 'vue'
+import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
+import { useCareTimeDog } from '@/composables/useCareTimeDog'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import type { CareTimeState } from '@/views/dog/MinigameCareTime.vue'
 
@@ -45,8 +45,8 @@ const props = defineProps<{
 const toolStore = useCareTimeToolStore()
 
 const svgElement = ref<SVGSVGElement | null>(null)
-const { dogSvg, dogPath, isPointInDog } = useDog()
-const { bubblesLayer, bubblePositions, createBubble, removeBubbles } = useBubbles()
+const { dogSvg, dogPath, isPointInDog } = useCareTimeDog()
+const { bubblesLayer, bubblePositions, createBubble, removeBubbles } = useCareTimeBubbles()
 const isActionActive = ref(false)
 
 const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: SVGSVGElement) => {

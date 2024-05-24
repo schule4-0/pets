@@ -1,7 +1,7 @@
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 import gsap from 'gsap'
 
-export const useBubbles = () => {
+export const useCareTimeBubbles = () => {
   const bubblePositions = ref<{ x: number; y: number; r: number }[]>([])
   const bubblesLayer = ref<SVGGElement | null>(null)
 
