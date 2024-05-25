@@ -66,10 +66,8 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     removeItem(item.id)
     mascot.setMessage(generalMessages.correct)
-    console.log('Richtig!')
   } else {
     mascot.setMessage(generalMessages.wrong)
-    console.log('Das stimmt leider nicht!')
   }
 }
 onMounted(() => {
