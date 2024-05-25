@@ -22,6 +22,9 @@ const mascotMessages: MascotMessages = {
     expressions: {
       wrong: {
         content: 'Das war leider falsch. Versuche es doch nochmal'
+      },
+      correct: {
+        content: 'Das war richtig. Gut gemacht!'
       }
     }
   },
