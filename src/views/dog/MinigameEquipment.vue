@@ -45,7 +45,9 @@ const equipmentMessages = mascotMessages.dog.stage1
 const generalMessages = mascotMessages.general.expressions
 
 onMounted(() => {
+  mascot.showMascotItem()
   mascot.setMessage(equipmentMessages.message2)
+  mascot.showMessage()
 })
 
 const items = ref<DraggableItemType[]>([
@@ -70,9 +72,6 @@ const handleDropInArea = (item: {
     mascot.setMessage(generalMessages.wrong)
   }
 }
-onMounted(() => {
-  mascot.setMessage(equipmentMessages.message2)
-})
 </script>
 
 <style scoped>
