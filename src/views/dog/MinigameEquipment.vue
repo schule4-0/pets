@@ -22,22 +22,20 @@ import DraggableItem, { type DraggableItemType } from '@/components/DraggableIte
 import DropArea from '@/components/DropArea.vue'
 import { onMounted } from 'vue'
 import { useStageNavigator } from '@/composables/useNavigation'
+
 import boneImg from '@/assets/equipment/bone.png'
 import bookImg from '@/assets/equipment/book.png'
-import mascotMessages from '@/config/mascotMessages'
+
 import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
-
 const mascot = useMascotStore()
 //TODO: dynamic loading of correct messages according to route
-const equipmentMessages = mascotMessages.dog.stage1
-const generalMessages = mascotMessages.general.expressions
+const equipmentMessages = mascot.messages.dog.stage1
+const generalMessages = mascot.messages.general.expressions
 
 onMounted(() => {
-  mascot.showMascotItem()
   mascot.setMessage(equipmentMessages.message2)
-  mascot.showMessage()
 })
 
 const items = ref<DraggableItemType[]>([

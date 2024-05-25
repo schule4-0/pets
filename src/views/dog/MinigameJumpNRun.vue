@@ -24,13 +24,12 @@ import PooComponent from '@/components/JumpNRun/PooComponent.vue'
 import BtnControl from '@/components/JumpNRun/ControlButton.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
-import mascotMessages from '@/config/mascotMessages'
 import StoneImg from '@/assets/jumpNrun/stone.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
-const jumpNRunMessages = mascotMessages.dog.stage3
+const jumpNRunMessages = mascot.messages.dog.stage3
 
 interface Poo {
   id: number
@@ -138,9 +137,7 @@ const animate = () => {
     }
 
     if (isColliding()) {
-      mascot.showMascotItem()
       mascot.setMessage(jumpNRunMessages.message2)
-      mascot.showMessage()
       state.isWaiting = true
       stopRun()
       setTimeout(() => {
@@ -193,17 +190,13 @@ const isCollidingGoal = () => {
 
 const checkWinCondition = () => {
   if (state.collectedPooCount === state.pooCount) {
-    mascot.showMascotItem()
     mascot.setMessage(jumpNRunMessages.message3)
-    mascot.showMessage()
     stopRun()
     setTimeout(() => {
       goToNextStage()
     }, 2000)
   } else {
-    mascot.showMascotItem()
     mascot.setMessage(jumpNRunMessages.message4)
-    mascot.showMessage()
     stopRun()
     setTimeout(() => {
       resetGame()
@@ -221,9 +214,7 @@ const resetGame = () => {
 }
 
 onMounted(() => {
-  mascot.showMascotItem()
   mascot.setMessage(jumpNRunMessages.message1)
-  mascot.showMessage()
   resetGame()
 })
 </script>

@@ -1,27 +1,48 @@
 import { defineStore } from 'pinia'
 import type { Message } from '@/config/mascotMessages'
+import mascotMessages from '@/config/mascotMessages'
+import { useReading } from '@/composables/reading'
+
+const { readAloud } = useReading()
 
 export const useMascotStore = defineStore('popup', {
   state: () => ({
     showMascot: false,
-    messageShown: false, //TODO: maybe derive from empty message
-    message: {} as Message
+    message: {} as Message,
+    speechBubbleShown: false
   }),
+  getters: {
+    messages: () => mascotMessages
+  },
   actions: {
-    setMessage(message: Message) {
-      this.message = message
+    setMessage(message: Message, delay?: number) {
+      setTimeout(() => {
+        this.showMascotItem()
+        this.showSpeechBubble()
+        this.message = message
+        this.readMessage()
+      }, delay)
     },
-    showMascotItem() {
-      this.showMascot = true
+    showMascotItem(delay?: number) {
+      setTimeout(() => {
+        this.showMascot = true
+      }, delay)
     },
     hideMascotItem() {
       this.showMascot = false
     },
-    showMessage() {
-      this.messageShown = true
+    showSpeechBubble() {
+      this.speechBubbleShown = true
     },
-    hideMessage() {
-      this.messageShown = false
+    hideSpeechBubble() {
+      this.speechBubbleShown = false
+    },
+    readMessage() {
+      readAloud(this.message)
+    },
+    readMessageAgain() {
+      this.showSpeechBubble()
+      this.readMessage()
     }
   }
 })
