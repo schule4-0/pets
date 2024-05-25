@@ -1,14 +1,5 @@
 <template>
   <div class="game-container">
-    <example-component>
-      <template #game-title>
-        <h2>Equipment</h2>
-      </template>
-      <template #game-description>
-        <div>Wir befinden uns im Minigame "Equipment".</div>
-      </template>
-    </example-component>
-
     <DropArea @droppedInArea="handleDropInArea" />
 
     <DraggableItem
