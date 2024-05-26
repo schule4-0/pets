@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <DropArea @droppedInArea="handleDropInArea" />
+    <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" height="10vw" />
 
     <DraggableItem
       v-for="item in items"
@@ -17,20 +17,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
-import { onMounted } from 'vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/bone.png'
 import bookImg from '@/assets/book.png'
+import backpackImg from '@/assets/backpack.png'
 import mascotMessages from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
 
 const mascot = useMascotStore()
-//TODO: dynamic loading of correct messages according to route
 const equipmentMessages = mascotMessages.dog.stage1
 const generalMessages = mascotMessages.general.expressions
 

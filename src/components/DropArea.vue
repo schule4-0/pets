@@ -1,11 +1,18 @@
+<!-- DropArea.vue -->
 <template>
-  <div ref="dropArea" class="drop-area">
-    <img src="@/assets/backpack.png" alt="Backpack" class="drop-area" />
+  <div ref="dropArea" :style="{ width: width, height: height }" class="drop-area">
+    <img :src="image" alt="Drop Area Image" :style="{ width: '100%', height: '100%' }" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, defineProps, defineEmits } from 'vue'
+
+const props = defineProps<{
+  image: string,
+  width: string,
+  height: string
+}>()
 
 const emit = defineEmits(['droppedInArea'])
 const dropArea = ref<HTMLElement | null>(null)
@@ -23,10 +30,7 @@ const handleDropEvent = (event: MouseEvent | TouchEvent) => {
   const type = target?.dataset.type as 'accepted' | 'rejected'
 
   const bounds = dropArea.value?.getBoundingClientRect()
-  const isWithin = clientX >= (bounds?.left || 0)
-  clientX <= (bounds?.right || 0)
-  clientY >= (bounds?.top || 0)
-  clientY <= (bounds?.bottom || 0)
+  const isWithin = clientX >= (bounds?.left || 0) && clientX <= (bounds?.right || 0) && clientY >= (bounds?.top || 0) && clientY <= (bounds?.bottom || 0)
 
   if (isWithin && id !== -1) {
     emit('droppedInArea', { id, x: clientX, y: clientY, type })
@@ -46,8 +50,6 @@ onUnmounted(() => {
 
 <style scoped>
 .drop-area {
-  width: 10vw;
-  height: 10vw;
   display: flex;
   justify-content: center;
   align-items: center;

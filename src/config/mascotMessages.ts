@@ -25,6 +25,9 @@ const mascotMessages: MascotMessages = {
       },
       correct: {
         content: 'Das war richtig. Gut gemacht!'
+      },
+      rockyHappy: {
+        content: 'Rocky freut sich und wedelt mit dem Schwanz!'
       }
     }
   },
@@ -40,6 +43,11 @@ const mascotMessages: MascotMessages = {
     stage2: {
       message1: {
         content: '2.Spiel'
+      }
+    },
+    stage3: {
+      message1: {
+        content: 'Super gemacht! Gib Rocky einen Knochen!'
       }
     }
   }
