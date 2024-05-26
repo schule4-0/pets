@@ -3,7 +3,6 @@
     <Character :isJumping="isJumping" />
     <Obstacle :image="StoneImg" :positionX="obstaclePositionX" />
 
-    <BtnControl type="run" @run="run" @stopRun="stopRun" bottom="10" left="5" />
     <BtnControl type="jump" @jump="jump" bottom="10" left="100" />
 
     <button @click="goToNextStage">Nächstes Minigame</button>
@@ -25,7 +24,7 @@ const mascot = useMascotStore()
 const jumpNRunMessages = mascotMessages.dog.stage3
 
 const initialBackgroundPositionX = 0
-const initialObstaclePositionX = 800
+const initialObstaclePositionX = 2000
 const initialIsRunning = false
 const initialIsJumping = false
 const initialIsWaiting = false
@@ -52,7 +51,7 @@ const jump = () => {
     isJumping.value = true
     setTimeout(() => {
       isJumping.value = false
-    }, 500)
+    }, 1000)
   }
 }
 
@@ -62,7 +61,7 @@ const animate = () => {
     obstaclePositionX.value -= 5
 
     if (obstaclePositionX.value < -50) {
-      obstaclePositionX.value = 800
+      obstaclePositionX.value = 2000
     }
 
     if (isColliding()) {
@@ -102,12 +101,17 @@ const resetGame = () => {
   obstaclePositionX.value = initialObstaclePositionX
   isRunning.value = initialIsRunning
   isJumping.value = initialIsJumping
+  //timeout before starting the game
+  setTimeout(() => {
+    run()
+  }, 5000)
 }
 
 onMounted(() => {
   mascot.showMascotItem()
   mascot.setMessage(jumpNRunMessages.message1)
   mascot.showMessage()
+  resetGame()
 })
 </script>
 
