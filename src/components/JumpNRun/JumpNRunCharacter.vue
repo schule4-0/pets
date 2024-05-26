@@ -1,0 +1,29 @@
+<template>
+  <div :class="{ character: true, jump: props.isJumping }">
+    <img src="@/assets/jumpNrun/character.png" alt="dog" class="character-img" />
+  </div>
+</template>
+
+<script setup lang="ts">
+const props = defineProps<{
+  isJumping: boolean
+}>()
+</script>
+
+<style scoped>
+.character {
+  position: absolute;
+  bottom: 20vh;
+  left: 20vh;
+  transition: bottom 0.5s;
+}
+
+.character.jump {
+  bottom: 60vh;
+}
+
+.character-img {
+  width: 20vh;
+  height: 20vh;
+}
+</style>

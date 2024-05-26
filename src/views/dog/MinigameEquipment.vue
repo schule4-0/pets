@@ -22,8 +22,8 @@ import DraggableItem, { type DraggableItemType } from '@/components/DraggableIte
 import DropArea from '@/components/DropArea.vue'
 import { onMounted } from 'vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/bone.png'
-import bookImg from '@/assets/book.png'
+import boneImg from '@/assets/equipment/bone.png'
+import bookImg from '@/assets/equipment/book.png'
 import mascotMessages from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 
@@ -67,7 +67,7 @@ const handleDropInArea = (item: {
 <style scoped>
 .game-container {
   position: relative;
-  background-image: url('@/assets/test-room.jpeg');
+  background-image: url('@/assets/equipment/test-room.jpeg');
   background-size: cover;
   background-position: center;
   padding: 20px;
