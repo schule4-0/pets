@@ -78,7 +78,7 @@ const getRandomPooPosition = () => {
   return (percentage * window.innerWidth) / 100
 }
 
-const makePoo = (positionX) => {
+const makePoo = (positionX: number) => {
   if (obstaclePositionX.value < positionX && !isGoalVisible.value) {
     stopRun()
     setTimeout(() => {
