@@ -48,6 +48,12 @@ const mascotMessages: MascotMessages = {
       },
       message2: {
         content: 'Aua! Das hat weh getan. Versuche es noch einmal!'
+      },
+      message3: {
+        content: 'Super! Du hast es geschafft!'
+      },
+      message4: {
+        content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
       }
     }
   }

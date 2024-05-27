@@ -1,5 +1,5 @@
 <template>
-  <!-- TODO: add touch event -->
+  <!-- TODO: change with swipe event -->
   <button
     v-if="type == 'jump'"
     @mousedown="$emit('jump')"

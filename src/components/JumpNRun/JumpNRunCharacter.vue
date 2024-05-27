@@ -15,11 +15,22 @@ const props = defineProps<{
   position: absolute;
   bottom: 20vh;
   left: 80vh;
-  transition: bottom 0.7s;
 }
 
 .character.jump {
-  bottom: 60vh;
+  animation: jump-animation 2s forwards;
+}
+
+@keyframes jump-animation {
+  0% {
+    bottom: 20vh;
+  }
+  50% {
+    bottom: 60vh;
+  }
+  100% {
+    bottom: 20vh;
+  }
 }
 
 .character-img {
