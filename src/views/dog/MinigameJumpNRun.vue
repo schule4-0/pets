@@ -2,18 +2,25 @@
   <div class="game-container" :style="{ backgroundPositionX: `${backgroundPositionX}px` }">
     <Character :isJumping="isJumping" />
     <Obstacle :image="StoneImg" :positionX="obstaclePositionX" />
-
     <BtnControl type="jump" @jump="jump" bottom="10" left="100" />
-
     <button @click="goToNextStage">Nächstes Minigame</button>
+
+    <PooComponent
+      v-for="poo in poos"
+      :key="poo.id"
+      :id="poo.id"
+      :positionX="poo.positionX"
+      @collect="collectPoo(poo.id)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import Character from '@/components/JumpNRun/JumpNRunCharacter.vue'
-import Obstacle from '@/components/JumpNRun/JumpNRunObstacle.vue'
-import BtnControl from '@/components/JumpNRun/JumpNRunControlButton.vue'
+import Obstacle from '@/components/JumpNRun/ObstacleItem.vue'
+import PooComponent from '@/components/JumpNRun/PooComponent.vue'
+import BtnControl from '@/components/JumpNRun/ControlButton.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import mascotMessages from '@/config/mascotMessages'
@@ -34,11 +41,16 @@ let obstaclePositionX = ref(initialObstaclePositionX)
 let isRunning = ref(initialIsRunning)
 let isJumping = ref(initialIsJumping)
 let isWaiting = ref(initialIsWaiting)
+let pooCount = ref(0)
+let collectedPooCount = ref(0)
+let poos = ref<{ id: number; positionX: number }[]>([])
+let pooIdCounter = 0
 
 const run = () => {
   if (!isRunning.value && !isWaiting.value) {
     isRunning.value = true
     animate()
+    scheduleRandomPoo()
   }
 }
 
@@ -55,10 +67,47 @@ const jump = () => {
   }
 }
 
+const scheduleRandomPoo = () => {
+  const randomTime = Math.random() * (8000 - 5000) + 5000
+  setTimeout(() => {
+    if (isRunning.value) {
+      makePoo()
+      scheduleRandomPoo()
+    }
+  }, randomTime)
+}
+
+const makePoo = () => {
+  // Only make a poo if the character is far enough from the obstacle
+  if (
+    obstaclePositionX.value < (window.innerWidth * 30) / 100 ||
+    obstaclePositionX.value > (window.innerWidth * 70) / 100
+  ) {
+    stopRun()
+    setTimeout(() => {
+      const newPoo = { id: pooIdCounter++, positionX: (42 * window.innerWidth) / 100 }
+      poos.value.push(newPoo)
+      pooCount.value++
+      run()
+    }, 1000)
+  }
+}
+
+const collectPoo = (id: number) => {
+  poos.value = poos.value.filter((poo) => poo.id !== id)
+  collectedPooCount.value++
+  console.log('Collected poo:', id)
+}
+
 const animate = () => {
   if (isRunning.value) {
     backgroundPositionX.value -= 5
     obstaclePositionX.value -= 5
+    if (poos.value.length > 0) {
+      poos.value.forEach((poo) => {
+        poo.positionX -= 5
+      })
+    }
 
     if (obstaclePositionX.value < -50) {
       obstaclePositionX.value = 2000
@@ -72,7 +121,6 @@ const animate = () => {
         isWaiting.value = false
         resetGame()
       }, 1000)
-      console.log('Collision detected!')
     }
 
     requestAnimationFrame(animate)
@@ -96,15 +144,17 @@ const isColliding = () => {
   )
 }
 
+//TODO: add time out
 const resetGame = () => {
   backgroundPositionX.value = initialBackgroundPositionX
   obstaclePositionX.value = initialObstaclePositionX
   isRunning.value = initialIsRunning
   isJumping.value = initialIsJumping
+  poos.value = []
   //timeout before starting the game
   setTimeout(() => {
     run()
-  }, 5000)
+  }, 0)
 }
 
 onMounted(() => {
