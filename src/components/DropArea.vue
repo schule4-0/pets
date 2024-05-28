@@ -1,17 +1,16 @@
 <!-- DropArea.vue -->
 <template>
-  <div ref="dropArea" :style="{ width: width, height: height }" class="drop-area">
-    <img :src="image" alt="Drop Area Image" :style="{ width: '100%', height: '100%' }" />
+  <div ref="dropArea" :style="{ width: width }" class="drop-area">
+    <img :src="image" alt="Drop Area Image" :style="{ width: '100%' }" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted, defineProps, defineEmits } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps<{
   image: string,
-  width: string,
-  height: string
+  width: string
 }>()
 
 const emit = defineEmits(['droppedInArea'])

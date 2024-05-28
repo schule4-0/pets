@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" height="10vw" />
+    <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
 
     <DraggableItem
       v-for="item in items"
@@ -13,6 +13,8 @@
     />
 
     <button @click="goToNextStage">Nächstes Minigame</button>
+
+    <RewardGame v-if="showReward" @finish="handleRewardFinish" />
   </div>
 </template>
 
@@ -20,6 +22,7 @@
 import { ref, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
+import RewardGame from '@/components/RewardGame.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/bone.png'
 import bookImg from '@/assets/book.png'
@@ -48,6 +51,10 @@ const removeItem = (id: number) => {
   items.value = items.value.filter((i) => i.id !== id)
 }
 
+const checkAllAcceptedItemsRemoved = () => {
+  return items.value.every(item => item.type !== 'accepted')
+}
+
 const handleDropInArea = (item: {
   id: number
   isWithin: boolean
@@ -57,9 +64,21 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     removeItem(item.id)
     mascot.setMessage(generalMessages.correct)
+    if (checkAllAcceptedItemsRemoved()) {
+      setTimeout(() => {
+        showReward.value = true
+      }, 5000);
+    }
   } else {
     mascot.setMessage(generalMessages.wrong)
   }
+}
+
+const showReward = ref(false)
+
+const handleRewardFinish = () => {
+  goToNextStage()
+  showReward.value = false
 }
 </script>
 
