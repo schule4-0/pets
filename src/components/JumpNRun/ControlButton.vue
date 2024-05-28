@@ -1,7 +1,7 @@
 <template>
   <!-- TODO: change with swipe event -->
   <button
-    v-if="type == 'jump'"
+    v-if="type === 'jump'"
     @mousedown="$emit('jump')"
     @mouseup="$emit('stopJump')"
     class="btnJump"
@@ -10,7 +10,7 @@
     Jump
   </button>
   <button
-    v-if="type == 'run'"
+    v-if="type === 'run'"
     @mousedown="$emit('run')"
     @touchstart="$emit('run')"
     @touchend="$emit('stopRun')"
