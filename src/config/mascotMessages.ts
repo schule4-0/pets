@@ -41,6 +41,20 @@ const mascotMessages: MascotMessages = {
       message1: {
         content: '2.Spiel'
       }
+    },
+    stage3: {
+      message1: {
+        content: 'Gehen wir Gassi! Aber pass auf, dass Rocky nicht gegen Steine läuft!'
+      },
+      message2: {
+        content: 'Aua! Das hat weh getan. Versuche es noch einmal!'
+      },
+      message3: {
+        content: 'Super! Du hast es geschafft!'
+      },
+      message4: {
+        content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
+      }
     }
   }
 }
