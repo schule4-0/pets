@@ -7,10 +7,10 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 
-const props = defineProps({
-  id: Number,
-  positionX: Number
-})
+const props = defineProps<{
+  id: number
+  positionX: number
+}>()
 
 const emits = defineEmits(['collect'])
 
