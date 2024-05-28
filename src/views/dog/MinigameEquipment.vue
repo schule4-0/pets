@@ -14,7 +14,16 @@
 
     <button @click="goToNextStage">Nächstes Minigame</button>
 
-    <RewardGame v-if="showReward" @finish="handleRewardFinish" />
+    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
+      <template #solution="{ solutionImages }">
+        <div class="solution">
+          <p>Rockys Utensilien</p>
+          <div class="solution-images">
+            <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
+          </div>
+        </div>
+      </template>
+    </RewardGame>
   </div>
 </template>
 
@@ -22,7 +31,7 @@
 import { ref, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
-import RewardGame from '@/components/RewardGame.vue'
+import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/bone.png'
 import bookImg from '@/assets/book.png'
@@ -40,6 +49,8 @@ onMounted(() => {
   mascot.showMascotItem()
   mascot.setMessage(equipmentMessages.message2)
   mascot.showMessage()
+
+  solutionImages.value = items.value.filter(item => item.type === 'accepted').map(item => item.image)
 })
 
 const items = ref<DraggableItemType[]>([
@@ -55,6 +66,8 @@ const checkAllAcceptedItemsRemoved = () => {
   return items.value.every(item => item.type !== 'accepted')
 }
 
+const solutionImages = ref<string[]>([])
+
 const handleDropInArea = (item: {
   id: number
   isWithin: boolean
@@ -67,7 +80,7 @@ const handleDropInArea = (item: {
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
         showReward.value = true
-      }, 5000);
+      }, 4000);
     }
   } else {
     mascot.setMessage(generalMessages.wrong)

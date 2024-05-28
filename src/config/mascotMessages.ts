@@ -27,7 +27,7 @@ const mascotMessages: MascotMessages = {
         content: 'Das war richtig. Gut gemacht!'
       },
       rockyHappy: {
-        content: 'Rocky freut sich und wedelt mit dem Schwanz!'
+        content: 'Wau wau! Hier siehst du nochmal, was Rocky braucht.'
       }
     }
   },
