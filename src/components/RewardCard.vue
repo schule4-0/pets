@@ -3,21 +3,19 @@
 
     <slot name="solution" v-if="wasBoneGiven" :solutionImages="solutionImages"></slot>
 
-    <div class="bottom-container">
-      <DropArea @droppedInArea="handleDropInArea" :image="cartoondogImg" width="20vw"/>
-
       <DraggableItem class="boneImg"
         :id="1"
         type="accepted"
         :image="boneImg"
         :initialX="50"
-        :initialY="80"
+        :initialY="5"
         v-if="!wasBoneGiven"
       />
 
-      <button v-if="wasBoneGiven" @click="goToNextStage">Nächstes Minigame</button>
-    </div>
+      <button v-if="wasBoneGiven" class="nextBtn" @click="goToNextStage">Nächstes Minigame</button>
   </div>
+  
+  <DropArea @droppedInArea="handleDropInArea" class="dogImg" :image="cartoondogImg" width="20vw"/>
 </template>
 
 <script setup lang="ts">
@@ -62,43 +60,29 @@ const handleDropInArea = (item: {
 
 <style>
 .reward-game-container {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
+  position: absolute;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.171) 10px 10px 10px;
   width: 95%;
   height: 90%;
-  background-color: white;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   border-radius: 20px;
-  box-shadow: rgba(0, 0, 0, 0.171) 10px 10px 10px;
-}
-
-.bottom-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
-  gap: 20px;
-  margin-top: 50px;
-}
-
-.boneImg {
-  width: 10%;
-  height: auto;
+  justify-content: space-between;
 }
 
 .solution {
-  text-align: center;
-  font-size: 3rem;
+  margin-top: 30px;
   background-color: rgb(224, 224, 224);
+  font-size: 3em;
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  align-self: center;
   border-radius: 20px;
-  margin: 40px;
-  padding: 20px;
+  justify-content: space-around;
+  padding-bottom: 20px;
 }
 
 .solution-images {
@@ -106,14 +90,28 @@ const handleDropInArea = (item: {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  height: 20%;
   flex-wrap: wrap;
+  height: 40%;
 }
 
 .solution-image {
-  margin: 20px;
-  width: 50px;
   height: 100%;
 }
 
+.dogImg {
+  position: relative;
+  top: 15%;
+  z-index: 1;
+}
+
+.boneImg {
+  position: absolute;
+  z-index: 100;
+}
+
+.nextBtn {
+  height: 70px;
+  width: 50%;
+  align-self: center;
+}
 </style>
