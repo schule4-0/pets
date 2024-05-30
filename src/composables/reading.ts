@@ -7,15 +7,35 @@ export function useReading() {
   speech.rate = 0.7
   speech.pitch = 1.3
 
-  function readAloud(message: Message) {
-    //TODO: initialise store outside of this function
-    const mascot = useMascotStore()
+  function hideSpeechBubble() {
+    const mascot = useMascotStore() //TODO: initialize mascot store outside this function
+    setTimeout(() => mascot.hideSpeechBubble(), 1500)
+  }
 
+  async function playFile(message: Message) {
+    const module = await import(/* @vite-ignore */ `../assets/audio/mascot/${message.audioFile}`)
+    const audio = new Audio(module.default)
+    //TODO: cancel audio
+    audio.addEventListener('ended', () => hideSpeechBubble(), { once: true })
+    audio.play()
+  }
+
+  function playLiveTts(message: Message) {
     window.speechSynthesis.cancel()
     speech.text = message.content
     window.speechSynthesis.speak(speech)
-    speech.onend = () => {
-      setTimeout(() => mascot.hideSpeechBubble(), 1500)
+    speech.onend = () => hideSpeechBubble()
+  }
+
+  async function readAloud(message: Message) {
+    if (message.audioFile) {
+      try {
+        await playFile(message)
+      } catch (e) {
+        playLiveTts(message)
+      }
+    } else {
+      playLiveTts(message)
     }
   }
 

@@ -3,6 +3,7 @@ export type FaceExpression = 'happy' | 'sad' | 'neutral'
 export type Message = {
   content: string
   faceExpression?: FaceExpression
+  audioFile?: string
 }
 
 type CollectionItem = {
@@ -21,7 +22,8 @@ const mascotMessages: MascotMessages = {
   general: {
     expressions: {
       wrong: {
-        content: 'Das war leider falsch. Versuche es doch nochmal'
+        content: 'Das war leider falsch. Versuche es doch nochmal',
+        audioFile: 'eeb3bd28e3be06eeaa839cc5bad03cb0.mp3'
       },
       correct: {
         content: 'Das war richtig. Gut gemacht!'
@@ -34,7 +36,8 @@ const mascotMessages: MascotMessages = {
         content: 'Hallo, ich bin dein Helfer'
       },
       message2: {
-        content: 'Packe alles, was Rocky benötigt in den Rucksack'
+        content: 'Packe alles, was Rocky benötigt in den Rucksack',
+        audioFile: 'a9e0f348d1d144a2956e44152419034e.mp3'
       }
     },
     stage2: {
