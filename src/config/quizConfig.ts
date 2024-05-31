@@ -1,27 +1,27 @@
-import dogImg from '@/assets/dog.png';
-import bunnyImg from '@/assets/bunny.png';
-import catImg from '@/assets/cat.png';
+import dogImg from '@/assets/dog.png'
+import bunnyImg from '@/assets/bunny.png'
+import catImg from '@/assets/cat.png'
 
 export interface Answer {
-  text: string;
-  image: string;
+  text: string
+  image: string
 }
 
 export interface Quiz {
-  question: string;
-  answers: Answer[];
-  correctAnswer: string;
+  question: string
+  answers: Answer[]
+  correctAnswer: string
 }
 
 const quizData: Quiz[] = [
   {
-    question: 'Was sollte in der Tasche für Rocky sein?',
+    question: 'Was sollte in der Tasche für Rocky sein, um mit ihm zu spielen?',
     answers: [
       { text: 'Ball', image: dogImg },
       { text: 'Buch', image: bunnyImg },
       { text: 'Hundebett', image: catImg }
     ],
-    correctAnswer: 'Ball' 
+    correctAnswer: 'Ball'
   },
   {
     question: 'Welches Futter soll in Rockys Napf gelegt werden, um ihn zu füttern?',
@@ -33,7 +33,7 @@ const quizData: Quiz[] = [
     correctAnswer: 'Hundefutter'
   },
   {
-    question: 'Was muss man beim Spazierengehen mitnehmen?',
+    question: 'Was muss man beim Spazierengehen mitnehmen, damit Rocky nicht einfach wegläuft?',
     answers: [
       { text: 'Handy', image: dogImg },
       { text: 'Leine', image: bunnyImg },
@@ -50,6 +50,6 @@ const quizData: Quiz[] = [
     ],
     correctAnswer: 'Seife'
   }
-];
+]
 
-export default quizData;
+export default quizData

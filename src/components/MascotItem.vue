@@ -38,6 +38,11 @@ function readMessage() {
 <style scoped lang="scss">
 .mascot-container {
   padding: 10px;
+  // mascot on the left side
+  position: fixed;
+  top: 270px;
+  left: 100px;
+  z-index: 1000;
 }
 
 .mascot {
