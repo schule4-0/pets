@@ -1,13 +1,15 @@
 <template>
   <div v-if="mascot.showMascot" @click="mascot.readMessageAgain" class="mascot-container">
-    <transition>
+    <transition name="appear">
       <!--TODO: add transition-->
       <div v-if="mascot.speechBubbleShown" class="speech-bubble">
         <p>{{ mascot.message.content }}</p>
       </div>
     </transition>
-    <img v-if="!mascot.speechBubbleShown" src="../assets/icon_audio.svg" alt="Audio" />
-    <div class="mascot"></div>
+    <div class="mascot">
+      <img src="../assets/icon_audio.svg" alt="Audio" />
+      <div class="mascot-image"></div>
+    </div>
   </div>
 </template>
 
@@ -21,14 +23,20 @@ const mascot = useMascotStore()
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  -webkit-tap-highlight-color: transparent;
+}
 
+.mascot {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
   img {
-    align-self: center;
     width: 40px;
   }
 }
 
-.mascot {
+.mascot-image {
   width: 75px;
   height: 150px;
   background-color: white;
@@ -47,7 +55,9 @@ const mascot = useMascotStore()
   border-radius: 10px;
 
   p {
-    //TODO: use desgin system
+    //TODO: use design system
+    -webkit-user-select: none;
+    user-select: none;
     font-size: 25px;
   }
 
@@ -61,6 +71,28 @@ const mascot = useMascotStore()
     left: 87%;
     width: 0;
     height: 0;
+  }
+}
+
+.appear-enter-active {
+  animation: bounce-in 0.5s;
+}
+.appear-leave-active {
+  transition: all 0.5s ease;
+}
+.appear-leave-to {
+  opacity: 0;
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 </style>

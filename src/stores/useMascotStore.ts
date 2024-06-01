@@ -16,8 +16,9 @@ export const useMascotStore = defineStore('popup', {
   },
   actions: {
     setMessage(message: Message, delay?: number) {
+      this.hideSpeechBubble() //Support animation
+      this.showMascotItem()
       setTimeout(() => {
-        this.showMascotItem()
         this.showSpeechBubble()
         this.message = message
         this.readMessage()

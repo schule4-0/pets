@@ -35,7 +35,7 @@ const equipmentMessages = mascot.messages.dog.stage1
 const generalMessages = mascot.messages.general.expressions
 
 onMounted(() => {
-  mascot.setMessage(equipmentMessages.message2)
+  mascot.setMessage(equipmentMessages.message2, 1000)
 })
 
 const items = ref<DraggableItemType[]>([
