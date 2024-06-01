@@ -7,27 +7,40 @@ export function useReading() {
   speech.rate = 0.7
   speech.pitch = 1.3
 
+  const audio = new Audio()
+
   function hideSpeechBubble() {
     const mascot = useMascotStore() //TODO: initialize mascot store outside this function
-    setTimeout(() => mascot.hideSpeechBubble(), 1500)
+    setTimeout(() => {
+      if (audio.paused && !window.speechSynthesis.speaking) {
+        mascot.hideSpeechBubble()
+      }
+    }, 1500)
+  }
+
+  audio.addEventListener('ended', hideSpeechBubble)
+
+  function cancelAudio() {
+    window.speechSynthesis.cancel()
+    audio.pause()
   }
 
   async function playFile(message: Message) {
     const module = await import(/* @vite-ignore */ `../assets/audio/mascot/${message.audioFile}`)
-    const audio = new Audio(module.default)
-    //TODO: cancel audio
-    audio.addEventListener('ended', () => hideSpeechBubble(), { once: true })
-    audio.play()
+    audio.src = module.default
+    await audio.play()
   }
 
   function playLiveTts(message: Message) {
-    window.speechSynthesis.cancel()
     speech.text = message.content
-    window.speechSynthesis.speak(speech)
+    if (audio.paused) {
+      window.speechSynthesis.speak(speech)
+    }
     speech.onend = () => hideSpeechBubble()
   }
 
   async function readAloud(message: Message) {
+    cancelAudio()
     if (message.audioFile) {
       try {
         await playFile(message)
