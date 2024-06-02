@@ -1,7 +1,10 @@
-import type { Message } from '@/config/mascotMessages'
+import type { StringResourceKey } from '@/config/mascotMessages'
+import { getStringRes } from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 export function useReading() {
+  const audioFiles = import.meta.glob('../assets/audio/mascot/*.mp3')
+
   const speech = new SpeechSynthesisUtterance()
   speech.lang = 'de'
   speech.rate = 0.7
@@ -25,30 +28,32 @@ export function useReading() {
     audio.pause()
   }
 
-  async function playFile(message: Message) {
-    const module = await import(/* @vite-ignore */ `../assets/audio/mascot/${message.audioFile}`)
+  async function playFile(filePath: string) {
+    const module = await import(/* @vite-ignore */ filePath)
     audio.src = module.default
     await audio.play()
   }
 
-  function playLiveTts(message: Message) {
-    speech.text = message.content
+  function playLiveTts(key: StringResourceKey) {
+    speech.text = getStringRes(key).content
     if (audio.paused) {
       window.speechSynthesis.speak(speech)
     }
     speech.onend = () => hideSpeechBubble()
   }
 
-  async function readAloud(message: Message) {
+  async function readAloud(key: StringResourceKey) {
+    const filePath = `../assets/audio/mascot/${key}.mp3`
     cancelAudio()
-    if (message.audioFile) {
-      try {
-        await playFile(message)
-      } catch (e) {
-        playLiveTts(message)
+    try {
+      //check if file exists
+      if (!audioFiles[filePath]) {
+        playLiveTts(key)
+      } else {
+        playFile(filePath)
       }
-    } else {
-      playLiveTts(message)
+    } catch (e) {
+      playLiveTts(key)
     }
   }
 

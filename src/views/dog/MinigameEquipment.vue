@@ -30,12 +30,10 @@ import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
-//TODO: dynamic loading of correct messages according to route
-const equipmentMessages = mascot.messages.dog.stage1
-const generalMessages = mascot.messages.general.expressions
 
 onMounted(() => {
-  mascot.setMessage(equipmentMessages.message2, 1000)
+  //mascot.setMessage(equipmentMessages.message2, 1000)
+  mascot.showMessage('STAGE1_BACKPACK', 1000)
 })
 
 const items = ref<DraggableItemType[]>([
@@ -55,9 +53,11 @@ const handleDropInArea = (item: {
   console.log('handleDropInArea', item)
   if (item.type === 'accepted') {
     removeItem(item.id)
-    mascot.setMessage(generalMessages.correct)
+    //mascot.setMessage(generalMessages.correct)//TODO
+    mascot.showMessage('GENERAL_RIGHT')
   } else {
-    mascot.setMessage(generalMessages.wrong)
+    //mascot.setMessage(generalMessages.wrong)
+    mascot.showMessage('GENERAL_WRONG')
   }
 }
 </script>

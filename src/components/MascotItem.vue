@@ -3,7 +3,7 @@
     <transition name="appear">
       <!--TODO: add transition-->
       <div v-if="mascot.speechBubbleShown" class="speech-bubble">
-        <p>{{ mascot.message.content }}</p>
+        <p>{{ mascot.messageString }}</p>
       </div>
     </transition>
     <div class="mascot">

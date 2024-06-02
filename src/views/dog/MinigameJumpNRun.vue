@@ -29,7 +29,6 @@ import Goal from '@/components/JumpNRun/GoalComponent.vue'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
-const jumpNRunMessages = mascot.messages.dog.stage3
 
 interface Poo {
   id: number
@@ -137,7 +136,7 @@ const animate = () => {
     }
 
     if (isColliding()) {
-      mascot.setMessage(jumpNRunMessages.message2)
+      mascot.showMessage('STAGE3_OUTCH')
       state.isWaiting = true
       stopRun()
       setTimeout(() => {
@@ -190,13 +189,13 @@ const isCollidingGoal = () => {
 
 const checkWinCondition = () => {
   if (state.collectedPooCount === state.pooCount) {
-    mascot.setMessage(jumpNRunMessages.message3)
+    mascot.showMessage('STAGE3_SUPER')
     stopRun()
     setTimeout(() => {
       goToNextStage()
     }, 2000)
   } else {
-    mascot.setMessage(jumpNRunMessages.message4)
+    mascot.showMessage('STAGE3_TRYAGAIN')
     stopRun()
     setTimeout(() => {
       resetGame()
@@ -214,7 +213,7 @@ const resetGame = () => {
 }
 
 onMounted(() => {
-  mascot.setMessage(jumpNRunMessages.message1)
+  mascot.showMessage('STAGE3_GOWALK')
   resetGame()
 })
 </script>
