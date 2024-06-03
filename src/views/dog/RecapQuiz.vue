@@ -21,11 +21,10 @@
         @answer-selected="handleAnswerSelected(answer.text, index)"
       />
     </div>
-
   </div>
 
   <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
-      <img src="@/assets/icon_arrow.png" />
+    <img src="@/assets/icon_arrow.png" />
   </button>
 
   <div class="modal">
@@ -46,7 +45,6 @@ import QuestionComponent from '@/components/QuizQuestion.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
 import mascotMessages from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
-import { onMounted } from 'vue'
 import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
 
@@ -70,12 +68,6 @@ const showModal = ref(false)
 const currentQuestion = computed(() => {
   return quizData[currentQuestionIndex.value]
 })
-
-// onMounted(() => {
-//   mascot.showMascotItem()
-//   mascot.setMessage(mascotMessage.question1)
-//   mascot.showMessage()
-// })
 
 const handleAnswerSelected = (selectedAnswerText: string, index: number) => {
   selectedAnswer.value = selectedAnswerText
@@ -116,11 +108,6 @@ const nextQuestion = () => {
     currentQuestionIndex.value++
     mascot.hideMessage()
     mascot.hideMascotItem()
-    // const currentQuestionNumber = currentQuestionIndex.value + 1
-    // const currentQuestionMessage = `question${currentQuestionNumber}`
-    // mascot.showMascotItem()
-    // mascot.setMessage(mascotMessage[currentQuestionMessage])
-    // mascot.showMessage()
   } else {
     showModal.value = true
   }
