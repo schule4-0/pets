@@ -22,10 +22,11 @@
       />
     </div>
 
-    <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
-      <img src="@/assets/icon_arrow.png" />
-    </button>
   </div>
+
+  <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
+      <img src="@/assets/icon_arrow.png" />
+  </button>
 
   <div class="modal">
     <div v-if="showModal" class="modal-overlay">
@@ -70,11 +71,11 @@ const currentQuestion = computed(() => {
   return quizData[currentQuestionIndex.value]
 })
 
-onMounted(() => {
-  mascot.showMascotItem()
-  mascot.setMessage(mascotMessage.question1)
-  mascot.showMessage()
-})
+// onMounted(() => {
+//   mascot.showMascotItem()
+//   mascot.setMessage(mascotMessage.question1)
+//   mascot.showMessage()
+// })
 
 const handleAnswerSelected = (selectedAnswerText: string, index: number) => {
   selectedAnswer.value = selectedAnswerText
@@ -113,14 +114,14 @@ const nextQuestion = () => {
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
-    const currentQuestionNumber = currentQuestionIndex.value + 1
-    const currentQuestionMessage = `question${currentQuestionNumber}`
-    mascot.showMascotItem()
-    mascot.setMessage(mascotMessage[currentQuestionMessage])
-    mascot.showMessage()
-  } else {
     mascot.hideMessage()
     mascot.hideMascotItem()
+    // const currentQuestionNumber = currentQuestionIndex.value + 1
+    // const currentQuestionMessage = `question${currentQuestionNumber}`
+    // mascot.showMascotItem()
+    // mascot.setMessage(mascotMessage[currentQuestionMessage])
+    // mascot.showMessage()
+  } else {
     showModal.value = true
   }
 }
@@ -150,6 +151,7 @@ const progress = computed(() => {
   justify-content: center;
   height: 100%;
   width: 70%;
+  margin-right: 150px;
 
   img {
     width: 5%;
@@ -166,6 +168,8 @@ const progress = computed(() => {
 
 .next-button {
   margin-top: 30px;
+  margin-bottom: 10px;
+  margin-left: 150px;
   align-self: flex-end;
   padding: 10px;
   cursor: pointer;
