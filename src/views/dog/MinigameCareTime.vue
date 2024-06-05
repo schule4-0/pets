@@ -23,10 +23,8 @@ import CareTimeDog from '@/components/CareTimeDog.vue'
 import CareTimeToolbar from '@/components/CareTimeToolbar.vue'
 
 import { useMascotStore } from '@/stores/useMascotStore'
-import mascotMessages from '@/config/mascotMessages'
 
 const mascot = useMascotStore()
-const careTimeMessages = mascotMessages.dog.stage3
 
 export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameCompleted'
 export type CareTimeTool = 'shampoo' | 'shower' | 'hairDryer'
@@ -40,31 +38,23 @@ const dogSize = computed(() => {
 })
 
 onMounted(() => {
-  mascot.showMascotItem()
-  mascot.setMessage(careTimeMessages.introduction)
-  mascot.showMessage()
+  mascot.showMessage('STAGE4_INTRODUCTION')
 })
 
 const onIsShampooed = () => {
-  mascot.showMascotItem()
-  mascot.setMessage(careTimeMessages.rockyIsShapooed)
-  mascot.showMessage()
+  mascot.showMessage('STAGE4_IS_SHAMPOOED')
 
   currentState.value = 'showering'
 }
 
 const onIsShowered = () => {
-  mascot.showMascotItem()
-  mascot.setMessage(careTimeMessages.gameCompleted)
-  mascot.showMessage()
+  mascot.showMessage('STAGE4_IS_SHOWERED')
 
   currentState.value = 'drying'
 }
 
 const onIsDryed = () => {
-  mascot.showMascotItem()
-  mascot.setMessage(careTimeMessages.rockyIsShapooed)
-  mascot.showMessage()
+  mascot.showMessage('STAGE4_IS_Dryed')
 
   currentState.value = 'gameCompleted'
 }

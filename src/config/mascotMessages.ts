@@ -40,11 +40,14 @@ const stringResources = {
     content:
       'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'
   },
-  STAGE4__IS_SHAMPOOED: {
+  STAGE4_IS_SHAMPOOED: {
     content: 'Rocky ist jetzt mit genug Shapoo eingedeckt, Zeit ihn abzuwaschen!'
   },
   STAGE4_IS_SHOWERED: {
     content: 'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen.'
+  },
+  STAGE4_IS_Dryed: {
+    content: 'Rocky is dryed now!'
   }
 } as const
 
