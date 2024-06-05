@@ -26,23 +26,16 @@ import { onMounted } from 'vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/bone.png'
 import cartoondogImg from '@/assets/cartoondog1.jpg'
-import mascotMessages from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
 
 const mascot = useMascotStore()
 const wasBoneGiven = ref(false)
-const props = defineProps<{ solutionImages: string[] }>()
-
-//TODO: dynamic loading of correct messages according to route
-const instructionMessage = mascotMessages.dog.stage3
-const generalMessages = mascotMessages.general.expressions
+defineProps<{ solutionImages: string[] }>()
 
 onMounted(() => {
-    mascot.showMascotItem()
-    mascot.setMessage(instructionMessage.message1)
-    mascot.showMessage()
+    mascot.showMessage('REWARD_GIVE_BONE')
 })
 
 const handleDropInArea = (item: {
@@ -52,7 +45,7 @@ const handleDropInArea = (item: {
 }) => {
     if (item.type === 'accepted') {
         wasBoneGiven.value = true
-        mascot.setMessage(generalMessages.rockyHappy)
+        mascot.showMessage('REWARD_ROCKY_HAPPY')
     }
 }
 
