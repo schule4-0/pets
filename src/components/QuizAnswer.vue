@@ -3,7 +3,7 @@
     class="answer-card"
     :class="{
       correct: wasClicked && answer.isCorrect /*|| (answer.isCorrect && correctAnswerSelected)*/,
-      incorrect: (wasClicked && !answer.isCorrect) /*|| (!answer.isCorrect && correctAnswerSelected)*/
+      incorrect: wasClicked && !answer.isCorrect /*|| (!answer.isCorrect && correctAnswerSelected)*/
     }"
     @click="selectAnswer"
   >

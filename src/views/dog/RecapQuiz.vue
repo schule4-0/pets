@@ -42,17 +42,16 @@
 import { ref, computed } from 'vue'
 import QuestionComponent from '@/components/QuizQuestion.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
-//import mascotMessages from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
+import type { StringResourceKey } from '@/config/mascotMessages'
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
 const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
-//const mascotMessage = mascotMessages.dog.quiz
 
 const router = useRouter()
 const showModal = ref(false)
@@ -69,11 +68,9 @@ const handleAnswerSelected = (isCorrect: boolean) => {
   } else {
     correctAnswerSelected.value = false
     const currentAnswerNumber = currentQuestionIndex.value + 1
-    const currentAnswerMessage = `STAGEQUIZ_INCORRECT${currentAnswerNumber}`
+    const currentAnswerMessage = `STAGEQUIZ_INCORRECT${currentAnswerNumber}` as StringResourceKey
     mascot.hideMascotItem()
-    //mascot.showMessage('STAGEQUIZ_INCORRECT1', 1000)
-    //mascot.showMessage(currentAnswerMessage)
-    //mascot.showMessage(mascotMessage[currentAnswerMessage])
+    mascot.showMessage(currentAnswerMessage)
   }
 }
 
