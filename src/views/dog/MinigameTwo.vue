@@ -15,6 +15,5 @@
 <script setup lang="ts">
 import ExampleComponent from '@/components/ExampleComponent.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-
 const { goToNextStage } = useStageNavigator()
 </script>

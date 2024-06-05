@@ -15,6 +15,12 @@ const stringResources = {
   GENERAL_RIGHT: {
     content: 'Das war richtig. Gut gemacht!'
   },
+  REWARD_ROCKY_HAPPY: {
+    content: 'Wau wau! Hier siehst du nochmal, was Rocky braucht.'
+  },
+  REWARD_GIVE_BONE: {
+    content: 'Super gemacht! Gib Rocky einen Knochen!'
+  },
   STAGE1_BACKPACK: {
     content: 'Packe alles, was Rocky benötigt in den Rucksack'
   },
