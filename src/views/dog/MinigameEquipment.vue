@@ -22,22 +22,18 @@ import DraggableItem, { type DraggableItemType } from '@/components/DraggableIte
 import DropArea from '@/components/DropArea.vue'
 import { onMounted } from 'vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/bone.png'
-import bookImg from '@/assets/book.png'
-import mascotMessages from '@/config/mascotMessages'
+
+import boneImg from '@/assets/equipment/bone.png'
+import bookImg from '@/assets/equipment/book.png'
+
 import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
-
 const mascot = useMascotStore()
-//TODO: dynamic loading of correct messages according to route
-const equipmentMessages = mascotMessages.dog.stage1
-const generalMessages = mascotMessages.general.expressions
 
 onMounted(() => {
-  mascot.showMascotItem()
-  mascot.setMessage(equipmentMessages.message2)
-  mascot.showMessage()
+  //mascot.setMessage(equipmentMessages.message2, 1000)
+  mascot.showMessage('STAGE1_BACKPACK', 1000)
 })
 
 const items = ref<DraggableItemType[]>([
@@ -57,9 +53,11 @@ const handleDropInArea = (item: {
   console.log('handleDropInArea', item)
   if (item.type === 'accepted') {
     removeItem(item.id)
-    mascot.setMessage(generalMessages.correct)
+    //mascot.setMessage(generalMessages.correct)//TODO
+    mascot.showMessage('GENERAL_RIGHT')
   } else {
-    mascot.setMessage(generalMessages.wrong)
+    //mascot.setMessage(generalMessages.wrong)
+    mascot.showMessage('GENERAL_WRONG')
   }
 }
 </script>
@@ -67,7 +65,7 @@ const handleDropInArea = (item: {
 <style scoped>
 .game-container {
   position: relative;
-  background-image: url('@/assets/test-room.jpeg');
+  background-image: url('@/assets/equipment/test-room.jpeg');
   background-size: cover;
   background-position: center;
   padding: 20px;

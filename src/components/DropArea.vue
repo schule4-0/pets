@@ -1,6 +1,6 @@
 <template>
   <div ref="dropArea" class="drop-area">
-    <img src="@/assets/backpack.png" alt="Backpack" class="drop-area" />
+    <img src="@/assets/equipment/backpack.png" alt="Backpack" class="drop-area" />
   </div>
 </template>
 
