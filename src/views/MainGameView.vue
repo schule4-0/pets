@@ -14,9 +14,6 @@
       <button @click="toggleMascot">Maskottchen</button>
       <button @click="toggleSpeechBubble">Sprechblase</button>
     </div>
-    <div class="overlay-bottom-left">
-      <button>Overlay button 3</button>
-    </div>
     <div class="mascot">
       <mascot-item />
     </div>
@@ -93,12 +90,6 @@ $overlay-padding: 10px;
 }
 .overlay-top-right {
   @include overlay-position(0, 0, null, null);
-}
-.overlay-bottom-left {
-  @include overlay-position(null, null, 0, 0);
-}
-.overlay-bottom-right {
-  @include overlay-position(null, 0, 0, null);
 }
 
 button {
