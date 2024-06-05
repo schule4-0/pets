@@ -12,7 +12,7 @@
     <div class="overlay-top-right">
       <!--for demonstration only-->
       <button @click="toggleMascot">Maskottchen</button>
-      <button @click="toggleMascotMessage">Maskottchen Nachricht</button>
+      <button @click="toggleSpeechBubble">Sprechblase</button>
     </div>
     <div class="mascot">
       <mascot-item />
@@ -41,11 +41,11 @@ function toggleMascot() {
   }
 }
 //for demonstration only
-function toggleMascotMessage() {
-  if (mascot.messageShown) {
-    mascot.hideMessage()
+function toggleSpeechBubble() {
+  if (mascot.speechBubbleShown) {
+    mascot.hideSpeechBubble()
   } else {
-    mascot.showMessage()
+    mascot.showSpeechBubble()
   }
 }
 </script>
@@ -99,7 +99,7 @@ button {
 .mascot {
   position: fixed;
   bottom: 20px;
-  right: 10%;
+  right: 5%;
   z-index: 1050;
   opacity: 1;
 }
