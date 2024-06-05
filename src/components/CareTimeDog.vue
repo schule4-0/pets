@@ -21,7 +21,16 @@
           stroke="black"
           fill="brown"
         />
+        <g ref="dirtLayer">
+          <polygon
+            v-for="dirt in dirtPositions"
+            :key="dirt.id"
+            :points="dirt.points"
+            fill="green"
+          />
+        </g>
         <g ref="bubblesLayer"></g>
+        <g ref="waterDropLayer"></g>
       </g>
     </svg>
   </div>
@@ -30,7 +39,6 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
-import { useCareTimeDog } from '@/composables/useCareTimeDog'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import type { CareTimeState } from '@/views/dog/MinigameCareTime.vue'
 
@@ -40,13 +48,28 @@ const props = defineProps<{
   currentState: CareTimeState
   onIsShampooed: () => void
   onIsShowered: () => void
+  onIsDryed: () => void
+  onIsCompleted: () => void
 }>()
 
 const toolStore = useCareTimeToolStore()
 
 const svgElement = ref<SVGSVGElement | null>(null)
-const { dogSvg, dogPath, isPointInDog } = useCareTimeDog()
-const { bubblesLayer, bubblePositions, createBubble, removeBubbles } = useCareTimeBubbles()
+const {
+  dogPath,
+  isPointInDog,
+  bubblesLayer,
+  bubblePositions,
+  createBubble,
+  removeBubbles,
+  dirtLayer,
+  dirtPositions,
+  removeDirt,
+  createWaterDrop,
+  removeWaterDrops,
+  waterDropLayer,
+  waterDropPositions
+} = useCareTimeBubbles()
 const isActionActive = ref(false)
 
 const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: SVGSVGElement) => {
@@ -80,13 +103,19 @@ const performAction = (event: MouseEvent | TouchEvent) => {
       }
     } else if (toolStore.selectedTool === 'shower') {
       removeBubbles(x, y)
+      removeDirt(x, y)
+      if (isPointInDog(x, y)) {
+        createWaterDrop(x, y)
+      }
+    } else if (toolStore.selectedTool === 'hairDryer') {
+      removeWaterDrops(x, y)
     }
   }
 }
 
 watch(
-  () => bubblePositions.value,
-  (bubbles) => {
+  () => [bubblePositions.value, waterDropPositions.value, props.currentState],
+  ([bubbles, waterDrops]) => {
     if (bubbles.length === 0 && props.currentState === 'shampooing') {
       // Do nothing - Game just started
     } else if (bubbles.length === 0 && props.currentState === 'showering') {
@@ -95,6 +124,11 @@ watch(
     } else if (bubbles.length === 20 && props.currentState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
       props.onIsShampooed()
+    } else if (waterDrops.length === 0 && props.currentState === 'drying') {
+      // Fully shampooed dog => now switch to shower
+      props.onIsDryed()
+    } else if (props.currentState === 'gameCompleted') {
+      props.onIsCompleted()
     }
   },
   { deep: true }

@@ -7,6 +7,8 @@
         :current-state="currentState"
         :on-is-showered="onIsShowered"
         :on-is-shampooed="onIsShampooed"
+        :on-is-dryed="onIsDryed"
+        :on-is-completed="onIsCompleted"
       />
     </div>
     <div class="toolbar-container">
@@ -26,7 +28,7 @@ import mascotMessages from '@/config/mascotMessages'
 const mascot = useMascotStore()
 const careTimeMessages = mascotMessages.dog.stage3
 
-export type CareTimeState = 'shampooing' | 'showering' | 'drying'
+export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameCompleted'
 export type CareTimeTool = 'shampoo' | 'shower' | 'hairDryer'
 const currentState = ref<CareTimeState>('shampooing')
 
@@ -57,6 +59,20 @@ const onIsShowered = () => {
   mascot.showMessage()
 
   currentState.value = 'drying'
+}
+
+const onIsDryed = () => {
+  mascot.showMascotItem()
+  mascot.setMessage(careTimeMessages.rockyIsShapooed)
+  mascot.showMessage()
+
+  currentState.value = 'gameCompleted'
+}
+
+const onIsCompleted = () => {
+  mascot.showMascotItem()
+  mascot.setMessage({ content: 'Game completed' })
+  mascot.showMessage()
 }
 </script>
 
