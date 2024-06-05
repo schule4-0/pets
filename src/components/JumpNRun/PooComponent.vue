@@ -1,6 +1,6 @@
 <template>
   <div class="poo" @click="collectPoo" :style="{ left: `${props.positionX}px` }">
-    <img src="@/assets/jumpNrun/poo.png" alt="Poo" class="image" />
+    <img :src="props.image" alt="Poo" class="image" />
   </div>
 </template>
 
@@ -10,6 +10,7 @@ import { defineProps, defineEmits } from 'vue'
 const props = defineProps<{
   id: number
   positionX: number
+  image: string
 }>()
 
 const emits = defineEmits(['collect'])
