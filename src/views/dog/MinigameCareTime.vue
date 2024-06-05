@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <button @click="goToNextStage">Nächstes Minigame</button>
     <div class="dog-container">
       <CareTimeDog
         :width="dogSize"
@@ -21,9 +22,10 @@
 import { computed, onMounted, ref } from 'vue'
 import CareTimeDog from '@/components/CareTimeDog.vue'
 import CareTimeToolbar from '@/components/CareTimeToolbar.vue'
-
 import { useMascotStore } from '@/stores/useMascotStore'
+import { useStageNavigator } from '@/composables/useNavigation'
 
+const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 
 export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameCompleted'
