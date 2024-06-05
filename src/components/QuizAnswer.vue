@@ -1,7 +1,10 @@
 <template>
   <div
     class="answer-card"
-    :class="{ correct: showCorrect, incorrect: showIncorrect }"
+    :class="{
+      correct: (wasClicked && answer.isCorrect) /*|| (answer.isCorrect && correctAnswerSelected)*/,
+      incorrect: (wasClicked && !answer.isCorrect) || (!answer.isCorrect && correctAnswerSelected)
+    }"
     @click="selectAnswer"
   >
     <img :src="answer.image" :alt="answer.text" class="answer-image" />
@@ -11,19 +14,33 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
+import { ref, watch } from 'vue'
 import type { Answer } from '@/config/quizConfig'
 
 const props = defineProps<{
   answer: Answer
-  showCorrect: boolean
-  showIncorrect: boolean
+  correctAnswerSelected: boolean
 }>()
 
 const emit = defineEmits(['answer-selected'])
+const wasClicked = ref(false)
 
 const selectAnswer = () => {
-  emit('answer-selected', props.answer.text)
+  if (!wasClicked.value) {
+    wasClicked.value = true
+    emit('answer-selected', props.answer.isCorrect)
+  } else {
+    wasClicked.value = false
+  }
 }
+
+watch(
+  () => props.answer,
+  () => {
+    wasClicked.value = false
+  },
+  { immediate: true }
+)
 </script>
 
 <style scoped>

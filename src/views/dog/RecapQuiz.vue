@@ -16,9 +16,8 @@
         v-for="(answer, index) in currentQuestion.answers"
         :key="index"
         :answer="answer"
-        :showCorrect="showCorrect[index]"
-        :showIncorrect="showIncorrect[index]"
-        @answer-selected="handleAnswerSelected(answer.text, index)"
+        :correctAnswerSelected="correctAnswerSelected"
+        @answer-selected="handleAnswerSelected"
       />
     </div>
   </div>
@@ -49,15 +48,8 @@ import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
 
 const currentQuestionIndex = ref(0)
-const selectedAnswer = ref<string | null>(null)
 const isAnswerSelected = ref(false)
-
-const showCorrect = ref<boolean[]>(
-  new Array(quizData[currentQuestionIndex.value].answers.length).fill(false)
-)
-const showIncorrect = ref<boolean[]>(
-  new Array(quizData[currentQuestionIndex.value].answers.length).fill(false)
-)
+const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
 const mascotMessage = mascotMessages.dog.quiz
@@ -69,23 +61,15 @@ const currentQuestion = computed(() => {
   return quizData[currentQuestionIndex.value]
 })
 
-const handleAnswerSelected = (selectedAnswerText: string, index: number) => {
-  selectedAnswer.value = selectedAnswerText
-
-  if (
-    selectedAnswer.value === currentQuestion.value.correctAnswer &&
-    selectedAnswer.value === selectedAnswerText
-  ) {
-    showCorrect.value[index] = true
-    showIncorrect.value.fill(true)
-    showIncorrect.value[index] = false
-
+const handleAnswerSelected = (isCorrect: boolean) => {
+  if (isCorrect) {
     isAnswerSelected.value = true
+    correctAnswerSelected.value = true
     mascot.showMascotItem()
     mascot.setMessage(mascotMessage.correct)
     mascot.showMessage()
   } else {
-    showIncorrect.value[index] = true
+    correctAnswerSelected.value = false
     const currentAnswerNumber = currentQuestionIndex.value + 1
     const currentAnswerMessage = `inCorrect${currentAnswerNumber}`
     mascot.hideMascotItem()
@@ -99,10 +83,7 @@ const handleAnswerSelected = (selectedAnswerText: string, index: number) => {
 
 const nextQuestion = () => {
   isAnswerSelected.value = false
-  selectedAnswer.value = null
-
-  showCorrect.value.fill(false)
-  showIncorrect.value.fill(false)
+  correctAnswerSelected.value = false
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
