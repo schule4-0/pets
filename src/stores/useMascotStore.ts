@@ -1,27 +1,57 @@
 import { defineStore } from 'pinia'
-import type { Message } from '@/config/mascotMessages'
+import type { Message, StringResourceKey } from '@/config/mascotMessages'
+import { getStringRes } from '@/config/mascotMessages'
+import { useReading } from '@/composables/reading'
+
+const { readAloud } = useReading()
 
 export const useMascotStore = defineStore('popup', {
   state: () => ({
     showMascot: false,
-    messageShown: false, //TODO: maybe derive from empty message
-    message: {} as Message
+    speechBubbleShown: false,
+    messageKey: '' as StringResourceKey
   }),
+  getters: {
+    messageString: (state) => {
+      return getStringRes(state.messageKey).content
+    }
+  },
   actions: {
+    /** @deprecated
+     * use showMessage(key: StringResourceKey, delay?: number) instead
+     */
     setMessage(message: Message) {
-      this.message = message
+      console.log(message.content)
     },
-    showMascotItem() {
-      this.showMascot = true
+    showMessage(key: StringResourceKey, delay?: number) {
+      this.hideSpeechBubble() //Support animation
+      this.showMascotItem()
+      setTimeout(() => {
+        this.showSpeechBubble()
+        this.messageKey = key
+        this.readMessage()
+      }, delay)
+    },
+    showMascotItem(delay?: number) {
+      setTimeout(() => {
+        this.showMascot = true
+      }, delay)
     },
     hideMascotItem() {
       this.showMascot = false
     },
-    showMessage() {
-      this.messageShown = true
+    showSpeechBubble() {
+      this.speechBubbleShown = true
     },
-    hideMessage() {
-      this.messageShown = false
+    hideSpeechBubble() {
+      this.speechBubbleShown = false
+    },
+    readMessageAgain() {
+      this.showSpeechBubble()
+      this.readMessage()
+    },
+    readMessage() {
+      readAloud(this.messageKey)
     }
   }
 })
