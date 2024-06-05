@@ -7,6 +7,7 @@ import MinigameTwo from '@/views/dog/MinigameTwo.vue'
 import RecapQuiz from '@/views/dog/RecapQuiz.vue'
 import MinigameJumpNRun from '@/views/dog/MinigameJumpNRun.vue'
 import MinigameCareTime from '@/views/dog/MinigameCareTime.vue'
+import MinigameFood from '@/views/dog/MinigameFood.vue'
 
 type PetStage = {
   path: string
@@ -22,10 +23,10 @@ type PetStages = {
 const petStages: PetStages = {
   dog: [
     { path: 'stages/1', component: MinigameEquipment, name: 'dog-equipment' },
-    { path: 'stages/2', component: MinigameTwo, name: 'dog-stage-two' },
+    { path: 'stages/2', component: MinigameFood, name: 'dog-nutrition' },
     { path: 'stages/3', component: MinigameJumpNRun, name: 'dog-jump-n-run' },
     { path: 'stages/4', component: MinigameCareTime, name: 'dog-caretime' },
-    { path: 'stages/quiz', component: RecapQuiz, name: 'dog-recap-quiz' }
+    { path: 'stages/5', component: RecapQuiz, name: 'dog-recap-quiz' }
   ]
   //cat: [
   //  { path: 'stages/1', component: MinigameEquipment, name: 'cat-one' },

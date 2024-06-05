@@ -1,8 +1,12 @@
 <template>
-  <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
+  <div
+    class="game-container"
+    :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }"
+    @touchstart="handleTouchStart"
+    @touchend="handleTouchEnd"
+  >
     <Character :isJumping="state.isJumping" />
     <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
-    <BtnControl type="jump" @jump="jump" bottom="10" left="100" />
     <button @click="goToNextStage">Nächstes Minigame</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
 
@@ -11,21 +15,23 @@
       :key="poo.id"
       :id="poo.id"
       :positionX="poo.positionX"
+      :image="poo.image"
+      :collected="poo.collected"
       @collect="collectPoo(poo.id)"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import Character from '@/components/JumpNRun/JumpNRunCharacter.vue'
 import Obstacle from '@/components/JumpNRun/ObstacleItem.vue'
 import PooComponent from '@/components/JumpNRun/PooComponent.vue'
-import BtnControl from '@/components/JumpNRun/ControlButton.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import StoneImg from '@/assets/jumpNrun/stone.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
+import PooImg from '@/assets/jumpNrun/poo.png'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
@@ -33,6 +39,8 @@ const mascot = useMascotStore()
 interface Poo {
   id: number
   positionX: number
+  image: string
+  collected: boolean
 }
 
 interface State {
@@ -89,6 +97,19 @@ const jump = () => {
   }
 }
 
+let touchStartY = 0
+
+const handleTouchStart = (event: TouchEvent) => {
+  touchStartY = event.touches[0].clientY
+}
+
+const handleTouchEnd = (event: TouchEvent) => {
+  const touchEndY = event.changedTouches[0].clientY
+  if (touchStartY - touchEndY > 50) {
+    jump()
+  }
+}
+
 const getRandomPooPosition = () => {
   const isLowerRange = Math.random() < 0.5 // Randomly choose between lower and upper range
   const percentage = isLowerRange ? Math.random() * 30 : 70 + Math.random() * 30
@@ -99,7 +120,12 @@ const makePoo = (positionX: number) => {
   if (state.obstaclePositionX < positionX && !state.isGoalVisible) {
     stopRun()
     setTimeout(() => {
-      const newPoo: Poo = { id: state.pooIdCounter++, positionX: (42 * window.innerWidth) / 100 }
+      const newPoo: Poo = {
+        id: state.pooIdCounter++,
+        positionX: (42 * window.innerWidth) / 100,
+        image: PooImg,
+        collected: false
+      }
       state.poos.push(newPoo)
       state.pooCount++
       state.randomPooPosition = -100
