@@ -42,7 +42,7 @@
 import { ref, computed } from 'vue'
 import QuestionComponent from '@/components/QuizQuestion.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
-import mascotMessages from '@/config/mascotMessages'
+//import mascotMessages from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
@@ -52,7 +52,7 @@ const isAnswerSelected = ref(false)
 const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
-const mascotMessage = mascotMessages.dog.quiz
+//const mascotMessage = mascotMessages.dog.quiz
 
 const router = useRouter()
 const showModal = ref(false)
@@ -65,19 +65,15 @@ const handleAnswerSelected = (isCorrect: boolean) => {
   if (isCorrect) {
     isAnswerSelected.value = true
     correctAnswerSelected.value = true
-    mascot.showMascotItem()
-    mascot.setMessage(mascotMessage.correct)
-    mascot.showMessage()
+    mascot.showMessage('STAGEQUIZ_CORRECT')
   } else {
     correctAnswerSelected.value = false
     const currentAnswerNumber = currentQuestionIndex.value + 1
-    const currentAnswerMessage = `inCorrect${currentAnswerNumber}`
+    const currentAnswerMessage = `STAGEQUIZ_INCORRECT${currentAnswerNumber}`
     mascot.hideMascotItem()
-    setTimeout(() => {
-      mascot.showMascotItem()
-      mascot.setMessage(mascotMessage[currentAnswerMessage])
-      mascot.showMessage()
-    }, 100)
+    //mascot.showMessage('STAGEQUIZ_INCORRECT1', 1000)
+    //mascot.showMessage(currentAnswerMessage)
+    //mascot.showMessage(mascotMessage[currentAnswerMessage])
   }
 }
 
@@ -87,7 +83,6 @@ const nextQuestion = () => {
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
-    mascot.hideMessage()
     mascot.hideMascotItem()
   } else {
     showModal.value = true
@@ -119,7 +114,7 @@ const progress = computed(() => {
   justify-content: center;
   height: 100%;
   width: 70%;
-  margin-right: 150px;
+  margin-right: 200px;
 
   img {
     width: 5%;
