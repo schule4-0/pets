@@ -33,9 +33,9 @@ import DraggableItem, { type DraggableItemType } from '@/components/DraggableIte
 import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/bone.png'
-import bookImg from '@/assets/book.png'
-import backpackImg from '@/assets/backpack.png'
+import boneImg from '@/assets/equipment/bone.png'
+import bookImg from '@/assets/equipment/book.png'
+import backpackImg from '@/assets/equipment/backpack.png'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()

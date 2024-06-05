@@ -1,4 +1,3 @@
-<!-- DropArea.vue -->
 <template>
   <div ref="dropArea" :style="{ width: width }" class="drop-area">
     <img :src="image" alt="Drop Area Image" :style="{ width: '100%' }" />

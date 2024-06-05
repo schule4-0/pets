@@ -9,7 +9,6 @@
       </template>
     </example-component>
     <button @click="goToNextStage">Nächstes Minigame</button>
-    <button @click="goToNextStage">Nächstes Minigame</button>
   </div>
 </template>
 

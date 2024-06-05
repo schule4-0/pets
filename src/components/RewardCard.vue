@@ -24,7 +24,7 @@ import DraggableItem from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import { onMounted } from 'vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/bone.png'
+import boneImg from '@/assets/equipment/bone.png'
 import cartoondogImg from '@/assets/cartoondog1.jpg'
 import { useMascotStore } from '@/stores/useMascotStore'
 
