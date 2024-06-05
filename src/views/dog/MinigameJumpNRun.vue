@@ -15,6 +15,8 @@
       :key="poo.id"
       :id="poo.id"
       :positionX="poo.positionX"
+      :image="poo.image"
+      :collected="poo.collected"
       @collect="collectPoo(poo.id)"
     />
   </div>
@@ -29,6 +31,7 @@ import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import mascotMessages from '@/config/mascotMessages'
 import StoneImg from '@/assets/jumpNrun/stone.png'
+import PooImg from '@/assets/jumpNrun/poo.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
 
 const { goToNextStage } = useStageNavigator()
@@ -45,6 +48,8 @@ onMounted(() => {
 interface Poo {
   id: number
   positionX: number
+  image: string
+  collected: boolean
 }
 
 interface State {
@@ -110,7 +115,6 @@ const handleTouchStart = (event: TouchEvent) => {
 const handleTouchEnd = (event: TouchEvent) => {
   const touchEndY = event.changedTouches[0].clientY
   if (touchStartY - touchEndY > 50) {
-    // Swipe up detected
     jump()
   }
 }
@@ -125,7 +129,12 @@ const makePoo = (positionX: number) => {
   if (state.obstaclePositionX < positionX && !state.isGoalVisible) {
     stopRun()
     setTimeout(() => {
-      const newPoo: Poo = { id: state.pooIdCounter++, positionX: (42 * window.innerWidth) / 100 }
+      const newPoo: Poo = {
+        id: state.pooIdCounter++,
+        positionX: (42 * window.innerWidth) / 100,
+        image: PooImg,
+        collected: false
+      }
       state.poos.push(newPoo)
       state.pooCount++
       state.randomPooPosition = -100
