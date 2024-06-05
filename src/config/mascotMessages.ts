@@ -46,7 +46,7 @@ const stringResources = {
   STAGE4_IS_SHOWERED: {
     content: 'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen.'
   },
-  STAGE4_IS_Dryed: {
+  STAGE4_IS_DRYED: {
     content: 'Rocky is dryed now!'
   }
 } as const

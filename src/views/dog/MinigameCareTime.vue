@@ -54,15 +54,13 @@ const onIsShowered = () => {
 }
 
 const onIsDryed = () => {
-  mascot.showMessage('STAGE4_IS_Dryed')
+  mascot.showMessage('STAGE4_IS_DRYED')
 
   currentState.value = 'gameCompleted'
 }
 
 const onIsCompleted = () => {
-  mascot.showMascotItem()
-  mascot.setMessage({ content: 'Game completed' })
-  mascot.showMessage()
+  // TODO: Do something
 }
 </script>
 
