@@ -14,7 +14,7 @@ const props = defineProps<{
 .character {
   position: absolute;
   bottom: 20vh;
-  left: 80vh;
+  left: 50vh;
 }
 
 .character.jump {
