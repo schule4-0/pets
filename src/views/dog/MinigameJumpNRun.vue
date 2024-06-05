@@ -23,15 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { reactive, onMounted } from 'vue'
 import Character from '@/components/JumpNRun/JumpNRunCharacter.vue'
 import Obstacle from '@/components/JumpNRun/ObstacleItem.vue'
 import PooComponent from '@/components/JumpNRun/PooComponent.vue'
-import BtnControl from '@/components/JumpNRun/ControlButton.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import StoneImg from '@/assets/jumpNrun/stone.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
+import PooImg from '@/assets/jumpNrun/poo.png'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
