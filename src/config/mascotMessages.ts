@@ -48,6 +48,21 @@ const stringResources = {
   },
   STAGE4_IS_DRYED: {
     content: 'Rocky is dryed now!'
+  },
+  STAGEQUIZ_INCORRECT1: {
+    content: 'Damit kann Rocky nicht spielen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_INCORRECT2: {
+    content: 'Das sollte Rocky nicht essen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_INCORRECT3: {
+    content: 'Das kann man nicht an Rocky anbringen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_INCORRECT4: {
+    content: 'Damit kann man Rocky nicht sauber bekommen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_CORRECT: {
+    content: 'Gut gemacht. Drücke auf den Pfeil.'
   }
 } as const
 

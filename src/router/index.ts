@@ -1,8 +1,10 @@
 import type { defineComponent } from 'vue'
 import { type RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import MainGameView from '../views/MainGameView.vue'
+import HomeView from '@/views/HomeView.vue'
+import MainGameView from '@/views/MainGameView.vue'
 import MinigameEquipment from '@/views/dog/MinigameEquipment.vue'
+import MinigameTwo from '@/views/dog/MinigameTwo.vue'
+import RecapQuiz from '@/views/dog/RecapQuiz.vue'
 import MinigameJumpNRun from '@/views/dog/MinigameJumpNRun.vue'
 import MinigameCareTime from '@/views/dog/MinigameCareTime.vue'
 import MinigameFood from '@/views/dog/MinigameFood.vue'
@@ -23,7 +25,8 @@ const petStages: PetStages = {
     { path: 'stages/1', component: MinigameEquipment, name: 'dog-equipment' },
     { path: 'stages/2', component: MinigameFood, name: 'dog-nutrition' },
     { path: 'stages/3', component: MinigameJumpNRun, name: 'dog-jump-n-run' },
-    { path: 'stages/4', component: MinigameCareTime, name: 'dog-caretime' }
+    { path: 'stages/4', component: MinigameCareTime, name: 'dog-caretime' },
+    { path: 'stages/5', component: RecapQuiz, name: 'dog-recap-quiz' }
   ]
   //cat: [
   //  { path: 'stages/1', component: MinigameEquipment, name: 'cat-one' },
