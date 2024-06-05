@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <DropArea @droppedInArea="handleDropInArea" />
+    <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
 
     <DraggableItem
       v-for="item in items"
@@ -13,27 +13,37 @@
     />
 
     <button @click="goToNextStage">Nächstes Minigame</button>
+
+    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
+      <template #solution="{ solutionImages }">
+        <div class="solution">
+          <p>Rockys Utensilien</p>
+          <div class="solution-images">
+            <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
+          </div>
+        </div>
+      </template>
+    </RewardGame>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
-import { onMounted } from 'vue'
+import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-
 import boneImg from '@/assets/equipment/bone.png'
 import bookImg from '@/assets/equipment/book.png'
-
+import backpackImg from '@/assets/equipment/backpack.png'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 
 onMounted(() => {
-  //mascot.setMessage(equipmentMessages.message2, 1000)
   mascot.showMessage('STAGE1_BACKPACK', 1000)
+  solutionImages.value = items.value.filter(item => item.type === 'accepted').map(item => item.image)
 })
 
 const items = ref<DraggableItemType[]>([
@@ -45,6 +55,12 @@ const removeItem = (id: number) => {
   items.value = items.value.filter((i) => i.id !== id)
 }
 
+const checkAllAcceptedItemsRemoved = () => {
+  return items.value.every(item => item.type !== 'accepted')
+}
+
+const solutionImages = ref<string[]>([])
+
 const handleDropInArea = (item: {
   id: number
   isWithin: boolean
@@ -53,12 +69,22 @@ const handleDropInArea = (item: {
   console.log('handleDropInArea', item)
   if (item.type === 'accepted') {
     removeItem(item.id)
-    //mascot.setMessage(generalMessages.correct)//TODO
     mascot.showMessage('GENERAL_RIGHT')
+    if (checkAllAcceptedItemsRemoved()) {
+      setTimeout(() => {
+        showReward.value = true
+      }, 4000);
+    }
   } else {
-    //mascot.setMessage(generalMessages.wrong)
     mascot.showMessage('GENERAL_WRONG')
   }
+}
+
+const showReward = ref(false)
+
+const handleRewardFinish = () => {
+  goToNextStage()
+  showReward.value = false
 }
 </script>
 
@@ -73,11 +99,11 @@ const handleDropInArea = (item: {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Aligns children vertically in the center */
-  align-items: center; /* Aligns children horizontally in the center */
+  justify-content: center;
+  align-items: center;
 }
 
 .drop-area-wrapper {
-  margin-bottom: 20px; /* Optional: Add some space below the DropArea */
+  margin-bottom: 20px;
 }
 </style>

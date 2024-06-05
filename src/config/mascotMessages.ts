@@ -15,6 +15,12 @@ const stringResources = {
   GENERAL_RIGHT: {
     content: 'Das war richtig. Gut gemacht!'
   },
+  REWARD_ROCKY_HAPPY: {
+    content: 'Wau wau! Hier siehst du nochmal, was Rocky braucht.'
+  },
+  REWARD_GIVE_BONE: {
+    content: 'Super gemacht! Gib Rocky einen Knochen!'
+  },
   STAGE1_BACKPACK: {
     content: 'Packe alles, was Rocky benötigt in den Rucksack'
   },
@@ -29,6 +35,19 @@ const stringResources = {
   },
   STAGE3_TRYAGAIN: {
     content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
+  },
+  STAGE4_INTRODUCTION: {
+    content:
+      'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'
+  },
+  STAGE4_IS_SHAMPOOED: {
+    content: 'Rocky ist jetzt mit genug Shapoo eingedeckt, Zeit ihn abzuwaschen!'
+  },
+  STAGE4_IS_SHOWERED: {
+    content: 'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen.'
+  },
+  STAGE4_IS_DRYED: {
+    content: 'Rocky is dryed now!'
   },
   STAGEQUIZ_INCORRECT1: {
     content: 'Damit kann Rocky nicht spielen. Versuch es doch noch einmal.'
