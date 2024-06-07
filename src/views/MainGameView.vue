@@ -7,7 +7,9 @@
 
     <!-- Overlay content positioned at corners over the game content -->
     <div class="overlay-top-left">
-      <button @click="goBack">Zurück</button>
+      <button @click="goBackToHome" class="closeButton">
+        <img src="@/assets/CloseButton.png" />
+      </button>
     </div>
     <div class="overlay-top-right">
       <!--for demonstration only-->
@@ -28,8 +30,8 @@ import MascotItem from '@/components/MascotItem.vue'
 const router = useRouter()
 const mascot = useMascotStore()
 
-function goBack() {
-  router.back()
+function goBackToHome() {
+  router.push(`/`)
 }
 
 //for demonstration only
@@ -70,14 +72,15 @@ main {
 }
 
 $overlay-color: rgba(0, 0, 0, 0.8);
+$overlay-color-left: transparent;
 $overlay-padding: 10px;
-@mixin overlay-position($top: null, $right: null, $bottom: null, $left: null) {
+@mixin overlay-position($top: null, $right: null, $bottom: null, $left: null, $color: null) {
   position: fixed;
   display: flex;
   align-items: center;
   padding: $overlay-padding;
   z-index: 1000;
-  background: $overlay-color;
+  background: $color;
   color: white;
   top: $top;
   right: $right;
@@ -86,10 +89,10 @@ $overlay-padding: 10px;
 }
 
 .overlay-top-left {
-  @include overlay-position(0, null, null, 0);
+  @include overlay-position(5px, null, null, 0, $overlay-color-left);
 }
 .overlay-top-right {
-  @include overlay-position(0, 0, null, null);
+  @include overlay-position(0, 0, null, null, $overlay-color);
 }
 
 button {
@@ -102,5 +105,20 @@ button {
   right: 5%;
   z-index: 1050;
   opacity: 1;
+}
+
+.closeButton {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  background: none;
+
+  img {
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    object-fit: cover;
+    display: block;
+  }
 }
 </style>
