@@ -6,10 +6,7 @@
         <p>{{ mascot.messageString }}</p>
       </div>
     </transition>
-    <div class="mascot">
-      <img src="../assets/icon_audio.svg" alt="Audio" />
-      <div class="mascot-image"></div>
-    </div>
+    <img src="../assets/mascot/Max_happy.svg" alt="Max_happy" />
   </div>
 </template>
 
@@ -24,6 +21,9 @@ const mascot = useMascotStore()
   flex-direction: column;
   align-items: flex-end;
   -webkit-tap-highlight-color: transparent;
+  img {
+    min-width: 150px;
+  }
 }
 
 .mascot {
