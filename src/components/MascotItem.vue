@@ -22,28 +22,9 @@ const mascot = useMascotStore()
   align-items: flex-end;
   -webkit-tap-highlight-color: transparent;
   img {
-    min-width: 150px;
+    width: 150px;
   }
 }
-
-.mascot {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 10px;
-  img {
-    width: 40px;
-  }
-}
-
-.mascot-image {
-  width: 75px;
-  height: 150px;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 50px;
-}
-
 .speech-bubble {
   position: relative;
   max-width: 300px;
