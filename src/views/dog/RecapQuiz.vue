@@ -7,7 +7,7 @@
         :class="{ answered: answered }"
         class="progress-buttons"
       >
-        <img src="@/assets/icon_arrow.png" />
+        <img src="@/assets/icon_arrows (1).png" />
         <!-- for demonstration only, later with icon -->
       </button>
     </div>
