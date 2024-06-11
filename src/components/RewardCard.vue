@@ -1,21 +1,22 @@
 <template>
   <div class="reward-game-container">
-
     <slot name="solution" v-if="wasBoneGiven" :solutionImages="solutionImages"></slot>
 
-      <DraggableItem class="boneImg"
-        :id="1"
-        type="accepted"
-        :image="boneImg"
-        :initialX="50"
-        :initialY="5"
-        v-if="!wasBoneGiven"
-      />
+    <DraggableItem
+      class="boneImg"
+      :id="1"
+      type="accepted"
+      :image="boneImg"
+      :initialX="50"
+      :initialY="5"
+      :collected="false"
+      v-if="!wasBoneGiven"
+    />
 
-      <button v-if="wasBoneGiven" class="nextBtn" @click="goToNextStage">Nächstes Minigame</button>
+    <button v-if="wasBoneGiven" class="nextBtn" @click="goToNextStage">Nächstes Minigame</button>
   </div>
-  
-  <DropArea @droppedInArea="handleDropInArea" class="dogImg" :image="cartoondogImg" width="20vw"/>
+
+  <DropArea @droppedInArea="handleDropInArea" class="dogImg" :image="cartoondogImg" width="20vw" />
 </template>
 
 <script setup lang="ts">
@@ -35,20 +36,19 @@ const wasBoneGiven = ref(false)
 defineProps<{ solutionImages: string[] }>()
 
 onMounted(() => {
-    mascot.showMessage('REWARD_GIVE_BONE')
+  mascot.showMessage('REWARD_GIVE_BONE')
 })
 
 const handleDropInArea = (item: {
-    id: number
-    isWithin: boolean
-    type: 'accepted' | 'rejected'
+  id: number
+  isWithin: boolean
+  type: 'accepted' | 'rejected'
 }) => {
-    if (item.type === 'accepted') {
-        wasBoneGiven.value = true
-        mascot.showMessage('REWARD_ROCKY_HAPPY')
-    }
+  if (item.type === 'accepted') {
+    wasBoneGiven.value = true
+    mascot.showMessage('REWARD_ROCKY_HAPPY')
+  }
 }
-
 </script>
 
 <style>
