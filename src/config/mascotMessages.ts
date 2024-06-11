@@ -35,6 +35,10 @@ const stringResources = {
   },
   STAGE3_TRYAGAIN: {
     content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
+  },
+  STAGE3_EXPLAINATION: {
+    content:
+      'Versuche alle Hundehaufen einzusammeln. Es ist wichtig, dass wir die Umwelt sauber halten.'
   }
 } as const
 
