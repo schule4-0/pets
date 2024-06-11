@@ -8,7 +8,6 @@
     <Character :isJumping="state.isJumping" />
     <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
     <button @click="goToNextStage">Nächstes Minigame</button>
-    <button @click="jump">jump</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
     <ScoreBoard :items="state.poos" />
 
@@ -58,7 +57,6 @@ interface State {
   isGoalVisible: boolean
   goalPositionX: number
   pooIdCounter: number
-  poosToCollect: number
   randomPooPosition: number
 }
 
@@ -94,7 +92,6 @@ const initialState: State = {
   isGoalVisible: false,
   goalPositionX: (90 * window.innerWidth) / 100,
   pooIdCounter: 0,
-  poosToCollect: 3,
   randomPooPosition: -100
 }
 
@@ -193,7 +190,7 @@ const animate = () => {
     }
 
     if (isCollidingGoal()) {
-      checkWinCondition()
+      checkWin()
     }
 
     requestAnimationFrame(animate)
@@ -234,8 +231,10 @@ const isCollidingGoal = () => {
   )
 }
 
-const checkWinCondition = () => {
-  if (state.collectedPooCount === state.pooCount) {
+const checkWin = () => {
+  // check if all poos are collected
+  const allCollected = state.poos.every((poo) => poo.collected)
+  if (allCollected) {
     mascot.showMessage('STAGE3_SUPER')
     stopRun()
     setTimeout(() => {
@@ -251,9 +250,22 @@ const checkWinCondition = () => {
 }
 
 const resetGame = () => {
-  Object.assign(state, initialState)
+  //reset state
+  state.backgroundPositionX = 0
+  state.obstaclePositionX = 2000
+  state.isRunning = false
+  state.isJumping = false
+  state.isWaiting = true
+  state.pooCount = 0
+  state.collectedPooCount = 0
+  state.poos = initialPoos.map((poo) => ({ ...poo, collected: false }))
+  state.isGoalVisible = false
+  state.goalPositionX = (90 * window.innerWidth) / 100
+  state.pooIdCounter = 0
+  state.randomPooPosition = -100
 
   setTimeout(() => {
+    state.isWaiting = false
     run()
     mascot.hideMascotItem()
   }, 5000)
@@ -262,6 +274,7 @@ const resetGame = () => {
 onMounted(() => {
   mascot.showMessage('STAGE3_GOWALK')
   resetGame()
+  run()
 })
 </script>
 <style scoped>
