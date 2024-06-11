@@ -3,7 +3,11 @@ import { getStringRes } from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 export function useReading() {
-  const audioFiles = import.meta.glob('../assets/audio/mascot/*.mp3')
+  //TODO: correct type
+  const audioFiles = import.meta.glob('@/assets/audio/mascot/*.mp3') as Record<
+    string,
+    () => Promise<{ default: string }>
+  >
 
   const speech = new SpeechSynthesisUtterance()
   speech.lang = 'de'
@@ -29,7 +33,9 @@ export function useReading() {
   }
 
   async function playFile(filePath: string) {
-    const module = await import(/* @vite-ignore */ filePath)
+    //get import function by filePath-key
+    const getFile = audioFiles[filePath]
+    const module = await getFile()
     audio.src = module.default
     await audio.play()
   }
@@ -43,8 +49,9 @@ export function useReading() {
   }
 
   async function readAloud(key: StringResourceKey) {
-    const filePath = `../assets/audio/mascot/${key}.mp3`
+    const filePath = `/src/assets/audio/mascot/${key}.mp3`
     cancelAudio()
+
     try {
       //check if file exists
       if (!audioFiles[filePath]) {
