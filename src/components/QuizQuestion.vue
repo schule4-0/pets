@@ -1,6 +1,5 @@
 <template>
   <div class="question">
-    <img src="@/assets/icon_audio.svg" alt="Audio" />
     <h1>{{ question }}</h1>
   </div>
 </template>
@@ -15,16 +14,13 @@ const props = defineProps<{
 
 <style scoped>
 .question {
-  font-size: 20px;
-  margin-bottom: 30px;
-  margin-top: 30px;
+  font-size: 18px;
+  margin-bottom: 10px;
+  margin-top: 50px;
   text-align: center;
-  background-color: lightgreen;
-  border-radius: 20px;
+  background-color: #646bee;
+  border-radius: 20px 20px 3px 20px;
   padding: 15px;
-}
-
-img {
-  float: right;
+  color: #f2f5f8;
 }
 </style>

@@ -2,13 +2,12 @@
   <div
     class="answer-card"
     :class="{
-      correct: wasClicked && answer.isCorrect /*|| (answer.isCorrect && correctAnswerSelected)*/,
-      incorrect: wasClicked && !answer.isCorrect /*|| (!answer.isCorrect && correctAnswerSelected)*/
+      correct: wasClicked && answer.isCorrect,
+      incorrect: wasClicked && !answer.isCorrect
     }"
     @click="selectAnswer"
   >
     <img :src="answer.image" :alt="answer.text" class="answer-image" />
-    <h3>{{ answer.text }}</h3>
   </div>
 </template>
 
@@ -18,7 +17,6 @@ import type { Answer } from '@/config/quizConfig'
 
 const props = defineProps<{
   answer: Answer
-  correctAnswerSelected: boolean
 }>()
 
 const emit = defineEmits(['answer-selected'])
@@ -44,30 +42,24 @@ watch(
 
 <style scoped>
 .answer-card {
-  margin-top: 50px;
+  margin-top: 70px;
   background-color: gainsboro;
-  border-radius: 20px;
-  padding: 30px;
+  border-radius: 60px;
+  padding: 40px;
   cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.answer-card:hover {
-  transform: scale(1.05);
 }
 
 .answer-card.correct {
-  background-color: lightgreen;
+  background-color: #b0dc64;
 }
 
 .answer-card.incorrect {
-  background-color: lightcoral;
+  background-color: #ffa4a4;
 }
 
 .answer-image {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 20px;
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
 }
 </style>
