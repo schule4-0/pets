@@ -70,7 +70,13 @@ const collectItem = (id: number) => {
     }
     return item
   })
-  console.log('items', items.value)
+
+  items.value = items.value.map((item) => {
+    if (item.id === id) {
+      return { ...item, collected: true }
+    }
+    return item
+  })
 }
 
 const checkAllAcceptedItemsRemoved = () => {
