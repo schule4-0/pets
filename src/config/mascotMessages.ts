@@ -39,6 +39,34 @@ const stringResources = {
   STAGE3_EXPLAINATION: {
     content:
       'Versuche alle Hundehaufen einzusammeln. Es ist wichtig, dass wir die Umwelt sauber halten.'
+  },
+  STAGE4_INTRODUCTION: {
+    content:
+      'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'
+  },
+  STAGE4_IS_SHAMPOOED: {
+    content: 'Rocky ist jetzt mit genug Shapoo eingedeckt, Zeit ihn abzuwaschen!'
+  },
+  STAGE4_IS_SHOWERED: {
+    content: 'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen.'
+  },
+  STAGE4_IS_DRYED: {
+    content: 'Rocky is dryed now!'
+  },
+  STAGEQUIZ_INCORRECT1: {
+    content: 'Damit kann Rocky nicht spielen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_INCORRECT2: {
+    content: 'Das sollte Rocky nicht essen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_INCORRECT3: {
+    content: 'Das kann man nicht an Rocky anbringen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_INCORRECT4: {
+    content: 'Damit kann man Rocky nicht sauber bekommen. Versuch es doch noch einmal.'
+  },
+  STAGEQUIZ_CORRECT: {
+    content: 'Gut gemacht. Drücke auf den Pfeil.'
   }
 } as const
 
