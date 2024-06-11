@@ -96,6 +96,7 @@ const state = reactive<State>({
 let jumpTimeout: number | null = null
 let makePooTimeout: number | null = null
 let colissionTimeout: number | null = null
+let winTimeout: number | null = null
 let gameResetTimeout: number | null = null
 
 const run = () => {
@@ -224,13 +225,13 @@ const checkWin = () => {
   if (allCollected) {
     mascot.showMessage('STAGE3_SUPER')
     stopRun()
-    setTimeout(() => {
+    winTimeout = setTimeout(() => {
       goToNextStage()
     }, 2000)
   } else {
     mascot.showMessage('STAGE3_TRYAGAIN')
     stopRun()
-    setTimeout(() => {
+    gameResetTimeout = setTimeout(() => {
       resetGame()
     }, 2000)
   }
@@ -250,7 +251,7 @@ const resetGame = () => {
   state.goalPositionX = initialState.goalPositionX
   state.pooIdCounter = initialState.pooIdCounter
 
-  setTimeout(() => {
+  gameResetTimeout = setTimeout(() => {
     run()
     mascot.hideMascotItem()
   }, 5000)
@@ -259,7 +260,6 @@ const resetGame = () => {
 onMounted(() => {
   mascot.showMessage('STAGE3_GOWALK')
   resetGame()
-  run()
 })
 
 onUnmounted(() => {
@@ -267,6 +267,7 @@ onUnmounted(() => {
   if (makePooTimeout) clearTimeout(makePooTimeout)
   if (colissionTimeout) clearTimeout(colissionTimeout)
   if (gameResetTimeout) clearTimeout(gameResetTimeout)
+  if (winTimeout) clearTimeout(winTimeout)
 })
 </script>
 <style scoped>
