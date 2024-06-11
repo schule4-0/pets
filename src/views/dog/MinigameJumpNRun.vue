@@ -1,14 +1,11 @@
 <template>
-  <div
-    class="game-container"
-    :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }"
-    @touchstart="handleTouchStart"
-    @touchend="handleTouchEnd"
-  >
+  <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
     <Character :isJumping="state.isJumping" />
     <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
     <button @click="goToNextStage">Nächstes Minigame</button>
+    <button @click="jump" class="btnJump">Jump</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
+    <ScoreBoard :items="state.poos" />
 
     <PooComponent
       v-for="poo in state.poos"
@@ -23,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 import Character from '@/components/JumpNRun/JumpNRunCharacter.vue'
 import Obstacle from '@/components/JumpNRun/ObstacleItem.vue'
 import PooComponent from '@/components/JumpNRun/PooComponent.vue'
@@ -32,6 +29,7 @@ import { useMascotStore } from '@/stores/useMascotStore'
 import StoneImg from '@/assets/jumpNrun/stone.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
 import PooImg from '@/assets/jumpNrun/poo.png'
+import ScoreBoard from '@/components/ScoreBoard.vue'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
@@ -55,10 +53,28 @@ interface State {
   isGoalVisible: boolean
   goalPositionX: number
   pooIdCounter: number
-  poosToCollect: number
-  randomPooPosition: number
 }
 
+const initialPoos = [
+  {
+    id: 0,
+    positionX: -1000,
+    image: PooImg,
+    collected: false
+  },
+  {
+    id: 1,
+    positionX: -1000,
+    image: PooImg,
+    collected: false
+  },
+  {
+    id: 2,
+    positionX: -1000,
+    image: PooImg,
+    collected: false
+  }
+]
 const initialState: State = {
   backgroundPositionX: 0,
   obstaclePositionX: 2000,
@@ -67,15 +83,21 @@ const initialState: State = {
   isWaiting: false,
   pooCount: 0,
   collectedPooCount: 0,
-  poos: [],
+  poos: initialPoos,
   isGoalVisible: false,
-  goalPositionX: (90 * window.innerWidth) / 100,
-  pooIdCounter: 0,
-  poosToCollect: 3,
-  randomPooPosition: -100
+  goalPositionX: (110 * window.innerWidth) / 100,
+  pooIdCounter: 0
 }
 
-const state = reactive<State>({ ...initialState })
+const state = reactive<State>({
+  ...initialState
+})
+
+let jumpTimeout: number | null = null
+let makePooTimeout: number | null = null
+let colissionTimeout: number | null = null
+let winTimeout: number | null = null
+let gameResetTimeout: number | null = null
 
 const run = () => {
   if (!state.isWaiting) {
@@ -91,57 +113,30 @@ const stopRun = () => {
 const jump = () => {
   if (!state.isJumping && !state.isWaiting) {
     state.isJumping = true
-    setTimeout(() => {
+    jumpTimeout = setTimeout(() => {
       state.isJumping = false
-    }, 2000) // duration of jump animation
+    }, 3000) // duration of jump animation
   }
 }
 
-let touchStartY = 0
-
-const handleTouchStart = (event: TouchEvent) => {
-  touchStartY = event.touches[0].clientY
-}
-
-const handleTouchEnd = (event: TouchEvent) => {
-  const touchEndY = event.changedTouches[0].clientY
-  if (touchStartY - touchEndY > 50) {
-    jump()
-  }
-}
-
-const getRandomPooPosition = () => {
-  const isLowerRange = Math.random() < 0.5 // Randomly choose between lower and upper range
-  const percentage = isLowerRange ? Math.random() * 30 : 70 + Math.random() * 30
-  return (percentage * window.innerWidth) / 100
-}
-
-const makePoo = (positionX: number) => {
-  if (state.obstaclePositionX < positionX && !state.isGoalVisible) {
-    stopRun()
-    setTimeout(() => {
-      const newPoo: Poo = {
-        id: state.pooIdCounter++,
-        positionX: (42 * window.innerWidth) / 100,
-        image: PooImg,
-        collected: false
-      }
-      state.poos.push(newPoo)
-      state.pooCount++
-      state.randomPooPosition = -100
-      run()
-    }, 1000)
-  }
+const makePoo = () => {
+  stopRun()
+  makePooTimeout = setTimeout(() => {
+    state.poos[state.pooCount].positionX = (40 * window.innerWidth) / 100
+    state.pooCount++
+    run()
+  }, 1000)
 }
 
 const collectPoo = (id: number) => {
-  state.poos = state.poos.filter((poo) => poo.id !== id)
-  state.collectedPooCount++
+  const poo = state.poos.find((poo) => poo.id === id)
+  if (poo) {
+    poo.collected = true
+  }
 }
 
 const animate = () => {
   if (state.isRunning) {
-    makePoo(state.randomPooPosition)
     state.backgroundPositionX -= 5
     state.obstaclePositionX -= 5
     if (state.poos.length > 0) {
@@ -153,11 +148,22 @@ const animate = () => {
       state.goalPositionX -= 5
     }
 
-    if (state.obstaclePositionX < -50) {
+    if (state.obstaclePositionX < -100 && !state.isJumping) {
       state.obstaclePositionX = 2000
-      state.randomPooPosition = getRandomPooPosition()
-      if (state.pooCount > state.poosToCollect - 1) {
-        state.isGoalVisible = true
+      if (state.pooCount >= state.poos.length) {
+        const collectedPooCount = state.poos.filter((poo) => poo.collected).length
+        console.log(collectedPooCount)
+        if (collectedPooCount > 0) {
+          state.isGoalVisible = true
+        } else {
+          mascot.showMessage('STAGE3_EXPLAINATION')
+          stopRun()
+          gameResetTimeout = setTimeout(() => {
+            resetGame()
+          }, 2000)
+        }
+      } else {
+        makePoo()
       }
     }
 
@@ -165,14 +171,14 @@ const animate = () => {
       mascot.showMessage('STAGE3_OUTCH')
       state.isWaiting = true
       stopRun()
-      setTimeout(() => {
+      colissionTimeout = setTimeout(() => {
         state.isWaiting = false
         resetGame()
       }, 1000)
     }
 
     if (isCollidingGoal()) {
-      checkWinCondition()
+      checkWin()
     }
 
     requestAnimationFrame(animate)
@@ -213,26 +219,39 @@ const isCollidingGoal = () => {
   )
 }
 
-const checkWinCondition = () => {
-  if (state.collectedPooCount === state.pooCount) {
+const checkWin = () => {
+  // check if all poos are collected
+  const allCollected = state.poos.every((poo) => poo.collected)
+  if (allCollected) {
     mascot.showMessage('STAGE3_SUPER')
     stopRun()
-    setTimeout(() => {
+    winTimeout = setTimeout(() => {
       goToNextStage()
     }, 2000)
   } else {
     mascot.showMessage('STAGE3_TRYAGAIN')
     stopRun()
-    setTimeout(() => {
+    gameResetTimeout = setTimeout(() => {
       resetGame()
     }, 2000)
   }
 }
 
 const resetGame = () => {
-  Object.assign(state, initialState)
-  state.goalPositionX = (90 * window.innerWidth) / 100
-  setTimeout(() => {
+  //reset state
+  state.backgroundPositionX = initialState.backgroundPositionX
+  state.obstaclePositionX = initialState.obstaclePositionX
+  state.isRunning = initialState.isRunning
+  state.isJumping = initialState.isJumping
+  state.isWaiting = initialState.isWaiting
+  state.pooCount = initialState.pooCount
+  state.collectedPooCount = initialState.collectedPooCount
+  state.poos = initialState.poos.map((poo) => ({ ...poo, collected: false }))
+  state.isGoalVisible = initialState.isGoalVisible
+  state.goalPositionX = initialState.goalPositionX
+  state.pooIdCounter = initialState.pooIdCounter
+
+  gameResetTimeout = setTimeout(() => {
     run()
     mascot.hideMascotItem()
   }, 5000)
@@ -242,8 +261,15 @@ onMounted(() => {
   mascot.showMessage('STAGE3_GOWALK')
   resetGame()
 })
-</script>
 
+onUnmounted(() => {
+  if (jumpTimeout) clearTimeout(jumpTimeout)
+  if (makePooTimeout) clearTimeout(makePooTimeout)
+  if (colissionTimeout) clearTimeout(colissionTimeout)
+  if (gameResetTimeout) clearTimeout(gameResetTimeout)
+  if (winTimeout) clearTimeout(winTimeout)
+})
+</script>
 <style scoped>
 .game-container {
   position: relative;
@@ -258,5 +284,11 @@ onMounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.btnJump {
+  position: absolute;
+  bottom: 5vh;
+  left: 5vh;
+  padding: 5vh;
 }
 </style>

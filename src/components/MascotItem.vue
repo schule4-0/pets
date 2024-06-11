@@ -6,10 +6,7 @@
         <p>{{ mascot.messageString }}</p>
       </div>
     </transition>
-    <div class="mascot">
-      <img src="../assets/icon_audio.svg" alt="Audio" />
-      <div class="mascot-image"></div>
-    </div>
+    <img src="../assets/mascot/Max_happy.svg" alt="Max_happy" />
   </div>
 </template>
 
@@ -24,26 +21,10 @@ const mascot = useMascotStore()
   flex-direction: column;
   align-items: flex-end;
   -webkit-tap-highlight-color: transparent;
-}
-
-.mascot {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 10px;
   img {
-    width: 40px;
+    width: 150px;
   }
 }
-
-.mascot-image {
-  width: 75px;
-  height: 150px;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 50px;
-}
-
 .speech-bubble {
   position: relative;
   max-width: 300px;
