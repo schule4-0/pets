@@ -1,5 +1,10 @@
 <template>
-  <div class="poo" @click="collectPoo" :style="{ left: `${props.positionX}px` }">
+  <div
+    v-if="!props.collected"
+    class="poo"
+    @click="collectPoo"
+    :style="{ left: `${props.positionX}px` }"
+  >
     <img :src="props.image" alt="Poo" class="image" />
   </div>
 </template>
@@ -9,6 +14,7 @@ const props = defineProps<{
   id: number
   positionX: number
   image: string
+  collected: boolean
 }>()
 
 const emits = defineEmits(['collect'])

@@ -18,7 +18,7 @@ const props = defineProps<{
 }
 
 .character.jump {
-  animation: jump-animation 2s forwards;
+  animation: jump-animation 3s forwards;
 }
 
 @keyframes jump-animation {
