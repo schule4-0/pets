@@ -16,8 +16,6 @@ interface Item {
 const props = defineProps<{
   items: Item[]
 }>()
-
-console.log(props.items)
 </script>
 
 <style scoped>
