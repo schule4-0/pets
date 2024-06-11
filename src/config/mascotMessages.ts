@@ -36,6 +36,10 @@ const stringResources = {
   STAGE3_TRYAGAIN: {
     content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
   },
+  STAGE3_EXPLAINATION: {
+    content:
+      'Versuche alle Hundehaufen einzusammeln. Es ist wichtig, dass wir die Umwelt sauber halten.'
+  },
   STAGE4_INTRODUCTION: {
     content:
       'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'

@@ -1,6 +1,6 @@
 <template>
   <div class="scoreboard">
-    <div v-for="item in props.items" :key="item.id" class="poo-icon">
+    <div v-for="item in props.items" :key="item.id" class="icon">
       <img :src="item.image" :class="{ collected: item.collected }" alt="item" />
     </div>
   </div>
@@ -11,6 +11,7 @@ interface Item {
   id: number
   collected: boolean
   image: string
+  type?: 'accepted' | 'rejected'
 }
 
 const props = defineProps<{
@@ -21,17 +22,21 @@ const props = defineProps<{
 <style scoped>
 .scoreboard {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 10vh;
+  left: 10vh;
   display: flex;
-  gap: 5px;
+  gap: 1vh;
+  padding: 1vh;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.poo-icon img {
-  width: 20px;
-  height: 20px;
+.icon img {
+  width: 4vh;
+  height: 4vh;
   opacity: 0.3;
 }
-.poo-icon img.collected {
+.icon img.collected {
   opacity: 1;
 }
 </style>

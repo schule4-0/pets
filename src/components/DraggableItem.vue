@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!props.collected"
     ref="elementRef"
     :data-id="props.id"
     :data-type="props.type"
@@ -27,6 +28,7 @@ export interface DraggableItemType {
   image: string
   initialX: number
   initialY: number
+  collected: boolean
 }
 
 const props = defineProps<DraggableItemType>()

@@ -6,7 +6,10 @@
         :key="index"
         :class="{ answered: answered }"
         class="progress-buttons"
-      ></button>
+      >
+        <img src="@/assets/icon_arrow.png" />
+        <!-- for demonstration only, later with icon -->
+      </button>
     </div>
 
     <QuestionComponent :question="currentQuestion.question" />
@@ -16,15 +19,14 @@
         v-for="(answer, index) in currentQuestion.answers"
         :key="index"
         :answer="answer"
-        :correctAnswerSelected="correctAnswerSelected"
         @answer-selected="handleAnswerSelected"
       />
     </div>
-  </div>
 
-  <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
-    <img src="@/assets/icon_arrow.png" />
-  </button>
+    <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
+      <img src="@/assets/icon_arrow.png" />
+    </button>
+  </div>
 
   <div class="modal">
     <div v-if="showModal" class="modal-overlay">
@@ -49,7 +51,6 @@ import type { StringResourceKey } from '@/config/mascotMessages'
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
-const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
 
@@ -63,20 +64,16 @@ const currentQuestion = computed(() => {
 const handleAnswerSelected = (isCorrect: boolean) => {
   if (isCorrect) {
     isAnswerSelected.value = true
-    correctAnswerSelected.value = true
     mascot.showMessage('STAGEQUIZ_CORRECT')
   } else {
-    correctAnswerSelected.value = false
     const currentAnswerNumber = currentQuestionIndex.value + 1
     const currentAnswerMessage = `STAGEQUIZ_INCORRECT${currentAnswerNumber}` as StringResourceKey
-    mascot.hideMascotItem()
     mascot.showMessage(currentAnswerMessage)
   }
 }
 
 const nextQuestion = () => {
   isAnswerSelected.value = false
-  correctAnswerSelected.value = false
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
@@ -87,7 +84,7 @@ const nextQuestion = () => {
 }
 
 const finishQuiz = () => {
-  router.push(`/pets/dog/stages/1`)
+  router.push(`/`)
 }
 
 const progress = computed(() => {
@@ -111,7 +108,7 @@ const progress = computed(() => {
   justify-content: center;
   height: 100%;
   width: 70%;
-  margin-right: 200px;
+  margin-right: 300px;
 
   img {
     width: 5%;
@@ -127,9 +124,7 @@ const progress = computed(() => {
 }
 
 .next-button {
-  margin-top: 30px;
-  margin-bottom: 10px;
-  margin-left: 150px;
+  margin-top: 10px;
   align-self: flex-end;
   padding: 10px;
   cursor: pointer;
@@ -161,11 +156,21 @@ const progress = computed(() => {
   height: 30px;
   border-radius: 50%;
   margin: 0 5px;
-  background-color: gainsboro;
+  background-color: #95A2F3;
+  border: none;
 }
 
 .progress-buttons.answered {
-  background-color: green;
+  background-color: #646BEE;
+  display: flex;
+  justify-content: end;
+  /* for demonstration only, later with icon */
+  img {
+    width: 18px;
+    height: 28px;
+    object-fit: contain;
+    transform: rotate(90deg);
+  }
 }
 
 .finish-button {
