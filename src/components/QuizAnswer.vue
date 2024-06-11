@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
 import { ref, watch } from 'vue'
 import type { Answer } from '@/config/quizConfig'
 

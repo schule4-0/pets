@@ -1,6 +1,8 @@
 <template>
   <div class="game-container">
-    <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
+    <div class="drop-area">
+      <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
+    </div>
 
     <DraggableItem
       v-for="item in items"
@@ -10,7 +12,10 @@
       :image="item.image"
       :initialX="item.initialX"
       :initialY="item.initialY"
+      :collected="item.collected"
     />
+
+    <ScoreBoard :items="collectableItems" />
 
     <button @click="goToNextStage">Nächstes Minigame</button>
 
@@ -34,29 +39,50 @@ import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/equipment/bone.png'
-import bookImg from '@/assets/equipment/book.png'
+import bookImg from '@/assets/equipment/book.svg'
+import dogFoodImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack.png'
 import { useMascotStore } from '@/stores/useMascotStore'
+import ScoreBoard from '@/components/ScoreBoard.vue'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK', 1000)
-  solutionImages.value = items.value.filter(item => item.type === 'accepted').map(item => item.image)
+  solutionImages.value = items.value
+    .filter((item) => item.type === 'accepted')
+    .map((item) => item.image)
 })
 
 const items = ref<DraggableItemType[]>([
-  { id: 1, type: 'accepted', image: boneImg, initialX: 10, initialY: 80 },
-  { id: 2, type: 'rejected', image: bookImg, initialX: 10, initialY: 50 }
+  { id: 1, type: 'accepted', image: boneImg, initialX: 10, initialY: 80, collected: false },
+  { id: 2, type: 'rejected', image: bookImg, initialX: 10, initialY: 50, collected: false },
+  { id: 3, type: 'accepted', image: dogFoodImg, initialX: 10, initialY: 20, collected: false }
 ])
 
-const removeItem = (id: number) => {
-  items.value = items.value.filter((i) => i.id !== id)
+const collectableItems = ref(items.value.filter((item) => item.type === 'accepted'))
+
+const collectItem = (id: number) => {
+  collectableItems.value = collectableItems.value.map((item) => {
+    if (item.id === id) {
+      return { ...item, collected: true }
+    }
+    return item
+  })
+
+  items.value = items.value.map((item) => {
+    if (item.id === id) {
+      return { ...item, collected: true }
+    }
+    return item
+  })
 }
 
 const checkAllAcceptedItemsRemoved = () => {
-  return items.value.every(item => item.type !== 'accepted')
+  return collectableItems.value.every(
+    (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
+  )
 }
 
 const solutionImages = ref<string[]>([])
@@ -66,14 +92,13 @@ const handleDropInArea = (item: {
   isWithin: boolean
   type: 'accepted' | 'rejected'
 }) => {
-  console.log('handleDropInArea', item)
   if (item.type === 'accepted') {
-    removeItem(item.id)
+    collectItem(item.id)
     mascot.showMessage('GENERAL_RIGHT')
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
         showReward.value = true
-      }, 4000);
+      }, 4000)
     }
   } else {
     mascot.showMessage('GENERAL_WRONG')
@@ -103,7 +128,9 @@ const handleRewardFinish = () => {
   align-items: center;
 }
 
-.drop-area-wrapper {
-  margin-bottom: 20px;
+.drop-area {
+  background-color: rgba(255, 255, 255, 0.7);
+  margin: 5vh;
+  border-radius: 100%;
 }
 </style>
