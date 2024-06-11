@@ -1,13 +1,9 @@
 <template>
-  <div
-    class="game-container"
-    :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }"
-    @touchstart="handleTouchStart"
-    @touchend="handleTouchEnd"
-  >
+  <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
     <Character :isJumping="state.isJumping" />
     <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
     <button @click="goToNextStage">Nächstes Minigame</button>
+    <button @click="jump" class="btnJump">Jump</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
     <ScoreBoard :items="state.poos" />
 
@@ -24,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from 'vue'
+import { reactive, onMounted, onUnmounted } from 'vue'
 import Character from '@/components/JumpNRun/JumpNRunCharacter.vue'
 import Obstacle from '@/components/JumpNRun/ObstacleItem.vue'
 import PooComponent from '@/components/JumpNRun/PooComponent.vue'
@@ -97,6 +93,12 @@ const state = reactive<State>({
   ...initialState
 })
 
+let jumpTimeout: number | null = null
+let makePooTimeout: number | null = null
+let colissionTimeout: number | null = null
+let winTimeout: number | null = null
+let gameResetTimeout: number | null = null
+
 const run = () => {
   if (!state.isWaiting) {
     state.isRunning = true
@@ -111,28 +113,15 @@ const stopRun = () => {
 const jump = () => {
   if (!state.isJumping && !state.isWaiting) {
     state.isJumping = true
-    setTimeout(() => {
+    jumpTimeout = setTimeout(() => {
       state.isJumping = false
     }, 3000) // duration of jump animation
   }
 }
 
-let touchStartY = 0
-
-const handleTouchStart = (event: TouchEvent) => {
-  touchStartY = event.touches[0].clientY
-}
-
-const handleTouchEnd = (event: TouchEvent) => {
-  const touchEndY = event.changedTouches[0].clientY
-  if (touchStartY - touchEndY > 50) {
-    jump()
-  }
-}
-
 const makePoo = () => {
   stopRun()
-  setTimeout(() => {
+  makePooTimeout = setTimeout(() => {
     state.poos[state.pooCount].positionX = (40 * window.innerWidth) / 100
     state.pooCount++
     run()
@@ -169,7 +158,7 @@ const animate = () => {
         } else {
           mascot.showMessage('STAGE3_EXPLAINATION')
           stopRun()
-          setTimeout(() => {
+          gameResetTimeout = setTimeout(() => {
             resetGame()
           }, 2000)
         }
@@ -182,7 +171,7 @@ const animate = () => {
       mascot.showMessage('STAGE3_OUTCH')
       state.isWaiting = true
       stopRun()
-      setTimeout(() => {
+      colissionTimeout = setTimeout(() => {
         state.isWaiting = false
         resetGame()
       }, 1000)
@@ -236,13 +225,13 @@ const checkWin = () => {
   if (allCollected) {
     mascot.showMessage('STAGE3_SUPER')
     stopRun()
-    setTimeout(() => {
+    winTimeout = setTimeout(() => {
       goToNextStage()
     }, 2000)
   } else {
     mascot.showMessage('STAGE3_TRYAGAIN')
     stopRun()
-    setTimeout(() => {
+    gameResetTimeout = setTimeout(() => {
       resetGame()
     }, 2000)
   }
@@ -262,7 +251,7 @@ const resetGame = () => {
   state.goalPositionX = initialState.goalPositionX
   state.pooIdCounter = initialState.pooIdCounter
 
-  setTimeout(() => {
+  gameResetTimeout = setTimeout(() => {
     run()
     mascot.hideMascotItem()
   }, 5000)
@@ -271,7 +260,14 @@ const resetGame = () => {
 onMounted(() => {
   mascot.showMessage('STAGE3_GOWALK')
   resetGame()
-  run()
+})
+
+onUnmounted(() => {
+  if (jumpTimeout) clearTimeout(jumpTimeout)
+  if (makePooTimeout) clearTimeout(makePooTimeout)
+  if (colissionTimeout) clearTimeout(colissionTimeout)
+  if (gameResetTimeout) clearTimeout(gameResetTimeout)
+  if (winTimeout) clearTimeout(winTimeout)
 })
 </script>
 <style scoped>
@@ -288,5 +284,11 @@ onMounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.btnJump {
+  position: absolute;
+  bottom: 5vh;
+  left: 5vh;
+  padding: 5vh;
 }
 </style>
