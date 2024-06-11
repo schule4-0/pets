@@ -74,7 +74,7 @@ const collectItem = (id: number) => {
 }
 
 const checkAllAcceptedItemsRemoved = () => {
-  return items.value.every(
+  return collectableItems.value.every(
     (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
   )
 }
@@ -88,7 +88,6 @@ const handleDropInArea = (item: {
 }) => {
   if (item.type === 'accepted') {
     collectItem(item.id)
-    console.log('items', items.value)
     mascot.showMessage('GENERAL_RIGHT')
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
