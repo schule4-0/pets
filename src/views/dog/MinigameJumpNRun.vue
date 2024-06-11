@@ -8,7 +8,9 @@
     <Character :isJumping="state.isJumping" />
     <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
     <button @click="goToNextStage">Nächstes Minigame</button>
+    <button @click="jump">jump</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
+    <ScoreBoard :items="state.poos" />
 
     <PooComponent
       v-for="poo in state.poos"
@@ -32,6 +34,7 @@ import { useMascotStore } from '@/stores/useMascotStore'
 import StoneImg from '@/assets/jumpNrun/stone.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
 import PooImg from '@/assets/jumpNrun/poo.png'
+import ScoreBoard from '@/components/ScoreBoard.vue'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
@@ -59,6 +62,26 @@ interface State {
   randomPooPosition: number
 }
 
+const initialPoos = [
+  {
+    id: 0,
+    positionX: -1000,
+    image: PooImg,
+    collected: false
+  },
+  {
+    id: 1,
+    positionX: -1000,
+    image: PooImg,
+    collected: false
+  },
+  {
+    id: 2,
+    positionX: -1000,
+    image: PooImg,
+    collected: false
+  }
+]
 const initialState: State = {
   backgroundPositionX: 0,
   obstaclePositionX: 2000,
@@ -67,7 +90,7 @@ const initialState: State = {
   isWaiting: false,
   pooCount: 0,
   collectedPooCount: 0,
-  poos: [],
+  poos: initialPoos,
   isGoalVisible: false,
   goalPositionX: (90 * window.innerWidth) / 100,
   pooIdCounter: 0,
@@ -75,7 +98,9 @@ const initialState: State = {
   randomPooPosition: -100
 }
 
-const state = reactive<State>({ ...initialState })
+const state = reactive<State>({
+  ...initialState
+})
 
 const run = () => {
   if (!state.isWaiting) {
@@ -93,7 +118,7 @@ const jump = () => {
     state.isJumping = true
     setTimeout(() => {
       state.isJumping = false
-    }, 2000) // duration of jump animation
+    }, 3000) // duration of jump animation
   }
 }
 
@@ -117,16 +142,10 @@ const getRandomPooPosition = () => {
 }
 
 const makePoo = (positionX: number) => {
-  if (state.obstaclePositionX < positionX && !state.isGoalVisible) {
+  if (state.obstaclePositionX < positionX && state.pooCount < state.poos.length) {
     stopRun()
     setTimeout(() => {
-      const newPoo: Poo = {
-        id: state.pooIdCounter++,
-        positionX: (42 * window.innerWidth) / 100,
-        image: PooImg,
-        collected: false
-      }
-      state.poos.push(newPoo)
+      state.poos[state.pooCount].positionX = (40 * window.innerWidth) / 100
       state.pooCount++
       state.randomPooPosition = -100
       run()
@@ -135,8 +154,10 @@ const makePoo = (positionX: number) => {
 }
 
 const collectPoo = (id: number) => {
-  state.poos = state.poos.filter((poo) => poo.id !== id)
-  state.collectedPooCount++
+  const poo = state.poos.find((poo) => poo.id === id)
+  if (poo) {
+    poo.collected = true
+  }
 }
 
 const animate = () => {
@@ -156,7 +177,7 @@ const animate = () => {
     if (state.obstaclePositionX < -50) {
       state.obstaclePositionX = 2000
       state.randomPooPosition = getRandomPooPosition()
-      if (state.pooCount > state.poosToCollect - 1) {
+      if (state.pooCount >= state.poos.length) {
         state.isGoalVisible = true
       }
     }
@@ -231,7 +252,7 @@ const checkWinCondition = () => {
 
 const resetGame = () => {
   Object.assign(state, initialState)
-  state.goalPositionX = (90 * window.innerWidth) / 100
+
   setTimeout(() => {
     run()
     mascot.hideMascotItem()
@@ -243,7 +264,6 @@ onMounted(() => {
   resetGame()
 })
 </script>
-
 <style scoped>
 .game-container {
   position: relative;

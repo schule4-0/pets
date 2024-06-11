@@ -16,19 +16,25 @@ interface Item {
 const props = defineProps<{
   items: Item[]
 }>()
+
+console.log(props.items)
 </script>
 
 <style scoped>
 .scoreboard {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 10vh;
+  left: 10vh;
   display: flex;
-  gap: 5px;
+  gap: 1vh;
+  padding: 1vh;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .poo-icon img {
-  width: 20px;
-  height: 20px;
+  width: 4vh;
+  height: 4vh;
   opacity: 0.3;
 }
 .poo-icon img.collected {
