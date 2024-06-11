@@ -17,8 +17,6 @@
 
     <ScoreBoard :items="collectableItems" />
 
-    <button @click="goToNextStage">Nächstes Minigame</button>
-
     <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
       <template #solution="{ solutionImages }">
         <div class="solution">

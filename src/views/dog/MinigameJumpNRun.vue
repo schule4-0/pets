@@ -2,7 +2,6 @@
   <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
     <Character :isJumping="state.isJumping" />
     <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
-    <button @click="goToNextStage">Nächstes Minigame</button>
     <button @click="jump" class="btnJump">Jump</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
     <ScoreBoard :items="state.poos" />
