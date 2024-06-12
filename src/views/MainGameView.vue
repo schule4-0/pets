@@ -8,31 +8,39 @@
     <!-- Overlay content positioned at corners over the game content -->
     <div class="overlay-top-left">
       <div class="navigation">
-        <button @click="goBack" class="goBackButton">
-          <img src="@/assets/icon_arrows (1).png" />
-          <!-- for demonstration only, later with icon -->
+        <button @click="goBack" class="navigationButtons">
+          <img src="@/assets/icons/icon_back.svg" />
         </button>
         <h2>Game</h2>
-        <button @click="goToNextStage" class="goNextButton">
-          <img src="@/assets/icon_arrows (1).png" />
-          <!-- for demonstration only, later with icon -->
+        <button @click="goToNextStage" class="navigationButtons">
+          <!-- should be removed, because of cheating? -->
+          <img src="@/assets/icons/icon_next.svg" />
         </button>
       </div>
       <div class="overlay-top-right">
-        <button @click="goBackToHome" class="closeButton">
-          <img src="@/assets/CloseButtonNew.png" />
-          <!-- for demonstration only, later with icon -->
+        <button @click="openModal" class="navigationButtons">
+          <img src="@/assets/icons/icon_close.svg" />
         </button>
       </div>
     </div>
     <div class="mascot">
       <mascot-item />
     </div>
+    <div class="modal">
+      <div v-if="showModal" class="modal-overlay">
+        <div class="modal-content">
+          <h2>Möchtest du das Spiel beenden?</h2>
+          <button @click="goBackToHome" class="modal-button">Ja</button>
+          <button @click="closeModal" class="modal-button">Nein</button>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 import MascotItem from '@/components/MascotItem.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 
@@ -40,12 +48,22 @@ const router = useRouter()
 
 const { goToNextStage } = useStageNavigator()
 
+const showModal = ref(false)
+
 function goBack() {
   router.back()
 }
 
 function goBackToHome() {
   router.push(`/`)
+}
+
+const openModal = () => {
+  showModal.value = true
+}
+
+const closeModal = () => {
+  showModal.value = false
 }
 </script>
 
@@ -110,49 +128,52 @@ button {
   align-items: center;
 }
 
-.goBackButton {
+.navigationButtons {
   cursor: pointer;
-  padding: 5px;
-  background: #95a2f3;
   border: none;
-  border-radius: 15px;
+  border-radius: 10px;
+  background: var(--s40-color-primary);
+  opacity: 0.7;
+  padding: 15px;
 
   img {
-    width: 35px;
-    height: 35px;
-    object-fit: cover;
-    display: block;
-    transform: rotate(180deg);
-  }
-}
-
-.goNextButton {
-  cursor: pointer;
-  padding: 5px;
-  background: #95a2f3;
-  border: none;
-  border-radius: 15px;
-
-  img {
-    width: 35px;
-    height: 35px;
-    object-fit: cover;
+    width: 20px;
+    height: 20px;
+    object-fit: fill;
     display: block;
   }
 }
 
-.closeButton {
+.modal-button {
+  padding: 15px 20px 15px 20px;
+  margin-top: 20px;
   cursor: pointer;
+  border-radius: 10px;
+  background: var(--s40-color-primary);
+  color: var(--vt-c-white);
   border: none;
-  padding: 0;
-  background: none;
+  font-size: 14px;
+}
 
-  img {
-    width: 48px;
-    height: 48px;
-    border-radius: 15px;
-    object-fit: cover;
-    display: block;
-  }
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--s40-color-contrast);
+  padding: 20px;
+  border-radius: 5px;
+  position: relative;
+  width: 450px;
+  text-align: center;
 }
 </style>
