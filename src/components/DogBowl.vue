@@ -1,9 +1,12 @@
 <template>
-  <div class="dog-bowl" ref="dogBowl" @mousedown="startDrag" @touchstart="startDrag">🥣</div>
+  <div class="dog-bowl" ref="dogBowl" @mousedown="startDrag" @touchstart="startDrag">
+    <img :src="imgDogBowl" alt="dogBowl" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
+import imgDogBowl from '@/assets/equipment/dogfood.svg'
 
 const dogBowl = ref<HTMLDivElement | null>(null)
 const isDragging = ref(false)
@@ -47,8 +50,12 @@ onUnmounted(() => {
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  cursor: pointer;
+  cursor: ew-resize;
   font-size: 5rem;
   user-select: none;
+
+  img {
+    height: 48px;
+  }
 }
 </style>

@@ -24,6 +24,10 @@ const stringResources = {
   STAGE1_BACKPACK: {
     content: 'Packe alles, was Rocky benötigt in den Rucksack'
   },
+  STAGE2_INTRODUCTION: {
+    content:
+      'Hilf Rocky, das richtige Futter zu fangen! Du kannst den Fressnapf hin und her bewegen. Achte dabei darauf, nur das Futter zu fangen, was Rocky auch fressen darf! Los geht’s!'
+  },
   STAGE3_GOWALK: {
     content: 'Gehen wir Gassi! Aber pass auf, dass Rocky nicht gegen Steine läuft!'
   },
