@@ -27,7 +27,7 @@ export interface Quiz {
 
 const quizData: Quiz[] = [
   {
-    question: 'Was sollte in der Tasche für Rocky sein, um mit ihm zu spielen?',
+    question: 'Was sollte in der Tasche für Rocky sein? Ein Ball, Bücher oder ein Hundebett?',
     answers: [
       { text: 'Ball', image: ballImg, isCorrect: true },
       { text: 'Buch', image: bookImg, isCorrect: false },
@@ -35,7 +35,7 @@ const quizData: Quiz[] = [
     ]
   },
   {
-    question: 'Welches Futter soll in Rockys Napf gelegt werden, um ihn zu füttern?',
+    question: 'Welches Futter sollte in Rockys Napf gelegt werden, um ihn zu füttern? Kuchen, Schokolade oder Hundefutter?',
     answers: [
       { text: 'Kuchen', image: cakeImg, isCorrect: false },
       { text: 'Schokolade', image: chocolateImg, isCorrect: false },
@@ -43,7 +43,7 @@ const quizData: Quiz[] = [
     ]
   },
   {
-    question: 'Was muss man beim Spazierengehen mitnehmen, damit Rocky nicht einfach wegläuft?',
+    question: 'Was muss man beim Spazierengehen mitnehmen? Ein Handy, eine Leine oder ein Kartenspiel?',
     answers: [
       { text: 'Handy', image: phoneImg, isCorrect: false },
       { text: 'Leine', image: leashImg, isCorrect: true },
@@ -51,7 +51,7 @@ const quizData: Quiz[] = [
     ]
   },
   {
-    question: 'Wie bekommt man Rocky wieder sauber, wenn er schmutzig ist?',
+    question: 'Wie bekommt man Rocky wieder sauber wenn er schmutzig ist? Mit Seife, mit Spielzeug oder mit einem Hundeknochen?',
     answers: [
       { text: 'Seife', image: soapImg, isCorrect: true },
       { text: 'Spielzeug', image: toyImg, isCorrect: false },
