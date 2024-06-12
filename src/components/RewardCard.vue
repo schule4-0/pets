@@ -16,7 +16,7 @@
       :id="1"
       type="accepted"
       :image="boneImg"
-      :initialX="46"
+      :initialX="44"
       :initialY="5"
       v-if="!wasBoneGiven"
       :collected="false"
@@ -30,7 +30,7 @@ import { ref, defineProps, onMounted, onUnmounted } from 'vue'
 import DraggableItem from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/equipment/bone.png'
+import boneImg from '@/assets/equipment/bone_border.png'
 import cartoondogImg from '@/assets/cartoondog1.jpg'
 import { useMascotStore } from '@/stores/useMascotStore'
 
@@ -38,7 +38,6 @@ const emit = defineEmits(['finish'])
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 const wasBoneGiven = ref(false)
-const isBouncing = ref(false)
 const showNextButton = ref(false)
 let nextButtonTimeoutId: ReturnType<typeof setTimeout> | null = null
 
@@ -115,7 +114,7 @@ const handleNextButtonClick = () => {
 }
 
 .solution-image {
-  height: 100%;
+  width: 10%;
 }
 
 .dogImg {
@@ -128,6 +127,10 @@ const handleNextButtonClick = () => {
   position: absolute;
   z-index: 100;
   animation: wiggle 1s ease;
+
+  img {
+    width: 15vh !important;
+  }
 }
 
 .nextBtn {
