@@ -3,7 +3,7 @@
     class="answer-card"
     :class="{
       correct: wasClicked && answer.isCorrect,
-      incorrect: wasClicked && !answer.isCorrect
+      incorrect: (wasClicked && !answer.isCorrect) || (!answer.isCorrect && correctAnswerSelected)
     }"
     @click="selectAnswer"
   >
@@ -17,6 +17,7 @@ import type { Answer } from '@/config/quizConfig'
 
 const props = defineProps<{
   answer: Answer
+  correctAnswerSelected: boolean
 }>()
 
 const emit = defineEmits(['answer-selected'])
@@ -43,9 +44,9 @@ watch(
 <style scoped>
 .answer-card {
   margin-top: 70px;
-  background-color: gainsboro;
+  background-color: var(--vt-c-white);
   border-radius: 60px;
-  padding: 40px;
+  padding: 50px;
   cursor: pointer;
 }
 
@@ -58,8 +59,8 @@ watch(
 }
 
 .answer-image {
-  width: 180px;
-  height: 180px;
+  width: 160px;
+  height: 160px;
   object-fit: contain;
 }
 </style>

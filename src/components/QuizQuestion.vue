@@ -18,9 +18,9 @@ const props = defineProps<{
   margin-bottom: 10px;
   margin-top: 50px;
   text-align: center;
-  background-color: #646bee;
+  background-color: var(--s40-color-primary);
   border-radius: 20px 20px 3px 20px;
   padding: 15px;
-  color: #f2f5f8;
+  color: var(--s40-color-contrast);
 }
 </style>

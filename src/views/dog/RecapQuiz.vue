@@ -7,8 +7,7 @@
         :class="{ answered: answered }"
         class="progress-buttons"
       >
-        <img src="@/assets/icon_arrows (1).png" />
-        <!-- for demonstration only, later with icon -->
+        <img src="@/assets/icons/icon_check.svg" />
       </button>
     </div>
 
@@ -19,13 +18,14 @@
         v-for="(answer, index) in currentQuestion.answers"
         :key="index"
         :answer="answer"
+        :correctAnswerSelected="correctAnswerSelected"
         @answer-selected="handleAnswerSelected"
       />
     </div>
 
-    <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
+    <!-- <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
       <img src="@/assets/icon_arrow.png" />
-    </button>
+    </button> -->
   </div>
 
   <div class="modal">
@@ -51,6 +51,7 @@ import type { StringResourceKey } from '@/config/mascotMessages'
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
+const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
 
@@ -64,6 +65,7 @@ const currentQuestion = computed(() => {
 const handleAnswerSelected = (isCorrect: boolean) => {
   if (isCorrect) {
     isAnswerSelected.value = true
+    correctAnswerSelected.value = true
     mascot.showMessage('STAGEQUIZ_CORRECT')
   } else {
     const currentAnswerNumber = currentQuestionIndex.value + 1
@@ -74,6 +76,7 @@ const handleAnswerSelected = (isCorrect: boolean) => {
 
 const nextQuestion = () => {
   isAnswerSelected.value = false
+  correctAnswerSelected.value = false
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
@@ -156,20 +159,19 @@ const progress = computed(() => {
   height: 30px;
   border-radius: 50%;
   margin: 0 5px;
-  background-color: #95A2F3;
+  background-color: var(--s40-color-secondary);
   border: none;
 }
 
 .progress-buttons.answered {
-  background-color: #646BEE;
+  background-color: var(--s40-color-primary);
   display: flex;
   justify-content: end;
-  /* for demonstration only, later with icon */
+
   img {
     width: 18px;
     height: 28px;
     object-fit: contain;
-    transform: rotate(90deg);
   }
 }
 
@@ -194,7 +196,7 @@ const progress = computed(() => {
 }
 
 .modal-content {
-  background: white;
+  background: var(--vt-c-white);
   padding: 20px;
   border-radius: 5px;
   position: relative;
