@@ -61,6 +61,7 @@ interface State {
   isObstacleVisible: boolean
   goalPositionX: number
   pooIdCounter: number
+  isWaiting: boolean
 }
 
 const initialPoos = [
@@ -95,7 +96,8 @@ const initialState: State = {
   isGoalVisible: false,
   isObstacleVisible: true,
   goalPositionX: (110 * window.innerWidth) / 100,
-  pooIdCounter: 0
+  pooIdCounter: 0,
+  isWaiting: true
 }
 
 const state = reactive<State>({
@@ -107,6 +109,7 @@ let colissionTimeout: number | null = null
 let gameResetTimeout: number | null = null
 
 const run = () => {
+  state.isWaiting = false
   state.isRunning = true
   state.image = RockyWalkingImg
   animate()
@@ -249,10 +252,11 @@ const resetGame = () => {
   state.isGoalVisible = initialState.isGoalVisible
   state.goalPositionX = initialState.goalPositionX
   state.pooIdCounter = initialState.pooIdCounter
+  state.isWaiting = initialState.isWaiting
 }
 
 const startGame = () => {
-  if (!state.isRunning) run()
+  if (state.isWaiting) run()
 }
 
 onMounted(() => {
