@@ -17,16 +17,7 @@
 
     <ScoreBoard :items="collectableItems" />
 
-    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
-      <template #solution="{ solutionImages }">
-        <div class="solution">
-          <p>Rockys Utensilien</p>
-          <div class="solution-images">
-            <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
-          </div>
-        </div>
-      </template>
-    </RewardGame>
+    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish"></RewardGame>
   </div>
 </template>
 
