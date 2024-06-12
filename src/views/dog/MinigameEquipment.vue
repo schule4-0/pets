@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
@@ -54,16 +54,9 @@ const items = ref<DraggableItemType[]>([
   { id: 3, type: 'accepted', image: dogFoodImg, initialX: 10, initialY: 20, collected: false }
 ])
 
-const collectableItems = ref(items.value.filter((item) => item.type === 'accepted'))
+const collectableItems = computed(() => items.value.filter((item) => item.type === 'accepted'))
 
 const collectItem = (id: number) => {
-  collectableItems.value = collectableItems.value.map((item) => {
-    if (item.id === id) {
-      return { ...item, collected: true }
-    }
-    return item
-  })
-
   items.value = items.value.map((item) => {
     if (item.id === id) {
       return { ...item, collected: true }
