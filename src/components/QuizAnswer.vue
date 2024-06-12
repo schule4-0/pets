@@ -26,9 +26,7 @@ const wasClicked = ref(false)
 const selectAnswer = () => {
   if (!wasClicked.value) {
     wasClicked.value = true
-    emit('answer-selected', props.answer.isCorrect)
-  } else {
-    wasClicked.value = false
+    emit('answer-selected', props.answer.isCorrect, props.answer.isIncorrect)
   }
 }
 
