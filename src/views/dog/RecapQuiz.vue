@@ -7,8 +7,7 @@
         :class="{ answered: answered }"
         class="progress-buttons"
       >
-        <img src="@/assets/icon_arrows (1).png" />
-        <!-- for demonstration only, later with icon -->
+        <img src="@/assets/icons/icon_check.svg" />
       </button>
     </div>
 
@@ -19,13 +18,10 @@
         v-for="(answer, index) in currentQuestion.answers"
         :key="index"
         :answer="answer"
+        :correctAnswerSelected="correctAnswerSelected"
         @answer-selected="handleAnswerSelected"
       />
     </div>
-
-    <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
-      <img src="@/assets/icon_arrow.png" />
-    </button>
   </div>
 
   <div class="modal">
@@ -47,10 +43,12 @@ import AnswerComponent from '@/components/QuizAnswer.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import type { StringResourceKey } from '@/config/mascotMessages'
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
+const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
 
@@ -61,24 +59,40 @@ const currentQuestion = computed(() => {
   return quizData[currentQuestionIndex.value]
 })
 
-const handleAnswerSelected = (isCorrect: boolean) => {
+onMounted(() => {
+  mascot.showMessage('STAGE5_QUESTION1')
+})
+
+const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
   if (isCorrect) {
     isAnswerSelected.value = true
-    mascot.showMessage('STAGEQUIZ_CORRECT')
+    correctAnswerSelected.value = true
+
+    const currentCorrectAnswerNumber = currentQuestionIndex.value + 1
+    const currentCorrectAnswerMessage =
+      `STAGE5_CORRECT${currentCorrectAnswerNumber}` as StringResourceKey
+    mascot.showMessage(currentCorrectAnswerMessage)
+
+    setTimeout(nextQuestion, 10000)
   } else {
-    const currentAnswerNumber = currentQuestionIndex.value + 1
-    const currentAnswerMessage = `STAGEQUIZ_INCORRECT${currentAnswerNumber}` as StringResourceKey
-    mascot.showMessage(currentAnswerMessage)
+    const currentWrongAnswerNumber = currentQuestionIndex.value + 1
+    const currentWrongAnswerMessage =
+      `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
+    mascot.showMessage(currentWrongAnswerMessage)
   }
 }
 
 const nextQuestion = () => {
   isAnswerSelected.value = false
+  correctAnswerSelected.value = false
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
-    mascot.hideMascotItem()
+    const currentQuestionNumber = currentQuestionIndex.value + 1
+    const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+    mascot.showMessage(currentQuestionMessage)
   } else {
+    mascot.showMessage('STAGE5_FINISH')
     showModal.value = true
   }
 }
@@ -106,9 +120,6 @@ const progress = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 70%;
-  margin-right: 300px;
 
   img {
     width: 5%;
@@ -123,27 +134,6 @@ const progress = computed(() => {
   gap: 40px;
 }
 
-.next-button {
-  margin-top: 10px;
-  align-self: flex-end;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  display: flex;
-  justify-content: end;
-  visibility: hidden;
-
-  img {
-    width: 20px;
-    height: auto;
-    object-fit: contain;
-  }
-}
-
-.next-button.visible {
-  visibility: visible;
-}
-
 .progress-bar {
   display: flex;
   justify-content: center;
@@ -156,20 +146,19 @@ const progress = computed(() => {
   height: 30px;
   border-radius: 50%;
   margin: 0 5px;
-  background-color: #95A2F3;
+  background-color: var(--s40-color-secondary);
   border: none;
 }
 
 .progress-buttons.answered {
-  background-color: #646BEE;
+  background-color: var(--s40-color-primary);
   display: flex;
   justify-content: end;
-  /* for demonstration only, later with icon */
+
   img {
     width: 18px;
     height: 28px;
     object-fit: contain;
-    transform: rotate(90deg);
   }
 }
 
@@ -194,7 +183,7 @@ const progress = computed(() => {
 }
 
 .modal-content {
-  background: white;
+  background: var(--vt-c-white);
   padding: 20px;
   border-radius: 5px;
   position: relative;

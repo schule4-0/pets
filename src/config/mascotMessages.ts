@@ -57,20 +57,63 @@ const stringResources = {
   STAGE4_IS_DRYED: {
     content: 'Rocky is dryed now!'
   },
-  STAGEQUIZ_INCORRECT1: {
-    content: 'Damit kann Rocky nicht spielen. Versuch es doch noch einmal.'
+  STAGE5_QUESTION1: {
+    content: 'Was sollte in der Tasche für Rocky sein? Ein Ball, Bücher oder ein Hundebett?'
   },
-  STAGEQUIZ_INCORRECT2: {
-    content: 'Das sollte Rocky nicht essen. Versuch es doch noch einmal.'
+  STAGE5_QUESTION2: {
+    content:
+      'Welches Futter sollte in Rockys Napf gelegt werden, um ihn zu füttern? Kuchen, Schokolade oder Hundefutter?'
   },
-  STAGEQUIZ_INCORRECT3: {
-    content: 'Das kann man nicht an Rocky anbringen. Versuch es doch noch einmal.'
+  STAGE5_QUESTION3: {
+    content:
+      'Was muss man beim Spazierengehen mitnehmen? Ein Handy, eine Leine oder ein Kartenspiel?'
   },
-  STAGEQUIZ_INCORRECT4: {
-    content: 'Damit kann man Rocky nicht sauber bekommen. Versuch es doch noch einmal.'
+  STAGE5_QUESTION4: {
+    content:
+      'Wie bekommt man Rocky wieder sauber wenn er schmutzig ist? Mit Seife, mit Spielzeug oder mit einem Hundeknochen?'
   },
-  STAGEQUIZ_CORRECT: {
-    content: 'Gut gemacht. Drücke auf den Pfeil.'
+  STAGE5_INCORRECT1_1: {
+    content:
+      'Obwohl Bücher toll sind, um zu lesen, braucht Rocky etwas, mit dem er spielen kann, wenn er draußen ist.'
+  },
+  STAGE5_INCORRECT1_2: {
+    content:
+      'Ein Hundebett ist toll für zu Hause, aber es passt nicht in eine Tasche für unterwegs.'
+  },
+  STAGE5_INCORRECT2_1: {
+    content: 'Kuchen ist für Menschen und kann für Rocky ungesund sein.'
+  },
+  STAGE5_INCORRECT2_2: {
+    content: 'Schokolade kann Hunden schaden.'
+  },
+  STAGE5_INCORRECT3_1: {
+    content: 'Ein Handy ist praktisch für Menschen, aber Rocky kann es nicht benutzen.'
+  },
+  STAGE5_INCORRECT3_2: {
+    content:
+      'Ein Kartenspiel ist etwas, das man drinnen spielt. Es hilft nicht beim Spazierengehen mit Rocky.'
+  },
+  STAGE5_INCORRECT4_1: {
+    content: 'Spielzeug ist toll zum Spielen, aber es macht ihn nicht sauber.'
+  },
+  STAGE5_INCORRECT4_2: {
+    content: 'Ein Hundeknochen ist ein tolles Spielzeug für Rocky, aber macht ihn nicht sauber.'
+  },
+  STAGE5_CORRECT1: {
+    content: 'Ja das ist richtig! Mit einem Ball kann Rocky spielen'
+  },
+  STAGE5_CORRECT2: {
+    content:
+      'Hundefutter ist speziell für Hunde gemacht und enthält alles, was Rocky braucht, um gesund und stark zu bleiben!'
+  },
+  STAGE5_CORRECT3: {
+    content: 'Genau! Die Leine ist dafür da, dass Rocky immer schön bei uns bleibt.'
+  },
+  STAGE5_CORRECT4: {
+    content: 'Spitze! Mit Seife bekommen wir alles sauber.'
+  },
+  STAGE5_FINISH: {
+    content: 'Toll gemacht! Du hast alle Fragen richtig beantwortet. Du kennst Rocky wirklich gut!'
   }
 } as const
 
