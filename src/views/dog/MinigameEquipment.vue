@@ -17,26 +17,21 @@
 
     <ScoreBoard :items="collectableItems" />
 
-    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
-      <template #solution="{ solutionImages }">
-        <div class="solution">
-          <p>Rockys Utensilien</p>
-          <div class="solution-images">
-            <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
-          </div>
-        </div>
-      </template>
-    </RewardGame>
+    <RewardGame
+      v-if="showReward"
+      :solution-images="solutionImages"
+      @finish="handleRewardFinish"
+    ></RewardGame>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/equipment/bone.png'
+import boneImg from '@/assets/equipment/bone.svg'
 import bookImg from '@/assets/equipment/book.svg'
 import dogFoodImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack.png'
@@ -59,16 +54,9 @@ const items = ref<DraggableItemType[]>([
   { id: 3, type: 'accepted', image: dogFoodImg, initialX: 10, initialY: 20, collected: false }
 ])
 
-const collectableItems = ref(items.value.filter((item) => item.type === 'accepted'))
+const collectableItems = computed(() => items.value.filter((item) => item.type === 'accepted'))
 
 const collectItem = (id: number) => {
-  collectableItems.value = collectableItems.value.map((item) => {
-    if (item.id === id) {
-      return { ...item, collected: true }
-    }
-    return item
-  })
-
   items.value = items.value.map((item) => {
     if (item.id === id) {
       return { ...item, collected: true }

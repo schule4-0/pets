@@ -52,7 +52,6 @@ const { startDrag, transitionStyle } = useDraggable(position, elementRef)
   user-select: none;
 }
 .images {
-  width: 5vw;
-  transform: rotate(90deg);
+  width: 7vw;
 }
 </style>

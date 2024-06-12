@@ -1,11 +1,14 @@
 <template>
   <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
     <Character :isJumping="state.isJumping" />
-    <Obstacle :image="StoneImg" :positionX="state.obstaclePositionX" />
+    <Obstacle
+      v-if="state.isObstacleVisible"
+      :image="StoneImg"
+      :positionX="state.obstaclePositionX"
+    />
     <button @click="jump" class="btnJump">Jump</button>
     <Goal v-if="state.isGoalVisible" :positionX="state.goalPositionX" />
     <ScoreBoard :items="state.poos" />
-
     <PooComponent
       v-for="poo in state.poos"
       :key="poo.id"
@@ -20,6 +23,7 @@
 
 <script setup lang="ts">
 import { reactive, onMounted, onUnmounted } from 'vue'
+import gsap from 'gsap'
 import Character from '@/components/JumpNRun/JumpNRunCharacter.vue'
 import Obstacle from '@/components/JumpNRun/ObstacleItem.vue'
 import PooComponent from '@/components/JumpNRun/PooComponent.vue'
@@ -50,6 +54,7 @@ interface State {
   collectedPooCount: number
   poos: Poo[]
   isGoalVisible: boolean
+  isObstacleVisible: boolean
   goalPositionX: number
   pooIdCounter: number
 }
@@ -84,6 +89,7 @@ const initialState: State = {
   collectedPooCount: 0,
   poos: initialPoos,
   isGoalVisible: false,
+  isObstacleVisible: true,
   goalPositionX: (110 * window.innerWidth) / 100,
   pooIdCounter: 0
 }
@@ -92,10 +98,8 @@ const state = reactive<State>({
   ...initialState
 })
 
-let jumpTimeout: number | null = null
 let makePooTimeout: number | null = null
 let colissionTimeout: number | null = null
-let winTimeout: number | null = null
 let gameResetTimeout: number | null = null
 
 const run = () => {
@@ -112,19 +116,23 @@ const stopRun = () => {
 const jump = () => {
   if (!state.isJumping && !state.isWaiting) {
     state.isJumping = true
-    jumpTimeout = setTimeout(() => {
-      state.isJumping = false
-    }, 3000) // duration of jump animation
+    gsap.to(state, {
+      isJumping: false,
+      duration: 3, // duration of jump animation in seconds
+      onComplete: () => {
+        state.isJumping = false
+      }
+    })
   }
 }
 
 const makePoo = () => {
   stopRun()
-  makePooTimeout = setTimeout(() => {
+  gsap.delayedCall(1, () => {
     state.poos[state.pooCount].positionX = (40 * window.innerWidth) / 100
     state.pooCount++
     run()
-  }, 1000)
+  })
 }
 
 const collectPoo = (id: number) => {
@@ -136,51 +144,55 @@ const collectPoo = (id: number) => {
 
 const animate = () => {
   if (state.isRunning) {
-    state.backgroundPositionX -= 5
-    state.obstaclePositionX -= 5
-    if (state.poos.length > 0) {
-      state.poos.forEach((poo) => {
-        poo.positionX -= 5
-      })
-    }
-    if (state.isGoalVisible) {
-      state.goalPositionX -= 5
-    }
-
-    if (state.obstaclePositionX < -100 && !state.isJumping) {
-      state.obstaclePositionX = 2000
-      if (state.pooCount >= state.poos.length) {
-        const collectedPooCount = state.poos.filter((poo) => poo.collected).length
-        console.log(collectedPooCount)
-        if (collectedPooCount > 0) {
-          state.isGoalVisible = true
-        } else {
-          mascot.showMessage('STAGE3_EXPLAINATION')
-          stopRun()
-          gameResetTimeout = setTimeout(() => {
-            resetGame()
-          }, 2000)
+    gsap.to(state, {
+      backgroundPositionX: state.backgroundPositionX - 5,
+      obstaclePositionX: state.obstaclePositionX - 5,
+      duration: 0.01,
+      onUpdate: () => {
+        if (state.poos.length > 0) {
+          state.poos.forEach((poo) => {
+            poo.positionX -= 5
+          })
         }
-      } else {
-        makePoo()
-      }
-    }
+        if (state.isGoalVisible) {
+          state.goalPositionX -= 5
+        }
 
-    if (isColliding()) {
-      mascot.showMessage('STAGE3_OUTCH')
-      state.isWaiting = true
-      stopRun()
-      colissionTimeout = setTimeout(() => {
-        state.isWaiting = false
-        resetGame()
-      }, 1000)
-    }
+        if (state.obstaclePositionX < -100 && !state.isJumping) {
+          state.obstaclePositionX = 2000
+          if (state.pooCount >= state.poos.length) {
+            const collectedPooCount = state.poos.filter((poo) => poo.collected).length
+            if (collectedPooCount > 0) {
+              state.isObstacleVisible = false
+              state.isGoalVisible = true
+            } else {
+              mascot.showMessage('STAGE3_EXPLAINATION')
+              stopRun()
+              gameResetTimeout = setTimeout(() => {
+                resetGame()
+              }, 2000)
+            }
+          } else {
+            makePoo()
+          }
+        }
 
-    if (isCollidingGoal()) {
-      checkWin()
-    }
+        if (isColliding()) {
+          mascot.showMessage('STAGE3_OUTCH')
+          state.isWaiting = true
+          stopRun()
+          colissionTimeout = setTimeout(() => {
+            state.isWaiting = false
+            resetGame()
+          }, 1000)
+        }
 
-    requestAnimationFrame(animate)
+        if (isCollidingGoal()) {
+          checkWin()
+        }
+      },
+      onComplete: animate
+    })
   }
 }
 
@@ -219,20 +231,19 @@ const isCollidingGoal = () => {
 }
 
 const checkWin = () => {
-  // check if all poos are collected
   const allCollected = state.poos.every((poo) => poo.collected)
   if (allCollected) {
     mascot.showMessage('STAGE3_SUPER')
     stopRun()
-    winTimeout = setTimeout(() => {
+    gsap.delayedCall(2, () => {
       goToNextStage()
-    }, 2000)
+    })
   } else {
     mascot.showMessage('STAGE3_TRYAGAIN')
     stopRun()
-    gameResetTimeout = setTimeout(() => {
+    gsap.delayedCall(2, () => {
       resetGame()
-    }, 2000)
+    })
   }
 }
 
@@ -250,10 +261,10 @@ const resetGame = () => {
   state.goalPositionX = initialState.goalPositionX
   state.pooIdCounter = initialState.pooIdCounter
 
-  gameResetTimeout = setTimeout(() => {
+  gsap.delayedCall(5, () => {
     run()
     mascot.hideMascotItem()
-  }, 5000)
+  })
 }
 
 onMounted(() => {
@@ -262,13 +273,12 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  if (jumpTimeout) clearTimeout(jumpTimeout)
   if (makePooTimeout) clearTimeout(makePooTimeout)
   if (colissionTimeout) clearTimeout(colissionTimeout)
   if (gameResetTimeout) clearTimeout(gameResetTimeout)
-  if (winTimeout) clearTimeout(winTimeout)
 })
 </script>
+
 <style scoped>
 .game-container {
   position: relative;

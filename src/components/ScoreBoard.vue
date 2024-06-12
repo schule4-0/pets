@@ -11,7 +11,6 @@ interface Item {
   id: number
   collected: boolean
   image: string
-  type?: 'accepted' | 'rejected'
 }
 
 const props = defineProps<{
