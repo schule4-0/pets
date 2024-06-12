@@ -1,6 +1,6 @@
 <template>
   <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
-    <Character :isJumping="state.isJumping" @click="startGame" />
+    <Character :image="state.image" :isJumping="state.isJumping" @click="startGame" />
     <Obstacle
       v-if="state.isObstacleVisible"
       :image="StoneImg"
@@ -31,8 +31,12 @@ import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import StoneImg from '@/assets/jumpNrun/stone.png'
 import Goal from '@/components/JumpNRun/GoalComponent.vue'
-import PooImg from '@/assets/jumpNrun/poo.png'
+import PooImg from '@/assets/poop.svg'
 import ScoreBoard from '@/components/ScoreBoard.vue'
+import RockySittingImg from '@/assets/rocky/Rocky_sitting.svg'
+import RockyWalkingImg from '@/assets/rocky/Rocky_step_1.svg'
+import RockyLyingBackImg from '@/assets/rocky/Rocky_lying_back.svg'
+import RockyJumpingImg from '@/assets/rocky/Rocky_stand.svg'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
@@ -45,6 +49,7 @@ interface Poo {
 }
 
 interface State {
+  image: string
   backgroundPositionX: number
   obstaclePositionX: number
   isRunning: boolean
@@ -79,6 +84,7 @@ const initialPoos = [
   }
 ]
 const initialState: State = {
+  image: RockySittingImg,
   backgroundPositionX: 0,
   obstaclePositionX: 2000,
   isRunning: false,
@@ -102,6 +108,7 @@ let gameResetTimeout: number | null = null
 
 const run = () => {
   state.isRunning = true
+  state.image = RockyWalkingImg
   animate()
 }
 
@@ -112,11 +119,15 @@ const stopRun = () => {
 const jump = () => {
   if (!state.isJumping && state.isRunning) {
     state.isJumping = true
+    state.image = RockyJumpingImg
     gsap.to(state, {
       isJumping: false,
       duration: 3,
       onComplete: () => {
         state.isJumping = false
+        if (state.isRunning) {
+          state.image = RockyWalkingImg
+        }
       }
     })
   }
@@ -124,6 +135,7 @@ const jump = () => {
 
 const makePoo = () => {
   stopRun()
+  state.image = RockySittingImg
   gsap.delayedCall(1, () => {
     state.poos[state.pooCount].positionX = (40 * window.innerWidth) / 100
     state.pooCount++
@@ -141,10 +153,10 @@ const collectPoo = (id: number) => {
 const animate = () => {
   if (state.isRunning) {
     gsap.to(state, {
-      backgroundPositionX: state.backgroundPositionX - 5,
-      obstaclePositionX: state.obstaclePositionX - 5,
       duration: 0.01,
       onUpdate: () => {
+        state.backgroundPositionX -= 5
+        state.obstaclePositionX -= 5
         if (state.poos.length > 0) {
           state.poos.forEach((poo) => {
             poo.positionX -= 5
@@ -153,7 +165,6 @@ const animate = () => {
         if (state.isGoalVisible) {
           state.goalPositionX -= 5
         }
-
         if (state.obstaclePositionX < -100 && !state.isJumping) {
           state.obstaclePositionX = 2000
           if (state.pooCount >= state.poos.length) {
@@ -174,12 +185,12 @@ const animate = () => {
         }
 
         if (isColliding()) {
+          state.image = RockyLyingBackImg
           mascot.showMessage('STAGE3_OUTCH')
           stopRun()
           colissionTimeout = setTimeout(() => {
             resetGame()
-            startGame()
-          }, 1000)
+          }, 2000)
         }
 
         if (state.goalPositionX < (50 * window.innerWidth) / 100) {
@@ -221,13 +232,13 @@ const checkWin = () => {
     stopRun()
     gsap.delayedCall(2, () => {
       resetGame()
-      startGame()
     })
   }
 }
 
 const resetGame = () => {
   //reset state
+  state.image = initialState.image
   state.backgroundPositionX = initialState.backgroundPositionX
   state.obstaclePositionX = initialState.obstaclePositionX
   state.isRunning = false

@@ -1,11 +1,12 @@
 <template>
   <div :class="{ character: true, jump: props.isJumping }">
-    <img src="@/assets/jumpNrun/character.png" alt="dog" class="character-img" />
+    <img :src="image" alt="dog" class="character-img" />
   </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
+  image: string
   isJumping: boolean
 }>()
 </script>
