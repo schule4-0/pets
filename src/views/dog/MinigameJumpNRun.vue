@@ -1,6 +1,6 @@
 <template>
   <div class="game-container" :style="{ backgroundPositionX: `${state.backgroundPositionX}px` }">
-    <Character :isJumping="state.isJumping" />
+    <Character :isJumping="state.isJumping" @click="startGame" />
     <Obstacle
       v-if="state.isObstacleVisible"
       :image="StoneImg"
@@ -49,7 +49,6 @@ interface State {
   obstaclePositionX: number
   isRunning: boolean
   isJumping: boolean
-  isWaiting: boolean
   pooCount: number
   collectedPooCount: number
   poos: Poo[]
@@ -84,7 +83,6 @@ const initialState: State = {
   obstaclePositionX: 2000,
   isRunning: false,
   isJumping: false,
-  isWaiting: false,
   pooCount: 0,
   collectedPooCount: 0,
   poos: initialPoos,
@@ -103,10 +101,8 @@ let colissionTimeout: number | null = null
 let gameResetTimeout: number | null = null
 
 const run = () => {
-  if (!state.isWaiting) {
-    state.isRunning = true
-    animate()
-  }
+  state.isRunning = true
+  animate()
 }
 
 const stopRun = () => {
@@ -114,11 +110,11 @@ const stopRun = () => {
 }
 
 const jump = () => {
-  if (!state.isJumping && !state.isWaiting) {
+  if (!state.isJumping && state.isRunning) {
     state.isJumping = true
     gsap.to(state, {
       isJumping: false,
-      duration: 3, // duration of jump animation in seconds
+      duration: 3,
       onComplete: () => {
         state.isJumping = false
       }
@@ -179,15 +175,14 @@ const animate = () => {
 
         if (isColliding()) {
           mascot.showMessage('STAGE3_OUTCH')
-          state.isWaiting = true
           stopRun()
           colissionTimeout = setTimeout(() => {
-            state.isWaiting = false
             resetGame()
+            startGame()
           }, 1000)
         }
 
-        if (isCollidingGoal()) {
+        if (state.goalPositionX < (50 * window.innerWidth) / 100) {
           checkWin()
         }
       },
@@ -213,23 +208,6 @@ const isColliding = () => {
   )
 }
 
-const isCollidingGoal = () => {
-  const characterElement = document.querySelector('.character')
-  const goalElement = document.querySelector('.goal')
-
-  if (!characterElement || !goalElement) return false
-
-  const characterRect = characterElement.getBoundingClientRect()
-  const goalRect = goalElement.getBoundingClientRect()
-
-  return (
-    characterRect.left < goalRect.right &&
-    characterRect.right > goalRect.left &&
-    characterRect.top < goalRect.bottom &&
-    characterRect.bottom > goalRect.top
-  )
-}
-
 const checkWin = () => {
   const allCollected = state.poos.every((poo) => poo.collected)
   if (allCollected) {
@@ -243,6 +221,7 @@ const checkWin = () => {
     stopRun()
     gsap.delayedCall(2, () => {
       resetGame()
+      startGame()
     })
   }
 }
@@ -251,20 +230,18 @@ const resetGame = () => {
   //reset state
   state.backgroundPositionX = initialState.backgroundPositionX
   state.obstaclePositionX = initialState.obstaclePositionX
-  state.isRunning = initialState.isRunning
+  state.isRunning = false
   state.isJumping = initialState.isJumping
-  state.isWaiting = initialState.isWaiting
   state.pooCount = initialState.pooCount
   state.collectedPooCount = initialState.collectedPooCount
   state.poos = initialState.poos.map((poo) => ({ ...poo, collected: false }))
   state.isGoalVisible = initialState.isGoalVisible
   state.goalPositionX = initialState.goalPositionX
   state.pooIdCounter = initialState.pooIdCounter
+}
 
-  gsap.delayedCall(5, () => {
-    run()
-    mascot.hideMascotItem()
-  })
+const startGame = () => {
+  if (!state.isRunning) run()
 }
 
 onMounted(() => {
