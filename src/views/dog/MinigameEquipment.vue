@@ -17,16 +17,11 @@
 
     <ScoreBoard :items="collectableItems" />
 
-    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
-      <template #solution="{ solutionImages }">
-        <div class="solution">
-          <p>Rockys Utensilien</p>
-          <div class="solution-images">
-            <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
-          </div>
-        </div>
-      </template>
-    </RewardGame>
+    <RewardGame
+      v-if="showReward"
+      :solution-images="solutionImages"
+      @finish="handleRewardFinish"
+    ></RewardGame>
   </div>
 </template>
 
@@ -36,7 +31,7 @@ import DraggableItem, { type DraggableItemType } from '@/components/DraggableIte
 import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/equipment/bone.png'
+import boneImg from '@/assets/equipment/bone.svg'
 import bookImg from '@/assets/equipment/book.svg'
 import dogFoodImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack.png'
