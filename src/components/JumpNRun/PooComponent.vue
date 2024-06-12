@@ -32,7 +32,7 @@ const collectPoo = () => {
 }
 
 .image {
-  width: 20vh;
-  height: 20vh;
+  width: 10vh;
+  height: 10vh;
 }
 </style>
