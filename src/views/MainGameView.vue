@@ -23,8 +23,8 @@
         </button>
       </div>
     </div>
-    <div class="mascot">
-      <mascot-item />
+    <div v-if="mascot.defaultPosition && mascot.showMascot" class="mascot">
+      <mascot-item :quizAppearance="false" />
     </div>
     <div class="modal">
       <div v-if="showModal" class="modal-overlay">
@@ -43,8 +43,10 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import MascotItem from '@/components/MascotItem.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
+import { useMascotStore } from '@/stores/useMascotStore'
 
 const router = useRouter()
+const mascot = useMascotStore()
 
 const { goToNextStage } = useStageNavigator()
 
@@ -116,7 +118,7 @@ button {
 .mascot {
   position: fixed;
   bottom: 20px;
-  right: 5%;
+  right: 1%;
   z-index: 1050;
   opacity: 1;
 }

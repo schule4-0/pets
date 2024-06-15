@@ -42,7 +42,7 @@ const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 
 onMounted(() => {
-  mascot.showMessage('STAGE1_BACKPACK', 1000)
+  mascot.showMessage('STAGE1_BACKPACK')
   solutionImages.value = items.value
     .filter((item) => item.type === 'accepted')
     .map((item) => item.image)
