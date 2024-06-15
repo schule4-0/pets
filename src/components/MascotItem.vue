@@ -1,9 +1,14 @@
 <template>
-  <div v-if="mascot.showMascot" @click="mascot.readMessageAgain" class="mascot-container">
+  <div
+    @click="mascot.readMessageAgain"
+    :class="quizAppearance ? 'mascot-container-quiz' : 'mascot-container-default'"
+  >
     <transition name="appear">
-      <!--TODO: add transition-->
-      <div v-if="mascot.speechBubbleShown" class="speech-bubble">
-        <p>{{ mascot.messageString }}</p>
+      <div
+        v-if="mascot.speechBubbleShown"
+        :class="quizAppearance ? 'speech-bubble-quiz' : 'speech-bubble-default'"
+      >
+        <p>{{ mascot.currentMessageString }}</p>
       </div>
     </transition>
     <img src="../assets/mascot/Max_happy.svg" alt="Max_happy" />
@@ -13,46 +18,58 @@
 <script setup lang="ts">
 import { useMascotStore } from '@/stores/useMascotStore'
 const mascot = useMascotStore()
+
+defineProps<{
+  quizAppearance: Boolean
+}>()
 </script>
 
 <style scoped lang="scss">
-.mascot-container {
+@mixin mascot-container($flex-direction, $align-items) {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: $flex-direction;
+  align-items: $align-items;
   -webkit-tap-highlight-color: transparent;
+
   img {
     width: 150px;
   }
 }
-.speech-bubble {
+@mixin speech-bubble($max-width, $margin-right) {
   position: relative;
-  max-width: 300px;
+  max-width: $max-width;
   padding: 20px;
   margin-bottom: 20px;
-  color: black;
-  background-color: #e1efc8;
-  border: 2px solid #324e00;
-  border-radius: 10px;
+  margin-right: $margin-right;
+  background: var(--s40-color-primary);
+  border: 3px solid #3a3e56;
+  border-radius: 30px 30px 3px 30px;
 
   p {
     //TODO: use design system
+    color: white;
     -webkit-user-select: none;
     user-select: none;
     font-size: 25px;
   }
+}
 
-  &:after {
-    border: 1em solid transparent;
-    border-top-color: #e1efc8;
-    content: '';
-    margin-left: -1em;
-    position: absolute;
-    top: 100%;
-    left: 87%;
-    width: 0;
-    height: 0;
-  }
+.mascot-container-default {
+  @include mascot-container(column, flex-end);
+}
+
+.mascot-container-quiz {
+  @include mascot-container(row, flex-start);
+  justify-content: flex-end;
+  width: 900px;
+}
+
+.speech-bubble-default {
+  @include speech-bubble(300px, 50px);
+}
+
+.speech-bubble-quiz {
+  @include speech-bubble(700px, 20px);
 }
 
 .appear-enter-active {
