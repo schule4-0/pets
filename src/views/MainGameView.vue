@@ -12,7 +12,7 @@
           <img src="@/assets/icons/icon_back.svg" />
         </button>
         <h2>Game</h2>
-        <button @click="goToNextStage" class="navigationButtons">
+        <button @click="goNext" class="navigationButtons">
           <!-- should be removed, because of cheating? -->
           <img src="@/assets/icons/icon_next.svg" />
         </button>
@@ -43,26 +43,37 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import MascotItem from '@/components/MascotItem.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
+import { useSound } from '@/composables/sound'
+import clickSound from '@/assets/audio/soundEffects/click.mp3'
 
 const router = useRouter()
+const sound = useSound()
 
 const { goToNextStage } = useStageNavigator()
 
 const showModal = ref(false)
 
+function goNext() {
+  sound.play(clickSound)
+  goToNextStage()
+}
 function goBack() {
+  sound.play(clickSound)
   router.back()
 }
 
 function goBackToHome() {
+  sound.play(clickSound)
   router.push(`/`)
 }
 
 const openModal = () => {
+  sound.play(clickSound)
   showModal.value = true
 }
 
 const closeModal = () => {
+  sound.play(clickSound)
   showModal.value = false
 }
 </script>
