@@ -45,13 +45,15 @@ import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import type { StringResourceKey } from '@/config/mascotMessages'
+import { useSound } from '@/composables/sound'
+import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
+import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
 const correctAnswerSelected = ref(false)
-
 const mascot = useMascotStore()
-
+const sound = useSound()
 const router = useRouter()
 const showModal = ref(false)
 
@@ -71,14 +73,20 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
     const currentCorrectAnswerNumber = currentQuestionIndex.value + 1
     const currentCorrectAnswerMessage =
       `STAGE5_CORRECT${currentCorrectAnswerNumber}` as StringResourceKey
-    mascot.showMessage(currentCorrectAnswerMessage)
+    sound.play(correctSound)
+    setTimeout(() => {
+      mascot.showMessage(currentCorrectAnswerMessage)
+    }, 1000)
 
     setTimeout(nextQuestion, 10000)
   } else {
     const currentWrongAnswerNumber = currentQuestionIndex.value + 1
     const currentWrongAnswerMessage =
       `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
-    mascot.showMessage(currentWrongAnswerMessage)
+    sound.play(wrongSound)
+    setTimeout(() => {
+      mascot.showMessage(currentWrongAnswerMessage)
+    }, 1000)
   }
 }
 
