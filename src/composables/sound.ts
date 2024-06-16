@@ -11,7 +11,25 @@ export function useSound() {
     }
   }
 
+  async function playLoop(filePath: string) {
+    try {
+      audio.pause()
+      audio.src = filePath
+      audio.loop = true
+      await audio.play()
+    } catch (e) {
+      return
+    }
+  }
+
+  function stopLoop() {
+    audio.loop = false
+    audio.pause()
+  }
+
   return {
-    play
+    play,
+    playLoop,
+    stopLoop
   }
 }

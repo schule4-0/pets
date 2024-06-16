@@ -41,6 +41,10 @@ import { ref, watch } from 'vue'
 import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import type { CareTimeState } from '@/views/dog/MinigameCareTime.vue'
+import { useSound } from '@/composables/sound'
+import waterSound from '@/assets/audio/soundEffects/water.mp3'
+import soapSound from '@/assets/audio/soundEffects/soap_bubbles.mp3'
+import dryerSound from '@/assets/audio/soundEffects/dryer.mp3'
 
 const props = defineProps<{
   width: number
@@ -53,6 +57,7 @@ const props = defineProps<{
 }>()
 
 const toolStore = useCareTimeToolStore()
+const sound = useSound()
 
 const svgElement = ref<SVGSVGElement | null>(null)
 const {
@@ -88,6 +93,7 @@ const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: S
 
 const startAction = (event: MouseEvent | TouchEvent) => {
   isActionActive.value = true
+  performSound()
   performAction(event)
 }
 
@@ -110,6 +116,16 @@ const performAction = (event: MouseEvent | TouchEvent) => {
     } else if (toolStore.selectedTool === 'hairDryer') {
       removeWaterDrops(x, y)
     }
+  }
+}
+
+const performSound = () => {
+  if (toolStore.selectedTool === 'shampoo') {
+    sound.playLoop(soapSound)
+  } else if (toolStore.selectedTool === 'shower') {
+    sound.playLoop(waterSound)
+  } else if (toolStore.selectedTool === 'hairDryer') {
+    sound.playLoop(dryerSound)
   }
 }
 
@@ -136,5 +152,6 @@ watch(
 
 const stopAction = () => {
   isActionActive.value = false
+  sound.stopLoop()
 }
 </script>
