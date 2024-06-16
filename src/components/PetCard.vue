@@ -15,7 +15,9 @@
 <script setup lang="ts">
 import type { Pet } from '@/config/petsConfig'
 import { useRouter } from 'vue-router'
+import { useSound } from '@/composables/sound'
 import iconLock from '@/assets/icon_lock.svg'
+import clickSound from '@/assets/audio/soundEffects/click.mp3'
 
 const props = defineProps<{
   pet: Pet
@@ -23,9 +25,11 @@ const props = defineProps<{
 }>()
 
 const router = useRouter()
+const sound = useSound()
 
 const handlePetSelected = () => {
   if (!props.isLocked) {
+    sound.play(clickSound)
     router.push(`/pets/${props.pet.englishName}/stages/1`)
   }
 }

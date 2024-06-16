@@ -23,8 +23,11 @@ import { ref, watch } from 'vue'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import placeholderImg from '@/assets/logo.svg'
 import type { CareTimeState, CareTimeTool } from '@/views/dog/MinigameCareTime.vue'
+import { useSound } from '@/composables/sound'
+import clickSound from '@/assets/audio/soundEffects/click.mp3'
 
 const toolStore = useCareTimeToolStore()
+const sound = useSound()
 
 defineProps<{
   currentState: CareTimeState
@@ -46,6 +49,7 @@ const selectableTools: SelectableTools[] = [
 const selectedTools = ref<CareTimeTool[]>([])
 
 function selectTool(toolName: CareTimeTool) {
+  sound.play(clickSound)
   toolStore.setTool(toolName)
   if (!selectedTools.value.includes(toolName)) {
     selectedTools.value.push(toolName)
