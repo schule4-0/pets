@@ -16,8 +16,12 @@ import imgChocolate from '@/assets/chocolate.svg'
 import imgPhone from '@/assets/phone.svg'
 import imgPoop from '@/assets/poop.svg'
 import gsap from 'gsap'
+import { useSound } from '@/composables/sound'
+import wrongItemSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import correctItemSound from '@/assets/audio/soundEffects/bite.mp3'
 
 const props = defineProps<{ food: Food }>()
+const sound = useSound()
 
 const nutritionMinigameStore = useNutritionMinigameStore()
 let animation: gsap.core.Tween | null = null
@@ -57,8 +61,10 @@ const dropFood = async () => {
     }
     if (props.food.isGood) {
       nutritionMinigameStore.incrementScore()
+      sound.play(correctItemSound)
     } else {
       nutritionMinigameStore.decrementScore()
+      sound.play(wrongItemSound)
     }
 
     nutritionMinigameStore.removeFood(props.food.id)
