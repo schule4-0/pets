@@ -37,9 +37,13 @@ import dogFoodImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack.png'
 import { useMascotStore } from '@/stores/useMascotStore'
 import ScoreBoard from '@/components/ScoreBoard.vue'
+import { useSound } from '@/composables/sound'
+import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
+import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
+const sound = useSound()
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -80,6 +84,7 @@ const handleDropInArea = (item: {
 }) => {
   if (item.type === 'accepted') {
     collectItem(item.id)
+    sound.play(correctSound)
     mascot.showMessage('GENERAL_RIGHT')
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
@@ -87,6 +92,7 @@ const handleDropInArea = (item: {
       }, 4000)
     }
   } else {
+    sound.play(wrongSound)
     mascot.showMessage('GENERAL_WRONG')
   }
 }
