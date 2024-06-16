@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import DraggableItem from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
