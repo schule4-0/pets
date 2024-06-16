@@ -35,6 +35,7 @@ import cartoondogImg from '@/assets/cartoondog1.jpg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useSound } from '@/composables/sound'
 import winSound from '@/assets/audio/soundEffects/win.mp3'
+import barkSound from '@/assets/audio/soundEffects/bark.mp3'
 
 const emit = defineEmits(['finish'])
 const { goToNextStage } = useStageNavigator()
@@ -67,7 +68,10 @@ const handleDropInArea = (item: {
 }) => {
   if (item.type === 'accepted') {
     wasBoneGiven.value = true
-    mascot.showMessage('REWARD_ROCKY_HAPPY')
+    sound.play(barkSound)
+    setTimeout(() => {
+      mascot.showMessage('REWARD_ROCKY_HAPPY')
+    }, 500)
     nextButtonTimeoutId = setTimeout(() => {
       showNextButton.value = true
     }, 3000)
