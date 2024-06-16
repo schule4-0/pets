@@ -33,10 +33,13 @@ import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/equipment/bone_border.png'
 import cartoondogImg from '@/assets/cartoondog1.jpg'
 import { useMascotStore } from '@/stores/useMascotStore'
+import { useSound } from '@/composables/sound'
+import winSound from '@/assets/audio/soundEffects/win.mp3'
 
 const emit = defineEmits(['finish'])
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
+const sound = useSound()
 const wasBoneGiven = ref(false)
 const showNextButton = ref(false)
 let nextButtonTimeoutId: ReturnType<typeof setTimeout> | null = null
@@ -44,7 +47,11 @@ let nextButtonTimeoutId: ReturnType<typeof setTimeout> | null = null
 defineProps<{ solutionImages: string[] }>()
 
 onMounted(() => {
+  //too much?
+  //sound.play(winSound)
+  //setTimeout(() => {
   mascot.showMessage('REWARD_GIVE_BONE')
+  //}, 3000)
 })
 
 onUnmounted(() => {
