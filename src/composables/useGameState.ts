@@ -1,5 +1,5 @@
-import type { ObstacleType } from '@/components/JumpNRun/ObstacleItem.vue'
-import type { PooType } from '@/components/JumpNRun/PooComponent.vue'
+import type { ObstacleType } from '@/components/minigame-walk/ObstacleItem.vue'
+import type { PooType } from '@/components/minigame-walk/PooComponent.vue'
 import imgPoo from '@/assets/poop.svg'
 import { ref, reactive, computed } from 'vue'
 
