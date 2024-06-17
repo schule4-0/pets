@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, type CSSProperties } from 'vue'
+import { type CSSProperties } from 'vue'
 
 export interface AnimatedComponentProps {
   imageSrc: string

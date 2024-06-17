@@ -45,6 +45,11 @@
   box-sizing: border-box;
   margin: 0;
   font-weight: normal;
+
+  user-select: none; /* Disable text selection */
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For Firefox */
+  -ms-user-select: none; /* For Internet Explorer/Edge */
 }
 
 body {

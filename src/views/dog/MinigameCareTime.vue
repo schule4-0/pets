@@ -1,18 +1,19 @@
 <template>
   <div class="container">
-    <div class="dog-container">
-      <CareTimeDog
-        :width="dogSize"
-        :height="dogSize"
-        :current-state="currentState"
-        :on-is-showered="onIsShowered"
-        :on-is-shampooed="onIsShampooed"
-        :on-is-dryed="onIsDryed"
-        :on-is-completed="onIsCompleted"
+    <div style="position: fixed; margin: 80px 16px; width: 320px">
+      <ProgressBar
+        :img-src="progressObject.imgSrc"
+        :progress="progressObject.currentProgress ?? 0"
+        :max="progressObject.maxProgress"
       />
     </div>
-    <div class="toolbar-container">
-      <CareTimeToolbar :current-state="currentState" />
+    <div class="dog-container">
+      <CareTimeDog
+        @bubble-counter="handleBubbleChange"
+        @water-drop-counter="handleWaterDropChange"
+        :width="dogSize"
+        :height="dogSize"
+      />
     </div>
   </div>
 </template>
@@ -20,14 +21,51 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import CareTimeDog from '@/components/CareTimeDog.vue'
-import CareTimeToolbar from '@/components/CareTimeToolbar.vue'
+import ProgressBar from '@/components/ProgressBar.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
+import imgShampoo from '@/assets/shampoo.svg'
+import imgPlaceholder from '@/assets/logo.svg'
+import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
+import { storeToRefs } from 'pinia'
 
 const mascot = useMascotStore()
 
+const { currentState } = storeToRefs(useCareTimeToolStore())
 export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameCompleted'
-export type CareTimeTool = 'shampoo' | 'shower' | 'hairDryer'
-const currentState = ref<CareTimeState>('shampooing')
+
+const bubbleCounter = ref(0)
+const waterDropCounter = ref(0)
+const maxWaterDropCounter = ref(0)
+
+const handleBubbleChange = (counter: number) => {
+  bubbleCounter.value = counter
+}
+
+const handleWaterDropChange = (counter: number) => {
+  waterDropCounter.value = counter
+  if (counter > maxWaterDropCounter.value) maxWaterDropCounter.value = counter
+}
+
+const progressObject = computed(() => {
+  switch (currentState.value) {
+    case 'shampooing':
+      return { imgSrc: imgShampoo, maxProgress: 100, currentProgress: bubbleCounter.value }
+    case 'showering':
+      return {
+        imgSrc: imgPlaceholder,
+        maxProgress: 100,
+        currentProgress: 100 - bubbleCounter.value
+      }
+    case 'drying':
+      return {
+        imgSrc: imgPlaceholder,
+        maxProgress: maxWaterDropCounter.value,
+        currentProgress: maxWaterDropCounter.value - waterDropCounter.value
+      }
+    default:
+      return { imgSrc: imgPlaceholder, maxProgress: 100, currentProgress: 100 }
+  }
+})
 
 const dogSize = computed(() => {
   const viewWidth = window.innerWidth
@@ -39,54 +77,19 @@ const dogSize = computed(() => {
 onMounted(() => {
   mascot.showMessage('STAGE4_INTRODUCTION')
 })
-
-const onIsShampooed = () => {
-  mascot.showMessage('STAGE4_IS_SHAMPOOED')
-
-  currentState.value = 'showering'
-}
-
-const onIsShowered = () => {
-  mascot.showMessage('STAGE4_IS_SHOWERED')
-
-  currentState.value = 'drying'
-}
-
-const onIsDryed = () => {
-  mascot.showMessage('STAGE4_IS_DRYED')
-
-  currentState.value = 'gameCompleted'
-}
-
-const onIsCompleted = () => {
-  // TODO: Do something
-}
 </script>
 
 <style scoped>
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
   width: 100vw;
   box-sizing: border-box;
-  padding: 20px;
+  background-color: cornsilk;
 }
 
 .dog-container {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.toolbar-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
 }
 </style>

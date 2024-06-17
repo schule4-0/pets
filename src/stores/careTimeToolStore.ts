@@ -1,13 +1,13 @@
-import type { CareTimeTool } from '@/views/dog/MinigameCareTime.vue'
+import type { CareTimeState } from '@/views/dog/MinigameCareTime.vue'
 import { defineStore } from 'pinia'
 
-export const useCareTimeToolStore = defineStore('careTimeTool', {
+export const useCareTimeToolStore = defineStore('careTimeState', {
   state: () => ({
-    selectedTool: 'shampoo' as CareTimeTool
+    currentState: 'shampooing' as CareTimeState
   }),
   actions: {
-    setTool(tool: CareTimeTool) {
-      this.selectedTool = tool
+    setCurrentState(state: CareTimeState) {
+      this.currentState = state
     }
   }
 })

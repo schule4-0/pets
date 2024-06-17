@@ -32,7 +32,7 @@ export const useCareTimeBubbles = () => {
   }
 
   const createBubble = (x: number, y: number) => {
-    const minDistance = 11 // Minimum distance between bubbles
+    const minDistance = 11 * 3 // Minimum distance between bubbles
 
     // Check if the new bubble is too close to any existing bubble
     for (const pos of bubblePositions.value) {
@@ -43,7 +43,7 @@ export const useCareTimeBubbles = () => {
     }
 
     const bubble = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-    const size = Math.random() * 5 + 7 // Random size between 5 and 10
+    const size = Math.random() * 5 * 3 + 7 * 3 // Random size between 5 and 10
     const opacity = Math.random() * 0.5 + 0.5 // Random opacity between 0.5 and 1
 
     bubble.setAttribute('cx', x.toString())
@@ -104,8 +104,8 @@ export const useCareTimeBubbles = () => {
     let id = 0
 
     while (currentCount < dirtCount) {
-      const x = Math.random() * 200
-      const y = Math.random() * 200
+      const x = Math.random() * 705
+      const y = Math.random() * 530
 
       if (isPointInDog(x, y)) {
         const points = generateDirtShape(x, y)
@@ -136,7 +136,7 @@ export const useCareTimeBubbles = () => {
   }
 
   const createWaterDrop = (x: number, y: number) => {
-    const minDistance = 17 // Minimum distance between waterDrops
+    const minDistance = 17 * 2 // Minimum distance between waterDrops
 
     // Check if the new waterDrop is too close to any existing waterDrop
     for (const pos of waterDropPositions.value) {
@@ -147,7 +147,7 @@ export const useCareTimeBubbles = () => {
     }
 
     const waterDrop = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-    const size = Math.random() * 4 + 1 // Random size between 5 and 10
+    const size = Math.random() * 4 * 3 + 1 * 3 // Random size between 5 and 10
     const opacity = Math.random() * 0.3 + 0.3 // Random opacity between 0.5 and 1
 
     waterDrop.setAttribute('cx', x.toString())
