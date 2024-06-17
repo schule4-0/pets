@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, defineExpose } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import gsap from 'gsap'
 import rockySit from '@/assets/rocky/Rocky_sitting.svg'
 import rockyStep1 from '@/assets/rocky/Rocky_step_1.svg'
