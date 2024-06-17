@@ -19,9 +19,9 @@
       @click="handleButtonClick"
       class="btnJump"
       v-if="!isGoalVisible"
-      :disabled="characterAction === 'jump'"
+      :disabled="characterAction === 'jump' || characterAction === 'hurt'"
     >
-      {{ hasGameStarted ? 'jump' : 'start' }}
+      <img :src="btnIcon" alt="Icon" />
     </button>
     <Goal v-if="isGoalVisible" :positionX="goalPositionX" ref="goalRef" class="goal" />
     <ScoreBoard :items="collectedPoos" />
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
 import gsap from 'gsap'
 import Character from '@/components/minigame-walk/JumpNRunCharacter.vue'
 import Obstacle from '@/components/minigame-walk/ObstacleItem.vue'
@@ -52,6 +52,8 @@ import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useGameState } from '@/composables/useGameState'
 import { useCharacterActions } from '@/composables/useCharacterActions'
+import imgIconPlay from '@/assets/minigame-walk/icon_play.svg'
+import imgIconArrowUp from '@/assets/minigame-walk/arrow_up.svg'
 import {
   useElementSpawning,
   type AnimatedComponentWithSpeedMultiplier
@@ -70,6 +72,8 @@ const hasGameStarted = ref(false)
 let collisionTimeout: number | null = null
 let animationTimeline: gsap.core.Timeline | null = null
 const isAnimating = ref(false)
+
+const btnIcon = computed(() => (hasGameStarted.value ? imgIconArrowUp : imgIconPlay))
 
 const startGame = () => {
   if (!hasGameStarted.value) {
@@ -325,7 +329,25 @@ onUnmounted(() => {
   position: fixed;
   bottom: 16px;
   left: 16px;
-  padding: 1.5rem 3rem;
+  width: 100px;
+  height: 100px;
   z-index: 100;
+  border: none;
+  background-color: #ffffffdd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-radius: 32px;
+}
+
+.btnJump:hover {
+  background-color: rgb(216, 216, 216);
+}
+
+.btnJump img {
+  width: 50%;
+  height: 50%;
 }
 </style>
