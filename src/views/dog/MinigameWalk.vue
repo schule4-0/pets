@@ -1,7 +1,7 @@
 <template>
   <div class="game-container">
     <div class="game-path"></div>
-    <div class="skyline" ref="skylineRef"></div>
+    <div class="skyline"></div>
     <Character
       :action="characterAction"
       @click="startGame"
@@ -66,7 +66,6 @@ const { spawnElementWithConfig, spawnInitialElements, lastElementSpawnTimes } =
   useElementSpawning(animatedElements)
 
 const goalRef = ref<InstanceType<typeof Goal> | null>(null)
-const skylineRef = ref<HTMLDivElement | null>(null)
 const hasGameStarted = ref(false)
 let collisionTimeout: number | null = null
 let animationTimeline: gsap.core.Timeline | null = null
@@ -169,16 +168,6 @@ const animateElements = () => {
       animatedElements.splice(index, 1)
     }
   })
-
-  if (!skylineRef.value) return
-  animationTimeline?.to(
-    skylineRef.value,
-    {
-      backgroundPositionX: `-=${distance * 0.3}`,
-      duration: duration
-    },
-    0
-  )
 }
 
 const animateObstacles = () => {
@@ -197,15 +186,15 @@ const animateObstacles = () => {
 
 const handleSpawning = () => {
   const currentTime = Date.now()
-  if (currentTime - lastElementSpawnTimes.cloud > 5000) {
+  if (currentTime - lastElementSpawnTimes.cloud > 7500) {
     spawnElementWithConfig('cloud')
     lastElementSpawnTimes.cloud = currentTime
   }
-  if (currentTime - lastElementSpawnTimes.fgBush > 3000) {
+  if (currentTime - lastElementSpawnTimes.fgBush > 1000) {
     spawnElementWithConfig('fgBush')
     lastElementSpawnTimes.fgBush = currentTime
   }
-  if (currentTime - lastElementSpawnTimes.bgBush > 5000) {
+  if (currentTime - lastElementSpawnTimes.bgBush > 1500) {
     spawnElementWithConfig('bgBush')
     lastElementSpawnTimes.bgBush = currentTime
   }
@@ -311,12 +300,13 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
-.btnJump {
+.skyline-container {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  padding: 1.5rem 3rem;
-  z-index: 100;
+  bottom: 30vh;
+  left: 0;
+  height: 50vh;
+  width: 100%;
+  display: flex;
 }
 
 .skyline {
@@ -328,6 +318,14 @@ onUnmounted(() => {
   background: url('@/assets/minigame-walk/skyline.svg');
   background-size: auto 100%;
   background-repeat: repeat-x;
-  z-index: 1;
+  z-index: 0;
+}
+
+.btnJump {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  padding: 1.5rem 3rem;
+  z-index: 100;
 }
 </style>
