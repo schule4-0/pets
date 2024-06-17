@@ -77,6 +77,7 @@ const btnIcon = computed(() => (hasGameStarted.value ? imgIconArrowUp : imgIconP
 
 const startGame = () => {
   if (!hasGameStarted.value) {
+    mascot.hideMascotItem()
     run()
     hasGameStarted.value = true
   }
