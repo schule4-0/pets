@@ -1,7 +1,7 @@
 <template>
   <div class="progress-container">
     <div class="circle">
-      <img src="@/assets/equipment/dogfood.svg" alt="food bowl" />
+      <img :src="imgSrc" alt="food bowl" />
     </div>
     <div class="progress-bar">
       <div class="progress" :style="{ width: computedProgress + '%' }"></div>
@@ -13,6 +13,7 @@
 import { computed } from 'vue'
 
 const props = defineProps<{
+  imgSrc: string
   progress: number
   max: number
 }>()
@@ -25,6 +26,7 @@ const computedProgress = computed(() => (props.progress / props.max) * 100)
   --light-blue: #dadfff;
   display: flex;
   align-items: center;
+  z-index: 99;
 
   .circle {
     border: 2px solid var(--s40-color-primary);

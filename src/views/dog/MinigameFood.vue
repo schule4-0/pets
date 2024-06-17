@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <div style="margin: 80px 16px; width: 320px">
-      <ProgressBar :progress="score" :max="MAX_NUTRITION_GAME_SCORE" />
+      <ProgressBar :img-src="imgFoodBowl" :progress="score" :max="MAX_NUTRITION_GAME_SCORE" />
     </div>
     <DogBowl />
     <FoodItem v-for="food in foods" :key="food.id" :food="food" />
@@ -16,6 +16,7 @@ import FoodItem from '@/components/FoodItem.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
+import imgFoodBowl from '@/assets/equipment/dogfood.svg'
 
 const mascot = useMascotStore()
 
