@@ -34,6 +34,9 @@ const stringResources = {
   STAGE3_OUTCH: {
     content: 'Aua! Das hat weh getan. Versuche es noch einmal!'
   },
+  STAGE3_MISSED_POO: {
+    content: 'Oh nein! Du hast einen Hundehaufen übersehen!'
+  },
   STAGE3_SUPER: {
     content: 'Super! Du hast es geschafft!'
   },

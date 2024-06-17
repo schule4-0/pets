@@ -1,6 +1,6 @@
 <template>
   <div class="goal" :style="{ left: `${props.positionX}px` }">
-    <img src="@/assets/jumpNrun/goal.png" alt="goal" class="image" />
+    <img src="@/assets/recapQuiz/Dogfood.svg" alt="goal" class="image" />
   </div>
 </template>
 
@@ -16,10 +16,10 @@ const props = defineProps({
 <style scoped>
 .goal {
   position: absolute;
-  bottom: 20vh;
+  bottom: 18vh;
+  z-index: 5;
 }
 .image {
-  width: 20vh;
-  height: 20vh;
+  width: 64px;
 }
 </style>
