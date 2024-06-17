@@ -1,9 +1,10 @@
-import { ref, type ComponentPublicInstance } from 'vue'
+import { ref } from 'vue'
 import type { CharacterActions } from '@/components/minigame-walk/JumpNRunCharacter.vue'
+import type JumpNRunCharacter from '@/components/minigame-walk/JumpNRunCharacter.vue'
 
 export const useCharacterActions = () => {
   const characterAction = ref<CharacterActions>('sit')
-  const characterRef = ref<ComponentPublicInstance | null>(null)
+  const characterRef = ref<InstanceType<typeof JumpNRunCharacter> | null>(null)
 
   const triggerJump = () => {
     if (characterAction.value !== 'jump') {

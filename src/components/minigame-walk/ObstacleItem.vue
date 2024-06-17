@@ -5,12 +5,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, type ComponentPublicInstance } from 'vue'
+import { ref, watch } from 'vue'
 import StoneImg from '@/assets/minigame-walk/stone.png'
+import type JumpNRunCharacter from './JumpNRunCharacter.vue'
 
 export interface ObstacleType {
   positionX: number
-  characterRef?: ComponentPublicInstance | null
+  characterRef?: InstanceType<typeof JumpNRunCharacter> | null
 }
 
 const props = defineProps<ObstacleType>()

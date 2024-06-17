@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, defineExpose } from 'vue'
 import gsap from 'gsap'
 import rockySit from '@/assets/rocky/Rocky_sitting.svg'
 import rockyStep1 from '@/assets/rocky/Rocky_step_1.svg'
@@ -40,6 +40,7 @@ const images = {
 }
 
 let runningTimeline: gsap.core.Timeline | null = null
+let currentAnimation: gsap.core.Timeline | null = null
 
 const handleAction = (action: CharacterActions) => {
   if (runningTimeline) {
@@ -83,7 +84,7 @@ const runAnimation = () => {
 
 const jumpAnimation = () => {
   if (characterRef.value) {
-    gsap
+    currentAnimation = gsap
       .timeline()
       .to(
         characterRef.value,
@@ -126,8 +127,27 @@ const jumpAnimation = () => {
   }
 }
 
+const abortAnimation = () => {
+  if (runningTimeline) {
+    runningTimeline.kill()
+    runningTimeline = null
+  }
+  if (currentAnimation) {
+    currentAnimation.kill()
+    currentAnimation = null
+  }
+
+  if (characterRef.value) {
+    gsap.set(characterRef.value, { y: 0 })
+  }
+}
+
 onMounted(() => {
   handleAction(props.action)
+})
+
+defineExpose({
+  abortAnimation
 })
 </script>
 

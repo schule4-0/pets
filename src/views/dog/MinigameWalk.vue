@@ -94,6 +94,7 @@ const run = () => {
 }
 
 const spawnPoo = () => {
+  characterRef.value?.abortAnimation()
   characterAction.value = 'poop'
   if (characterRef.value) {
     const characterRect = characterRef.value.$el.getBoundingClientRect()
@@ -149,6 +150,7 @@ const checkGoalVisibility = () => {
 }
 
 const handleCollision = () => {
+  characterRef.value?.abortAnimation()
   characterAction.value = 'hurt'
   mascot.showMessage('STAGE3_OUTCH')
   collisionTimeout = window.setTimeout(resetGame, 2000)
@@ -173,8 +175,7 @@ const animateElements = () => {
     skylineRef.value,
     {
       backgroundPositionX: `-=${distance * 0.3}`,
-      duration: duration,
-      ease: 'none'
+      duration: duration
     },
     0
   )
