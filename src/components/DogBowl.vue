@@ -23,8 +23,7 @@ const startDrag = (event: MouseEvent | TouchEvent) => {
 const onDrag = (event: MouseEvent | TouchEvent) => {
   if (isDragging.value && dogBowl.value) {
     let clientX = event instanceof MouseEvent ? event.clientX : event.touches[0].clientX
-    const newLeft = clientX - dogBowl.value.clientWidth / 2
-    dogBowl.value.style.left = `${Math.max(0, Math.min(newLeft, window.innerWidth - dogBowl.value.clientWidth))}px`
+    dogBowl.value.style.left = `${clientX}px`
   }
 }
 
