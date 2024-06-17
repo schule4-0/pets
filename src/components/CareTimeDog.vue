@@ -107,7 +107,8 @@ const performAction = (event: MouseEvent | TouchEvent) => {
       if (isPointInDog(x, y)) {
         createBubble(x, y)
       }
-    } else if (toolStore.selectedTool === 'shower') {
+    }
+    if (toolStore.selectedTool === 'shower') {
       removeBubbles(x, y)
       removeDirt(x, y)
       if (isPointInDog(x, y)) {
@@ -120,9 +121,7 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 }
 
 const performSound = () => {
-  if (toolStore.selectedTool === 'shampoo') {
-    sound.playLoop(soapSound)
-  } else if (toolStore.selectedTool === 'shower') {
+  if (toolStore.selectedTool === 'shower') {
     sound.playLoop(waterSound)
   } else if (toolStore.selectedTool === 'hairDryer') {
     sound.playLoop(dryerSound)
