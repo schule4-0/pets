@@ -1,5 +1,10 @@
 import { onMounted, ref } from 'vue'
 import gsap from 'gsap'
+import bubbleSound1 from '@/assets/audio/soundEffects/bubbles/bubble1.mp3'
+import bubbleSound2 from '@/assets/audio/soundEffects/bubbles/bubble2.mp3'
+import bubbleSound3 from '@/assets/audio/soundEffects/bubbles/bubble3.mp3'
+import bubbleSound4 from '@/assets/audio/soundEffects/bubbles/bubble4.mp3'
+import { useSound } from './sound'
 
 export const useCareTimeBubbles = () => {
   const dogPath = ref<SVGPathElement | null>(null)
@@ -12,6 +17,9 @@ export const useCareTimeBubbles = () => {
 
   const waterDropPositions = ref<{ x: number; y: number; r: number }[]>([])
   const waterDropLayer = ref<SVGGElement | null>(null)
+
+  const audio = useSound()
+  const bubbleSounds = [bubbleSound1, bubbleSound2, bubbleSound3, bubbleSound4]
 
   const isPointInDog = (x: number, y: number) => {
     if (dogPath.value && dogPath.value.ownerSVGElement) {
@@ -49,6 +57,7 @@ export const useCareTimeBubbles = () => {
 
     // Animate the bubble for a more realistic effect
     gsap.fromTo(bubble, { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' })
+    audio.playRandomSound()
   }
 
   const removeBubbles = (x: number, y: number) => {
@@ -178,6 +187,7 @@ export const useCareTimeBubbles = () => {
 
   onMounted(() => {
     generateDirt()
+    audio.loadSounds(bubbleSounds)
   })
 
   return {

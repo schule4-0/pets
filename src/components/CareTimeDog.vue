@@ -43,7 +43,6 @@ import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import type { CareTimeState } from '@/views/dog/MinigameCareTime.vue'
 import { useSound } from '@/composables/sound'
 import waterSound from '@/assets/audio/soundEffects/water.mp3'
-import soapSound from '@/assets/audio/soundEffects/soap_bubbles.mp3'
 import dryerSound from '@/assets/audio/soundEffects/dryer.mp3'
 
 const props = defineProps<{
@@ -107,7 +106,8 @@ const performAction = (event: MouseEvent | TouchEvent) => {
       if (isPointInDog(x, y)) {
         createBubble(x, y)
       }
-    } else if (toolStore.selectedTool === 'shower') {
+    }
+    if (toolStore.selectedTool === 'shower') {
       removeBubbles(x, y)
       removeDirt(x, y)
       if (isPointInDog(x, y)) {
@@ -120,9 +120,7 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 }
 
 const performSound = () => {
-  if (toolStore.selectedTool === 'shampoo') {
-    sound.playLoop(soapSound)
-  } else if (toolStore.selectedTool === 'shower') {
+  if (toolStore.selectedTool === 'shower') {
     sound.playLoop(waterSound)
   } else if (toolStore.selectedTool === 'hairDryer') {
     sound.playLoop(dryerSound)
