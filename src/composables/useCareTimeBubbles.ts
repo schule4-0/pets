@@ -1,6 +1,5 @@
 import { onMounted, ref } from 'vue'
 import gsap from 'gsap'
-import { useRandomSound } from '@/composables/randomSound'
 import bubbleSound1 from '@/assets/audio/soundEffects/bubbles/bubble1.mp3'
 import bubbleSound2 from '@/assets/audio/soundEffects/bubbles/bubble2.mp3'
 import bubbleSound3 from '@/assets/audio/soundEffects/bubbles/bubble3.mp3'
