@@ -322,7 +322,7 @@ onUnmounted(() => {
 }
 
 .btnJump {
-  position: absolute;
+  position: fixed;
   bottom: 16px;
   left: 16px;
   padding: 1.5rem 3rem;
