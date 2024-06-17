@@ -8,10 +8,12 @@
 import { ref, onUnmounted } from 'vue'
 import imgDogBowl from '@/assets/equipment/dogfood.svg'
 
+const emits = defineEmits(['startDrag'])
 const dogBowl = ref<HTMLDivElement | null>(null)
 const isDragging = ref(false)
 
 const startDrag = (event: MouseEvent | TouchEvent) => {
+  emits('startDrag')
   isDragging.value = true
   document.addEventListener('mousemove', onDrag)
   document.addEventListener('mouseup', stopDrag)
