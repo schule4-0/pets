@@ -15,6 +15,9 @@ const stringResources = {
   GENERAL_RIGHT: {
     content: 'Das war richtig. Gut gemacht!'
   },
+  REWARD_EXPLANATION: {
+    content: 'Rocky liebt es nach  erledigten Aufgaben mit einem Knochen belohnt zu werden'
+  },
   REWARD_ROCKY_HAPPY: {
     content: 'Wau wau! Hier siehst du nochmal, was Rocky braucht.'
   },
@@ -56,21 +59,41 @@ const stringResources = {
   STAGE1_ALL_PACKED: {
     content: ''
   },
+  STAGE2_TIME_TO_FEED: {
+    content:
+      'Nun ist es Zeit, Rocky zu füttern. Lass uns doch schauen, was Rocky heute essen möchte!'
+  },
   STAGE2_INTRODUCTION: {
     content:
-      'Hilf Rocky, das richtige Futter zu fangen! Du kannst den Fressnapf hin und her bewegen. Achte dabei darauf, nur das Futter zu fangen, was Rocky auch fressen darf! Los geht’s!'
+      'Hilf Rocky, das richtige Futter zu fangen! Du kannst den Fressnapf hin- und herbewegen. Achte dabei darauf, nur das Futter zu fangen, was Rocky auch fressen darf! Los geht’s!'
+  },
+  STAGE2_UNHEALTHY: {
+    content: 'Das darf Rocky leider nicht essen. Das ist ungesund für ihn'
+  },
+  STAGE2_UNHEALTHY2: {
+    content: 'Das darf Rocky leider nicht essen. Es ist nicht gut für Hunde'
+  },
+  STAGE2_FEEDING_DONE: {
+    content: 'Das hast du toll gemacht! Jetzt ist Rocky satt und bereit für den Spaziergang'
   },
   STAGE3_GOWALK: {
-    content: 'Gehen wir Gassi! Aber pass auf, dass Rocky nicht gegen Steine läuft!'
+    content:
+      'Bist du bereit für einen Spaziergang? Los geht’s! Achte  darauf, Hindernissen auszuweichen und Hundehaufen, die Rocky hinterlässt,  einzusammeln. Tippe auf Rocky, damit er losläuft. Siehst du ein Hindernis, tippst auf den Knopf unten links. Um die Hundehaufen aufzusammeln, berühre sie mit  deinem Finger'
+  },
+  STAGE3_WAS_CLOSE: {
+    content: 'Hmm...' //TODO
   },
   STAGE3_OUTCH: {
-    content: 'Aua! Das hat weh getan. Versuche es noch einmal!'
+    content: 'Hoppla...' //TODO
   },
   STAGE3_MISSED_POO: {
-    content: 'Oh nein! Du hast einen Hundehaufen übersehen!'
+    content: '' //TODO
   },
   STAGE3_SUPER: {
-    content: 'Super! Du hast es geschafft!'
+    content: 'Das hast du super gemacht!'
+  },
+  STAGE3_GREAT_WALK: {
+    content: 'Das war...' //TODO
   },
   STAGE3_TRYAGAIN: {
     content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
@@ -83,14 +106,24 @@ const stringResources = {
     content:
       'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'
   },
+  STAGE4_SHAMPOO_EXPLANATION: {
+    content: '' //TODO
+  },
   STAGE4_IS_SHAMPOOED: {
-    content: 'Rocky ist jetzt mit genug Shapoo eingedeckt, Zeit ihn abzuwaschen!'
+    content: '' //TODO
   },
   STAGE4_IS_SHOWERED: {
-    content: 'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen.'
+    content:
+      'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen. Ziehe den Föhn zu Rocky und trockne ihn damit gründlich ab'
   },
   STAGE4_IS_DRYED: {
     content: 'Rocky is dryed now!'
+  },
+  STAGE4_WASHING_DONE: {
+    content: '' //TODO
+  },
+  STAGE5_INTRODUCTION: {
+    content: '' //TODO
   },
   STAGE5_QUESTION1: {
     content: 'Was sollte in der Tasche für Rocky sein? Ein Ball, Bücher oder ein Hundebett?'
@@ -113,23 +146,24 @@ const stringResources = {
   },
   STAGE5_INCORRECT1_2: {
     content:
-      'Ein Hundebett ist toll für zu Hause, aber es passt nicht in eine Tasche für unterwegs.'
+      'Ein Hundebett ist toll für zu Hause, aber es passt nicht in deine Tasche für unterwegs.'
   },
   STAGE5_INCORRECT2_1: {
     content: 'Kuchen ist für Menschen und kann für Rocky ungesund sein.'
   },
   STAGE5_INCORRECT2_2: {
-    content: 'Schokolade kann Hunden schaden.'
+    content: 'Schade, Schokolade schadet den Hunden.'
   },
   STAGE5_INCORRECT3_1: {
-    content: 'Ein Handy ist praktisch für Menschen, aber Rocky kann es nicht benutzen.'
+    content: 'Ein Handy ist zwar praktisch für uns Menschen, aber Rocky kann es nicht benutzen.'
   },
   STAGE5_INCORRECT3_2: {
     content:
-      'Ein Kartenspiel ist etwas, das man drinnen spielt. Es hilft nicht beim Spazierengehen mit Rocky.'
+      'Ein Kartenspiel ist etwas, mit dem man drinnen spielt. Es hilft nicht beim Spazierengehen mit Rocky.'
   },
   STAGE5_INCORRECT4_1: {
-    content: 'Spielzeug ist toll zum Spielen, aber es macht ihn nicht sauber.'
+    content:
+      'Spielzeug ist toll zum Spielen, aber um Rocky sauber zu bekommen brauchen wir etwas anderes.'
   },
   STAGE5_INCORRECT4_2: {
     content: 'Ein Hundeknochen ist ein tolles Spielzeug für Rocky, aber macht ihn nicht sauber.'
@@ -139,16 +173,20 @@ const stringResources = {
   },
   STAGE5_CORRECT2: {
     content:
-      'Hundefutter ist speziell für Hunde gemacht und enthält alles, was Rocky braucht, um gesund und stark zu bleiben!'
+      'Hundefutter ist speziell für Hunde gemacht und enthält alles, was Rocky braucht, um gesund und stark zu bleiben. Toll!'
   },
   STAGE5_CORRECT3: {
     content: 'Genau! Die Leine ist dafür da, dass Rocky immer schön bei uns bleibt.'
   },
   STAGE5_CORRECT4: {
-    content: 'Spitze! Mit Seife bekommen wir alles sauber.'
+    content: 'Spitze! Mit Seife bekommen wir alles wieder sauber.'
   },
   STAGE5_FINISH: {
-    content: 'Toll gemacht! Du hast alle Fragen richtig beantwortet. Du kennst Rocky wirklich gut!'
+    content:
+      'Toll gemacht! Du hast alle Fragen richtig beantwortet. Du kennst Rocky wirklich wirklich gut!'
+  },
+  GAME_FINISHED: {
+    content: '' //TODO
   }
 } as const
 
