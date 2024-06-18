@@ -156,10 +156,11 @@
       </g>
     </svg>
     <img
+      v-if="currentState !== 'gameCompleted'"
       ref="toolElement"
-      src="@/assets/shampoo.svg"
+      :src="toolImage"
       draggable="false"
-      :style="{ height: '50px', left: toolPosition.x + 'px', top: toolPosition.y + 'px' }"
+      :style="{ height: '100px', left: toolPosition.x + 'px', top: toolPosition.y + 'px' }"
       class="tool"
       @mousedown="startAction"
       @mousemove="performAction"
@@ -173,7 +174,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import { useSound } from '@/composables/sound'
@@ -181,6 +182,9 @@ import waterSound from '@/assets/audio/soundEffects/water.mp3'
 import dryerSound from '@/assets/audio/soundEffects/dryer.mp3'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
+import imgShampoo from '@/assets/shampoo.svg'
+import imgShowerHead from '@/assets/Showerhead_water.svg'
+import imgTowel from '@/assets/Towel.svg'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
@@ -195,6 +199,14 @@ const sound = useSound()
 
 const svgElement = ref<SVGSVGElement | null>(null)
 const toolElement = ref<HTMLImageElement | null>(null)
+
+const toolImage = computed(() =>
+  currentState.value === 'showering'
+    ? imgShowerHead
+    : currentState.value === 'drying'
+      ? imgTowel
+      : imgShampoo
+)
 
 const {
   dogPath,
