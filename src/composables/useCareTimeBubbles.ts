@@ -142,29 +142,34 @@ export const useCareTimeBubbles = () => {
     for (const pos of waterDropPositions.value) {
       const distance = Math.sqrt((pos.x - x) ** 2 + (pos.y - y) ** 2)
       if (distance < minDistance) {
-        return
+        return // Don't create the waterDrop if too close to an existing one
       }
     }
 
     const id = waterDropPositions.value.length
     const width = Math.random() * 28 + 10
     const height = (width / 2) * 3
-    const opacity = Math.random() * 0.3 + 0.3
+    const opacity = Math.random() * 0.3 + 0.3 // Random opacity between 0.5 and 1
+
+    // Create the group element to contain the water drop
+    const svgNS = 'http://www.w3.org/2000/svg'
+    const gElement = document.createElementNS(svgNS, 'g')
+    gElement.classList.add('waterdrop-container')
+    gElement.setAttribute('data-water-drop-id', id.toString())
+    gElement.setAttribute('opacity', opacity.toString())
+    gElement.setAttribute('transform', `translate(${x}, ${y - 32})`)
 
     // Create the SVG element
-    const svgNS = 'http://www.w3.org/2000/svg'
     const svgElement = document.createElementNS(svgNS, 'svg')
-    svgElement.setAttribute('data-water-drop-id', id.toString())
     svgElement.setAttribute('width', width.toString())
     svgElement.setAttribute('height', height.toString())
     svgElement.setAttribute('viewBox', '0 0 30 48')
     svgElement.setAttribute('fill', 'none')
     svgElement.setAttribute('xmlns', svgNS)
-    svgElement.setAttribute('opacity', opacity.toString())
 
-    // Create the g element
-    const gElement = document.createElementNS(svgNS, 'g')
-    gElement.setAttribute('class', 'waterDrop')
+    // Create the g element inside the SVG
+    const innerGElement = document.createElementNS(svgNS, 'g')
+    innerGElement.setAttribute('class', 'waterDrop')
 
     // Define the paths
     const paths = [
@@ -180,23 +185,23 @@ export const useCareTimeBubbles = () => {
       const path = document.createElementNS(svgNS, 'path')
       path.setAttribute('d', d)
       path.setAttribute('fill', colors[i])
-      gElement.appendChild(path)
+      innerGElement.appendChild(path)
     })
 
-    // Append the g element to the SVG element
-    svgElement.appendChild(gElement)
+    // Append the inner g element to the SVG element
+    svgElement.appendChild(innerGElement)
 
-    // Set the transform attribute for positioning
-    svgElement.setAttribute('transform', `translate(${x}, ${y - 32})`)
+    // Append the SVG element to the group element
+    gElement.appendChild(svgElement)
 
-    // Append the SVG to the water drop layer
+    // Append the group element to the main SVG layer
     if (waterDropLayer.value) {
-      waterDropLayer.value.appendChild(svgElement)
+      waterDropLayer.value.appendChild(gElement)
     }
     waterDropPositions.value.push({ x, y, id })
 
-    // Animate the waterDrop
-    gsap.fromTo(svgElement, { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' })
+    // Animate the waterDrop for a more realistic effect
+    gsap.fromTo(gElement, { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' })
   }
 
   const parseTransform = (transform: any) => {
@@ -212,7 +217,7 @@ export const useCareTimeBubbles = () => {
 
   const removeWaterDrops = (x: number, y: number) => {
     const radius = 20 // Radius around the touch/mouse point to remove water drops
-    const waterDrops = waterDropLayer.value?.querySelectorAll('svg')
+    const waterDrops = waterDropLayer.value?.querySelectorAll('.waterdrop-container')
 
     if (waterDrops) {
       waterDrops.forEach((drop) => {
