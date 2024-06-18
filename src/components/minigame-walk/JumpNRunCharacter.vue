@@ -14,10 +14,6 @@ import rockyStep3 from '@/assets/rocky/Rocky_step_3.svg'
 import rockyJump from '@/assets/rocky/Rocky_stand.svg'
 import rockyPoop from '@/assets/rocky/Rocky_sitting.svg'
 import rockyHurt from '@/assets/rocky/Rocky_lying_back.svg'
-import { useSound } from '@/composables/sound'
-import walkSound from '@/assets/audio/soundEffects/walk.mp3'
-import jumpSound from '@/assets/audio/soundEffects/jump.mp3'
-import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 
 const globalConfig = {
   jumpHeight: -250,
@@ -28,9 +24,13 @@ const globalConfig = {
 export type CharacterActions = 'sit' | 'run' | 'jump' | 'poop' | 'hurt'
 const props = defineProps<{
   action: CharacterActions
+  jumpSound: String
+  hurtSound: String
+  walkSound: String
+  playSound: Function
+  playLoopSound: Function
+  stopLoopSound: Function
 }>()
-
-const sound = useSound()
 
 const emit = defineEmits(['jumpCompleted'])
 
@@ -66,19 +66,17 @@ const handleAction = (action: CharacterActions) => {
 }
 
 const handleSound = (action: CharacterActions) => {
-  sound.stopLoop()
-  switch (action) {
-    case 'run':
-      sound.playLoop(walkSound)
-      break
-    case 'jump':
-      sound.play(jumpSound)
-      break
-    case 'hurt':
-      sound.play(hurtSound)
-      break
+  if (action === 'jump') {
+    props.playSound(props.jumpSound)
+  } else if (action === 'hurt') {
+    props.playSound(props.hurtSound)
+  } else if (action === 'run') {
+    props.playLoopSound(props.walkSound)
+  } else {
+    props.stopLoopSound()
   }
 }
+
 watch(
   () => props.action,
   (newAction) => {

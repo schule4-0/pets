@@ -15,6 +15,7 @@ export function useSound() {
   async function play(filePath: string) {
     try {
       audio.pause()
+      audio.loop = false
       audio.src = filePath
       await audio.play()
       isPlaying.value = true
@@ -56,7 +57,6 @@ export function useSound() {
   // Play a random sound from the loaded sounds
   function playRandomSound() {
     if (isPlaying.value) {
-      console.log('A sound is already playing.')
       return
     }
 
@@ -75,7 +75,6 @@ export function useSound() {
     randomSound.onerror = () => {
       currentSound.value = null
       isPlaying.value = false
-      console.error('Error playing the sound.')
     }
   }
 
