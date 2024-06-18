@@ -29,7 +29,32 @@ const stringResources = {
       'Das ist Rocky, mein treuer und fröhlicher Hund. Es ist ein wunderschöner Morgen, und Rocky ist voller Energie. Ich habe jedoch eine Menge Dinge zu erledigen und brauche dringend deine Hilfe. Du wirst einen Tag voller Spaß mit Rocky erleben. Es warten viele spannende Aufgaben, die du zusammen mit Rocky bewältigen wirst. Doch bevor ihr loszieht, müsst ihr zuerst noch Rockys Rucksack packen.'
   },
   STAGE1_BACKPACK: {
-    content: 'Packe alles, was Rocky benötigt in den Rucksack'
+    content:
+      'Oben links siehst du die Gegenstände, die ihr  für den Tag benötigt. Finde sie und ziehe sie in den Rucksack.'
+  },
+  STAGE1_WRONG: {
+    content: 'Gute Idee, aber das steht leider nicht auf der Liste. Versuchs nochmal!'
+  },
+  STAGE1_BALL: {
+    content: ''
+  },
+  STAGE1_FEEDING_BOWL: {
+    content: ''
+  },
+  STAGE1_TREATS: {
+    content: ''
+  },
+  STAGE1_TOYS: {
+    content: ''
+  },
+  STAGE1_BONE: {
+    content: ''
+  },
+  STAGE1_PLASTIC_BAG: {
+    content: ''
+  },
+  STAGE1_ALL_PACKED: {
+    content: ''
   },
   STAGE2_INTRODUCTION: {
     content:
