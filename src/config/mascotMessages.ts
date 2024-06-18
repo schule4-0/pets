@@ -40,10 +40,11 @@ const stringResources = {
     content: 'Gute Idee, aber das steht leider nicht auf der Liste. Versuchs nochmal!'
   },
   STAGE1_BALL: {
-    content: ''
+    content: 'Spitze! Mit dem Ball kann Rocky spielen und Spaß haben.'
   },
   STAGE1_FEEDING_BOWL: {
-    content: ''
+    content:
+      'Ja, der Fressnapf ist wichtig, damit Rocky sein Futter und Wasser daraus essen und trinken kann.'
   },
   STAGE1_TREATS: {
     content: ''
@@ -52,7 +53,8 @@ const stringResources = {
     content: ''
   },
   STAGE1_BONE: {
-    content: ''
+    content:
+      'Richtig! Der Knochen ist ein leckeres Kauspielzeug für Rocky. Er kann darauf herumkauen und seine Zähne sauber halten.'
   },
   STAGE1_PLASTIC_BAG: {
     content: ''

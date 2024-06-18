@@ -32,7 +32,7 @@ import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import bookImg from '@/assets/equipment/book.svg'
-import dogFoodImg from '@/assets/equipment/dogfood.svg'
+import feedingBowlImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack_closed.svg'
 import boneImg from '@/assets/equipment/bone_border.png'
 import cardGameImg from '@/assets/equipment/Cardgame.svg'
@@ -56,10 +56,34 @@ onMounted(() => {
 })
 
 const items = ref<DraggableItemType[]>([
-  { id: 1, type: 'accepted', image: boneImg, initialX: 45, initialY: 90, collected: false },
-  { id: 2, type: 'accepted', image: dogFoodImg, initialX: 24, initialY: 83, collected: false },
-  { id: 3, type: 'accepted', image: ballImg, initialX: 34, initialY: 54.5, collected: false },
-  { id: 4, type: 'accepted', image: dogleashImg, initialX: 72, initialY: 21.5, collected: false },
+  {
+    id: 1,
+    type: 'accepted',
+    image: boneImg,
+    initialX: 45,
+    initialY: 90,
+    collected: false,
+    message: 'STAGE1_BONE'
+  },
+  {
+    id: 2,
+    type: 'accepted',
+    image: feedingBowlImg,
+    initialX: 24,
+    initialY: 83,
+    collected: false,
+    message: 'STAGE1_FEEDING_BOWL'
+  },
+  {
+    id: 3,
+    type: 'accepted',
+    image: ballImg,
+    initialX: 34,
+    initialY: 54.5,
+    collected: false,
+    message: 'STAGE1_BALL'
+  },
+  //{ id: 4, type: 'accepted', image: dogleashImg, initialX: 72, initialY: 21.5, collected: false },
   { id: 5, type: 'rejected', image: bookImg, initialX: 60, initialY: 68, collected: false },
   { id: 6, type: 'rejected', image: cardGameImg, initialX: 85, initialY: 15.5, collected: false }
 ])
@@ -87,11 +111,22 @@ const handleDropInArea = (item: {
   id: number
   isWithin: boolean
   type: 'accepted' | 'rejected'
+  message: string
 }) => {
   if (item.type === 'accepted') {
     collectItem(item.id)
     sound.play(correctSound)
-    mascot.showMessage('GENERAL_RIGHT')
+    //TODO: clean up by using message from item
+    if (item.id === 1) {
+      mascot.showMessage('STAGE1_BONE')
+    }
+    if (item.id === 2) {
+      mascot.showMessage('STAGE1_FEEDING_BOWL')
+    }
+    if (item.id === 3) {
+      mascot.showMessage('STAGE1_BALL')
+    }
+
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
         showReward.value = true
