@@ -24,7 +24,6 @@ const globalConfig = {
 export type CharacterActions = 'sit' | 'run' | 'jump' | 'poop' | 'hurt'
 const props = defineProps<{
   action: CharacterActions
-  jumpSound: String
   hurtSound: String
   walkSound: String
   playSound: Function
@@ -66,12 +65,12 @@ const handleAction = (action: CharacterActions) => {
 }
 
 const handleSound = (action: CharacterActions) => {
-  if (action === 'jump') {
-    //props.playSound(props.jumpSound)
-  } else if (action === 'hurt') {
+  /*if (action === 'jump') {
+    props.playSound(props.jumpSound)
+  } else */ if (action === 'hurt') {
     props.playSound(props.hurtSound)
   } else if (action === 'run') {
-    //props.playLoopSound(props.walkSound)
+    props.playLoopSound(props.walkSound)
   } else {
     props.stopLoopSound()
   }

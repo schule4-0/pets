@@ -4,7 +4,6 @@
     <div class="skyline"></div>
     <Character
       :action="characterAction"
-      :jumpSound="jumpSound"
       :hurtSound="hurtSound"
       :walkSound="walkSound"
       :playSound="sound.play"
@@ -66,7 +65,6 @@ import {
 } from '@/composables/useElementSpawning'
 import { useSound } from '@/composables/sound'
 import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
-import jumpSound from '@/assets/audio/soundEffects/jump.mp3'
 import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
 
@@ -98,7 +96,6 @@ const startGame = () => {
 const handleButtonClick = () => {
   if (hasGameStarted.value) {
     triggerJump()
-    sound.play(jumpSound)
   } else {
     startGame()
   }
@@ -106,7 +103,6 @@ const handleButtonClick = () => {
 
 const run = () => {
   characterAction.value = 'run'
-  sound.playLoop(walkSound)
   gsap.delayedCall(2, spawnObstacle)
   animate()
 }
