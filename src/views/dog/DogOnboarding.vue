@@ -3,9 +3,9 @@
     <div class="background"></div>
     <img
       class="stationary-image"
-      src="@/assets/mascot/Lisa.svg"
+      src="@/assets/LisaFullBody.svg"
       alt="Stationary"
-      style="height: 140px"
+      style="height: 220px"
     />
     <img class="walking-image" :src="currentFrame" alt="Walking" style="height: 120px" />
   </div>
@@ -51,13 +51,6 @@ const animateWalking = () => {
 const onAnimationComplete = () => {
   if (!isMounted.value) return
   walking.value = false
-  mascot.showMessage('ONBOARDING_PART2')
-  mascot.hideMascotItem()
-
-  // Hotfix: should later be called in the mascots on end callback
-  transitionTimeout = setTimeout(() => {
-    stageTransition.startStageTransition(goToNextStage)
-  }, 41000)
 }
 
 const moveWalkingImage = () => {
@@ -87,6 +80,11 @@ onMounted(() => {
     animateWalking()
     moveWalkingImage()
   }, 3500)
+
+  // Hotfix: should later be called in the mascots on end callback
+  transitionTimeout = setTimeout(() => {
+    stageTransition.startStageTransition(goToNextStage)
+  }, 30000)
 })
 
 onUnmounted(() => {
