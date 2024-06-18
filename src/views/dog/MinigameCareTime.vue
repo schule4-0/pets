@@ -24,7 +24,8 @@ import CareTimeDog from '@/components/CareTimeDog.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
-import imgPlaceholder from '@/assets/logo.svg'
+import imgShowerHead from '@/assets/Showerhead_water.svg'
+import imgTowel from '@/assets/Towel.svg'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import { storeToRefs } from 'pinia'
 
@@ -52,18 +53,18 @@ const progressObject = computed(() => {
       return { imgSrc: imgShampoo, maxProgress: 100, currentProgress: bubbleCounter.value }
     case 'showering':
       return {
-        imgSrc: imgPlaceholder,
+        imgSrc: imgShowerHead,
         maxProgress: 100,
         currentProgress: 100 - bubbleCounter.value
       }
     case 'drying':
       return {
-        imgSrc: imgPlaceholder,
+        imgSrc: imgTowel,
         maxProgress: maxWaterDropCounter.value,
         currentProgress: maxWaterDropCounter.value - waterDropCounter.value
       }
     default:
-      return { imgSrc: imgPlaceholder, maxProgress: 100, currentProgress: 100 }
+      return { imgSrc: imgTowel, maxProgress: 100, currentProgress: 100 }
   }
 })
 
@@ -81,15 +82,19 @@ onMounted(() => {
 
 <style scoped>
 .container {
-  height: 100vh;
-  width: 100vw;
   box-sizing: border-box;
-  background-color: cornsilk;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/BathBlank.svg');
+  background-size: cover;
+  background-position: center;
 }
 
 .dog-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  width: 100%;
 }
 </style>
