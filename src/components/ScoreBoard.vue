@@ -25,7 +25,7 @@ const props = defineProps<{
 
 <style scoped>
 .scoreboard {
-  position: absolute;
+  position: fixed;
   top: 80px;
   left: 20px;
   display: flex;

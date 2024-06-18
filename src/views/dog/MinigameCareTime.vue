@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div style="position: fixed; margin: 80px 16px; width: 320px">
+    <div style="position: fixed; top: 80px; left: 16px; width: 320px">
       <ProgressBar
         :img-src="progressObject.imgSrc"
         :progress="progressObject.currentProgress ?? 0"

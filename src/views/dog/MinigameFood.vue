@@ -1,6 +1,6 @@
 <template>
   <div class="game">
-    <div style="margin: 80px 16px; width: 320px">
+    <div style="position: fixed; top: 80px; left: 16px; width: 320px">
       <ProgressBar :img-src="imgFoodBowl" :progress="score" :max="MAX_NUTRITION_GAME_SCORE" />
     </div>
     <DogBowl @start-drag="handleStartDogBowlDrag" />
