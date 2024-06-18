@@ -67,11 +67,11 @@ const handleAction = (action: CharacterActions) => {
 
 const handleSound = (action: CharacterActions) => {
   if (action === 'jump') {
-    props.playSound(props.jumpSound)
+    //props.playSound(props.jumpSound)
   } else if (action === 'hurt') {
     props.playSound(props.hurtSound)
   } else if (action === 'run') {
-    props.playLoopSound(props.walkSound)
+    //props.playLoopSound(props.walkSound)
   } else {
     props.stopLoopSound()
   }
