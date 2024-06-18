@@ -58,8 +58,11 @@ import {
   useElementSpawning,
   type AnimatedComponentWithSpeedMultiplier
 } from '@/composables/useElementSpawning'
+import { useSound } from '@/composables/sound'
+import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 
 const mascot = useMascotStore()
+const sound = useSound()
 const { goToNextStage } = useStageNavigator()
 const { goalPositionX, isGoalVisible, gameState, collectedPoos } = useGameState()
 const { characterAction, characterRef, triggerJump, handleJumpComplete } = useCharacterActions()
@@ -130,6 +133,7 @@ const collectPoo = () => {
     gameState.poo = null
     gameState.pooCount++
     checkGoalVisibility()
+    sound.play(collectSound)
     if (!isGoalVisible.value) {
       spawnObstacle()
     }
