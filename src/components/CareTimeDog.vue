@@ -247,6 +247,7 @@ const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: S
 
 const startAction = (event: MouseEvent | TouchEvent) => {
   isActionActive.value = true
+  mascot.hideSpeechBubble()
   performSound()
   performAction(event)
 }
