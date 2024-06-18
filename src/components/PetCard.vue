@@ -30,7 +30,7 @@ const sound = useSound()
 const handlePetSelected = () => {
   if (!props.isLocked) {
     sound.play(clickSound)
-    router.push(`/pets/${props.pet.englishName}/stages/1`)
+    router.push(`/pets/${props.pet.englishName}/stages/0`)
   }
 }
 </script>

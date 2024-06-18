@@ -3,7 +3,7 @@ import type { StringResourceKey } from '@/config/mascotMessages'
 import { getStringRes } from '@/config/mascotMessages'
 import { useReading } from '@/composables/reading'
 
-const { readAloud } = useReading()
+const { readAloud, cancelAudio } = useReading()
 
 export const useMascotStore = defineStore('popup', {
   state: () => ({
@@ -18,7 +18,7 @@ export const useMascotStore = defineStore('popup', {
     }
   },
   actions: {
-    showMessage(key: StringResourceKey, onEnd?: Function, overrideDefaultPosition = false) {
+    showMessage(key: StringResourceKey, onEnd = () => {}, overrideDefaultPosition = false) {
       this.defaultPosition = !overrideDefaultPosition
       this.hideSpeechBubble() //Support animation
       this.showMascotItem()
@@ -49,6 +49,9 @@ export const useMascotStore = defineStore('popup', {
     },
     readMessage(onEnd?: Function) {
       readAloud(this.messageKey, onEnd)
+    },
+    cancelMessage() {
+      cancelAudio()
     }
   }
 })
