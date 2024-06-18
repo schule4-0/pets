@@ -4,6 +4,12 @@
     <div class="skyline"></div>
     <Character
       :action="characterAction"
+      :jumpSound="jumpSound"
+      :hurtSound="hurtSound"
+      :walkSound="walkSound"
+      :playSound="sound.play"
+      :playLoopSound="sound.playLoop"
+      :stopLoopSound="sound.stopLoop"
       @click="startGame"
       ref="characterRef"
       @jump-completed="handleJumpComplete"
@@ -60,6 +66,9 @@ import {
 } from '@/composables/useElementSpawning'
 import { useSound } from '@/composables/sound'
 import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
+import jumpSound from '@/assets/audio/soundEffects/jump.mp3'
+import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import walkSound from '@/assets/audio/soundEffects/walk.mp3'
 
 const mascot = useMascotStore()
 const sound = useSound()
@@ -89,6 +98,7 @@ const startGame = () => {
 const handleButtonClick = () => {
   if (hasGameStarted.value) {
     triggerJump()
+    sound.play(jumpSound)
   } else {
     startGame()
   }
@@ -96,6 +106,7 @@ const handleButtonClick = () => {
 
 const run = () => {
   characterAction.value = 'run'
+  sound.playLoop(walkSound)
   gsap.delayedCall(2, spawnObstacle)
   animate()
 }
@@ -134,6 +145,10 @@ const collectPoo = () => {
     gameState.pooCount++
     checkGoalVisibility()
     sound.play(collectSound)
+    //TODO: dont use timeout here
+    setTimeout(() => {
+      sound.playLoop(walkSound)
+    }, 500)
     if (!isGoalVisible.value) {
       spawnObstacle()
     }
@@ -160,6 +175,7 @@ const checkGoalVisibility = () => {
 const handleCollision = () => {
   characterRef.value?.abortAnimation()
   characterAction.value = 'hurt'
+  sound.play(hurtSound)
   mascot.showMessage('STAGE3_OUTCH')
   collisionTimeout = window.setTimeout(resetGame, 2000)
 }
