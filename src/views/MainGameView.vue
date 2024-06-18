@@ -1,5 +1,6 @@
 <template>
   <main>
+    <div class="transition-overlay" :class="{ darken: isStageOverlayActive }"></div>
     <!-- Main game content displayed through router-view -->
     <div class="game-content">
       <RouterView />
@@ -46,9 +47,12 @@ import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useSound } from '@/composables/sound'
 import clickSound from '@/assets/audio/soundEffects/click.mp3'
+import { useStageStore } from '@/stores/useStageStore'
+import { storeToRefs } from 'pinia'
 
 const router = useRouter()
 const mascot = useMascotStore()
+const { isActive: isStageOverlayActive } = storeToRefs(useStageStore())
 const sound = useSound()
 
 const { goToNextStage } = useStageNavigator()
@@ -97,6 +101,23 @@ main {
     height: 100%;
     z-index: 1;
   }
+}
+
+.transition-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999999;
+  opacity: 0;
+  background-color: #000;
+  transition: opacity 1.25s linear;
+  pointer-events: none;
+}
+
+.transition-overlay.darken {
+  opacity: 1;
 }
 
 $overlay-color: transparent;

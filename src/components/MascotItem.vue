@@ -11,7 +11,7 @@
         <p>{{ mascot.currentMessageString }}</p>
       </div>
     </transition>
-    <img src="../assets/mascot/Max_happy.svg" alt="Max_happy" />
+    <img src="../assets/mascot/Lisa.svg" alt="Lisa" />
   </div>
 </template>
 
@@ -32,7 +32,7 @@ defineProps<{
   -webkit-tap-highlight-color: transparent;
 
   img {
-    width: 150px;
+    width: 200px;
   }
 }
 @mixin speech-bubble($max-width, $margin-right) {

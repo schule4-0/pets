@@ -72,6 +72,7 @@ export function useReading() {
   }
 
   return {
-    readAloud
+    readAloud,
+    cancelAudio
   }
 }
