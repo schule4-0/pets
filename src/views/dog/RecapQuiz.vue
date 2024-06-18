@@ -11,7 +11,7 @@
       </button>
     </div>
 
-    <QuestionComponent :question="currentQuestion.question" />
+    <MascotItem :quiz-appearance="true" />
 
     <div class="answers-container">
       <AnswerComponent
@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import QuestionComponent from '@/components/QuizQuestion.vue'
+import MascotItem from '@/components/MascotItem.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
@@ -52,9 +52,11 @@ import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
 const correctAnswerSelected = ref(false)
+
 const mascot = useMascotStore()
 const sound = useSound()
 const router = useRouter()
+
 const showModal = ref(false)
 
 const currentQuestion = computed(() => {
@@ -62,7 +64,7 @@ const currentQuestion = computed(() => {
 })
 
 onMounted(() => {
-  mascot.showMessage('STAGE5_QUESTION1')
+  mascot.showMessage('STAGE5_QUESTION1', () => {}, true)
 })
 
 const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
@@ -74,18 +76,29 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
     const currentCorrectAnswerMessage =
       `STAGE5_CORRECT${currentCorrectAnswerNumber}` as StringResourceKey
     sound.play(correctSound)
+
     setTimeout(() => {
-      mascot.showMessage(currentCorrectAnswerMessage)
+      mascot.showMessage(currentCorrectAnswerMessage, () => {}, true)
     }, 1000)
 
-    setTimeout(nextQuestion, 10000)
+    setTimeout(nextQuestion, 10400)
   } else {
     const currentWrongAnswerNumber = currentQuestionIndex.value + 1
     const currentWrongAnswerMessage =
       `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
     sound.play(wrongSound)
+
     setTimeout(() => {
-      mascot.showMessage(currentWrongAnswerMessage)
+      mascot.showMessage(
+        currentWrongAnswerMessage,
+        () => {
+          const currentQuestionNumber = currentQuestionIndex.value + 1
+          const currentQuestionMessage =
+            `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+          mascot.showMessage(currentQuestionMessage, () => {}, true)
+        },
+        true
+      )
     }, 1000)
   }
 }
@@ -98,9 +111,9 @@ const nextQuestion = () => {
     currentQuestionIndex.value++
     const currentQuestionNumber = currentQuestionIndex.value + 1
     const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
-    mascot.showMessage(currentQuestionMessage)
+    mascot.showMessage(currentQuestionMessage, () => {}, true)
   } else {
-    mascot.showMessage('STAGE5_FINISH')
+    mascot.showMessage('STAGE5_FINISH', () => {}, true)
     showModal.value = true
   }
 }
@@ -146,16 +159,16 @@ const progress = computed(() => {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 70px;
 }
 
 .progress-buttons {
-  width: 30px;
-  height: 30px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
   margin: 0 5px;
   background-color: var(--s40-color-secondary);
-  border: none;
+  border: 2px solid #60668F;
 }
 
 .progress-buttons.answered {
