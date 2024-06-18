@@ -49,7 +49,7 @@ onMounted(() => {
   //too much?
   //sound.play(winSound)
   //setTimeout(() => {
-  mascot.showMessage('REWARD_GIVE_BONE')
+  mascot.showMessage('REWARD_EXPLANATION')
   //}, 3000)
 })
 

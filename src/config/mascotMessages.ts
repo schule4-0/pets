@@ -16,7 +16,8 @@ const stringResources = {
     content: 'Das war richtig. Gut gemacht!'
   },
   REWARD_EXPLANATION: {
-    content: 'Rocky liebt es nach  erledigten Aufgaben mit einem Knochen belohnt zu werden'
+    content:
+      'Rocky liebt es nach erledigten Aufgaben mit einem Knochen belohnt zu werden. Ziehe den Knochen zu Rocky.'
   },
   REWARD_ROCKY_HAPPY: {
     content: 'Hier siehst du nochmal, was Rocky braucht.'
