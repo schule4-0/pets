@@ -93,7 +93,7 @@ const handleDropInArea = (item: {
     }
   } else {
     sound.play(wrongSound)
-    mascot.showMessage('GENERAL_WRONG')
+    mascot.showMessage('STAGE1_WRONG')
   }
 }
 
