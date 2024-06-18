@@ -68,14 +68,12 @@ const moveWalkingImage = () => {
 
 onMounted(() => {
   isMounted.value = true
-
-  // Hotfix: Give some additional time to download the onboarding audio
   setTimeout(() => {
     mascot.showMessage(
       'ONBOARDING_PART1' /*, () => {
-      animateWalking()
-      moveWalkingImage()
-      }*/
+    animateWalking()
+    moveWalkingImage()
+  }*/
     )
     mascot.hideMascotItem()
 
@@ -88,7 +86,7 @@ onMounted(() => {
     transitionTimeout = setTimeout(() => {
       stageTransition.startStageTransition(goToNextStage)
     }, 30000)
-  }, 2000)
+  })
 })
 
 onUnmounted(() => {
