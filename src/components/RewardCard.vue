@@ -22,7 +22,14 @@
       :collected="false"
     />
   </div>
-  <DropArea @droppedInArea="handleDropInArea" class="dogImg" :image="cartoondogImg" width="20vw" />
+  <div class="drop-area-container">
+    <DropArea
+      @droppedInArea="handleDropInArea"
+      class="dogImg"
+      :image="cartoondogImg"
+      width="20vw"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -110,6 +117,8 @@ const handleNextButtonClick = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  bottom: 3vh;
   gap: 40px;
   flex-wrap: wrap;
   height: 40%;
@@ -147,6 +156,16 @@ const handleNextButtonClick = () => {
   border: none;
   margin-bottom: 20px;
   color: white;
+}
+
+.drop-area-container {
+  position: absolute;
+  bottom: 25vh;
+  left: 40vw;
+  justify-content: center;
+  align-items: center;
+  height: 20vw;
+  width: 20vw;
 }
 
 @keyframes wiggle {
