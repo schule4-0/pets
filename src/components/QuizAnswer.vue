@@ -46,7 +46,7 @@ watch(
   border-radius: 60px;
   padding: 50px;
   cursor: pointer;
-  border: 2px solid #3a3e56;
+  border: 3px solid #60668F;
 }
 
 .answer-card.correct {

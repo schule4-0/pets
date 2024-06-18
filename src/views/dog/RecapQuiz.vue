@@ -168,7 +168,7 @@ const progress = computed(() => {
   border-radius: 50%;
   margin: 0 5px;
   background-color: var(--s40-color-secondary);
-  border: 2px solid #3a3e56;
+  border: 2px solid #60668F;
 }
 
 .progress-buttons.answered {
