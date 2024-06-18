@@ -310,7 +310,7 @@ watch(
       currentState.value = 'showering'
       isActionActive.value = false
     } else if (waterDrops.length === 0 && currState === 'drying') {
-      mascot.showMessage('STAGE4_IS_DRYED')
+      mascot.showMessage('STAGE4_WASHING_DONE')
       currentState.value = 'gameCompleted'
       isActionActive.value = false
     } else if (currState === 'gameCompleted') {

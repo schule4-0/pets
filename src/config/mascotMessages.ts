@@ -94,7 +94,8 @@ const stringResources = {
     content: 'Das hast du super gemacht!'
   },
   STAGE3_GREAT_WALK: {
-    content: 'Das war...' //TODO
+    content:
+      'Das war ein toller Spaziergang! Rocky ist aber ein bisschen schmutzig geworden. Lass uns nach Hause gehen und ihn gemeinsam sauber machen.'
   },
   STAGE3_TRYAGAIN: {
     content: 'Schade, du hast wohl ein paar Hundehaufen übersehen. Versuche es noch einmal!'
@@ -108,38 +109,35 @@ const stringResources = {
       'Oh je! Rockys Fell ist ja voller Schmutz, so können wir ihn nicht im Haus rumlaufen lassen. Los, lass uns Rocky waschen damit sein Fell wieder richtig toll glänzt!'
   },
   STAGE4_SHAMPOO_EXPLANATION: {
-    content: '' //TODO
+    content:
+      'Zuerst müssen wir Rocky einseifen, damit der ganze Schmutz aus seinem Fell entfernt wird. Wische mit deinem Finger hin und her, um Rocky einzuseifen.'
   },
   STAGE4_IS_SHAMPOOED: {
-    content: '' //TODO
+    content:
+      'Spitze! Jetzt müssen wir die Seife wieder abwaschen. Das ist wichtig, damit keine Seifenreste in Rockys Fell bleiben. Ziehe den Duschkopf zu Rocky und wische wieder hin und her um ihn abzuwaschen.'
   },
   STAGE4_IS_SHOWERED: {
     content:
       'Wow Rocky ist jetzt wieder blitzblank! Nun müssen wir ihn nur noch abtrocknen. Ziehe den Föhn zu Rocky und trockne ihn damit gründlich ab'
   },
-  STAGE4_IS_DRYED: {
-    content: 'Rocky is dryed now!'
-  },
   STAGE4_WASHING_DONE: {
-    content: '' //TODO
+    content:
+      'Wunderbar, du bist ein richtiger Tierexperte! Da Rocky so brav beim Waschen war, sollten wir ihm eine Belohnung geben!'
   },
   STAGE5_INTRODUCTION: {
     content: '' //TODO
   },
   STAGE5_QUESTION1: {
-    content: 'Was sollte in der Tasche für Rocky sein? Ein Ball, Bücher oder ein Hundebett?'
+    content: 'Was sollte in der Tasche für Rocky sein?'
   },
   STAGE5_QUESTION2: {
-    content:
-      'Welches Futter sollte in Rockys Napf gelegt werden, um ihn zu füttern? Kuchen, Schokolade oder Hundefutter?'
+    content: 'Welches Futter sollte in Rockys Napf gelegt werden, um ihn zu füttern?'
   },
   STAGE5_QUESTION3: {
-    content:
-      'Was muss man beim Spazierengehen mitnehmen? Ein Handy, eine Leine oder ein Kartenspiel?'
+    content: 'Was muss man beim Spazierengehen mitnehmen?'
   },
   STAGE5_QUESTION4: {
-    content:
-      'Wie bekommt man Rocky wieder sauber wenn er schmutzig ist? Mit Seife, mit Spielzeug oder mit einem Hundeknochen?'
+    content: 'Wie bekommt man Rocky wieder sauber wenn er schmutzig ist?'
   },
   STAGE5_INCORRECT1_1: {
     content:
