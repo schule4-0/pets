@@ -168,12 +168,15 @@ export const useCareTimeBubbles = () => {
       return
     }
 
-    const opacity = Math.random() * 0.3 + 0.3 // Random opacity between 0.5 and 1
+    const opacity = Math.random() * 0.3 + 0.3
 
-    svgElement.setAttribute('transform', `translate(${x}, ${y - 32})`)
-    svgElement.setAttribute('opacity', opacity.toString())
+    svgElement.setAttributeNS(null, 'transform', `translate(${x}, ${y - 32})`)
+    svgElement.setAttributeNS(null, 'opacity', opacity.toString())
 
-    waterDropLayer.value?.appendChild(svgElement)
+    // Append the SVG to the water drop layer
+    if (waterDropLayer.value) {
+      waterDropLayer.value.appendChild(svgElement)
+    }
     waterDropPositions.value.push({ x, y, id })
 
     // Animate the waterDrop for a more realistic effect
