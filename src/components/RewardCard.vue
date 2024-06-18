@@ -26,15 +26,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import DraggableItem from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/equipment/bone_border.png'
-import cartoondogImg from '@/assets/cartoondog1.jpg'
+import cartoondogImg from '@/assets/rocky/Rocky_happy.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useSound } from '@/composables/sound'
-import winSound from '@/assets/audio/soundEffects/win.mp3'
 import barkSound from '@/assets/audio/soundEffects/bark.mp3'
 
 const emit = defineEmits(['finish'])
@@ -43,7 +42,6 @@ const mascot = useMascotStore()
 const sound = useSound()
 const wasBoneGiven = ref(false)
 const showNextButton = ref(false)
-let nextButtonTimeoutId: ReturnType<typeof setTimeout> | null = null
 
 defineProps<{ solutionImages: string[] }>()
 
@@ -55,12 +53,6 @@ onMounted(() => {
   //}, 3000)
 })
 
-onUnmounted(() => {
-  if (nextButtonTimeoutId !== null) {
-    clearTimeout(nextButtonTimeoutId)
-  }
-})
-
 const handleDropInArea = (item: {
   id: number
   isWithin: boolean
@@ -69,13 +61,12 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     wasBoneGiven.value = true
     sound.play(barkSound)
-    setTimeout(() => {
-      mascot.showMessage('REWARD_ROCKY_HAPPY')
-    }, 500)
-    nextButtonTimeoutId = setTimeout(() => {
-      showNextButton.value = true
-    }, 3000)
+    mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
   }
+}
+
+const displayNextButton = () => {
+  showNextButton.value = true
 }
 
 const handleNextButtonClick = () => {
