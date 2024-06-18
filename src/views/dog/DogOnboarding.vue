@@ -68,23 +68,27 @@ const moveWalkingImage = () => {
 
 onMounted(() => {
   isMounted.value = true
-  mascot.showMessage(
-    'ONBOARDING_PART1' /*, () => {
-    animateWalking()
-    moveWalkingImage()
-  }*/
-  )
-  mascot.hideMascotItem()
 
+  // Hotfix: Give some additional time to download the onboarding audio
   setTimeout(() => {
-    animateWalking()
-    moveWalkingImage()
-  }, 3500)
+    mascot.showMessage(
+      'ONBOARDING_PART1' /*, () => {
+      animateWalking()
+      moveWalkingImage()
+      }*/
+    )
+    mascot.hideMascotItem()
 
-  // Hotfix: should later be called in the mascots on end callback
-  transitionTimeout = setTimeout(() => {
-    stageTransition.startStageTransition(goToNextStage)
-  }, 30000)
+    setTimeout(() => {
+      animateWalking()
+      moveWalkingImage()
+    }, 3500)
+
+    // Hotfix: should later be called in the mascots on end callback
+    transitionTimeout = setTimeout(() => {
+      stageTransition.startStageTransition(goToNextStage)
+    }, 30000)
+  }, 2000)
 })
 
 onUnmounted(() => {
