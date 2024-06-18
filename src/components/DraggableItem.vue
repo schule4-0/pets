@@ -29,6 +29,7 @@ export interface DraggableItemType {
   initialX: number
   initialY: number
   collected: boolean
+  message?: string
 }
 
 const props = defineProps<DraggableItemType>()
