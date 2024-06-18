@@ -142,36 +142,52 @@ export const useCareTimeBubbles = () => {
     for (const pos of waterDropPositions.value) {
       const distance = Math.sqrt((pos.x - x) ** 2 + (pos.y - y) ** 2)
       if (distance < minDistance) {
-        return // Don't create the waterDrop if too close to an existing one
+        return
       }
     }
 
     const id = waterDropPositions.value.length
     const width = Math.random() * 28 + 10
-    const svgContent = `
-        <svg data-water-drop-id="${id}" width="${width}" height="${(width / 2) * 3}" viewBox="0 0 30 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g class="waterDrop">
-            <path d="M24.2598 44.4761C24.2343 44.4989 24.2087 44.5218 24.1829 44.5446C18.9842 49.1225 11.0009 49.1225 5.80116 44.5452C5.7751 44.5224 5.74903 44.4996 5.7231 44.4761C1.80879 40.9866 -0.341062 35.7425 0.0442703 30.6212C0.52047 24.2882 4.52506 18.7892 8.2275 13.5324C11.1575 9.37142 14.0689 4.84956 14.9918 0.000488281C15.9141 4.84956 18.8261 9.37142 21.7561 13.5324C25.4581 18.7892 29.4634 24.2882 29.9394 30.6212C30.3243 35.7425 28.1745 40.9866 24.2598 44.4761Z" fill="#00BDEC"/>
-            <path d="M24.2599 44.4763C24.2346 44.4991 24.2086 44.5219 24.1833 44.5435C18.9845 49.122 11.001 49.122 5.80149 44.5454C5.7755 44.5226 5.7495 44.4991 5.7235 44.4763C2.38305 41.4983 0.327622 37.2421 0.0361328 32.8763C1.46001 35.0782 3.24995 37.0322 5.43401 38.4496C8.43783 40.3988 12.2381 41.2448 15.6729 40.2574C19.2158 39.2389 22.0821 36.325 23.4135 32.8611C24.745 29.3966 24.6225 25.458 23.4382 21.9397C22.0184 17.7195 19.1987 14.1549 16.9264 10.3316C15.1164 7.28522 14.3403 4.71178 14.8844 0.651626C14.9136 0.434373 14.9502 0.217903 14.9915 0.0026731C14.9917 0.00176 14.9919 0.000913098 14.992 0C15.9144 4.8494 18.8258 9.37106 21.7564 13.5318C25.4582 18.789 29.4635 24.2877 29.9395 30.6207C30.3243 35.742 28.1745 40.986 24.2599 44.4763Z" fill="#00A2DF"/>
-            <path d="M4.23946 30.9811C3.11373 30.9385 2.24625 29.9597 2.33654 28.8273C2.51122 26.6371 3.37295 24.493 4.56601 22.6324C5.70771 20.8522 7.1149 19.4011 8.47158 17.5001C8.91092 16.8845 9.79664 16.8221 10.3173 17.3693L10.3367 17.3895C10.755 17.8292 10.7871 18.5149 10.4081 18.9894C7.81196 22.2393 6.31707 25.4457 6.2956 29.0012C6.28881 30.1276 5.35562 31.0232 4.23946 30.9811Z" fill="#5FC9E0"/>
-            <path d="M13.0105 14.1382C13.0105 14.7895 12.487 15.3175 11.8412 15.3175C11.1954 15.3175 10.6719 14.7895 10.6719 14.1382C10.6719 13.487 11.1954 12.959 11.8412 12.959C12.487 12.959 13.0105 13.487 13.0105 14.1382Z" fill="#5FC9E0"/>
-          </g>
-        </svg>`
-
-    // Create a container for the SVG
-    const container = document.createElement('div')
-    container.innerHTML = svgContent
-    const svgElement = container.querySelector('svg')
-
-    if (!svgElement) {
-      console.error('Water drop SVG element not found in the content.')
-      return
-    }
-
+    const height = (width / 2) * 3
     const opacity = Math.random() * 0.3 + 0.3
 
-    svgElement.setAttributeNS(null, 'transform', `translate(${x}, ${y - 32})`)
-    svgElement.setAttributeNS(null, 'opacity', opacity.toString())
+    // Create the SVG element
+    const svgNS = 'http://www.w3.org/2000/svg'
+    const svgElement = document.createElementNS(svgNS, 'svg')
+    svgElement.setAttribute('data-water-drop-id', id.toString())
+    svgElement.setAttribute('width', width.toString())
+    svgElement.setAttribute('height', height.toString())
+    svgElement.setAttribute('viewBox', '0 0 30 48')
+    svgElement.setAttribute('fill', 'none')
+    svgElement.setAttribute('xmlns', svgNS)
+    svgElement.setAttribute('opacity', opacity.toString())
+
+    // Create the g element
+    const gElement = document.createElementNS(svgNS, 'g')
+    gElement.setAttribute('class', 'waterDrop')
+
+    // Define the paths
+    const paths = [
+      'M24.2598 44.4761C24.2343 44.4989 24.2087 44.5218 24.1829 44.5446C18.9842 49.1225 11.0009 49.1225 5.80116 44.5452C5.7751 44.5224 5.74903 44.4996 5.7231 44.4761C1.80879 40.9866 -0.341062 35.7425 0.0442703 30.6212C0.52047 24.2882 4.52506 18.7892 8.2275 13.5324C11.1575 9.37142 14.0689 4.84956 14.9918 0.000488281C15.9141 4.84956 18.8261 9.37142 21.7561 13.5324C25.4581 18.7892 29.4634 24.2882 29.9394 30.6212C30.3243 35.7425 28.1745 40.9866 24.2598 44.4761Z',
+      'M24.2599 44.4763C24.2346 44.4991 24.2086 44.5219 24.1833 44.5435C18.9845 49.122 11.001 49.122 5.80149 44.5454C5.7755 44.5226 5.7495 44.4991 5.7235 44.4763C2.38305 41.4983 0.327622 37.2421 0.0361328 32.8763C1.46001 35.0782 3.24995 37.0322 5.43401 38.4496C8.43783 40.3988 12.2381 41.2448 15.6729 40.2574C19.2158 39.2389 22.0821 36.325 23.4135 32.8611C24.745 29.3966 24.6225 25.458 23.4382 21.9397C22.0184 17.7195 19.1987 14.1549 16.9264 10.3316C15.1164 7.28522 14.3403 4.71178 14.8844 0.651626C14.9136 0.434373 14.9502 0.217903 14.9915 0.0026731C14.9917 0.00176 14.9919 0.000913098 14.992 0C15.9144 4.8494 18.8258 9.37106 21.7564 13.5318C25.4582 18.789 29.4635 24.2877 29.9395 30.6207C30.3243 35.742 28.1745 40.986 24.2599 44.4763Z',
+      'M4.23946 30.9811C3.11373 30.9385 2.24625 29.9597 2.33654 28.8273C2.51122 26.6371 3.37295 24.493 4.56601 22.6324C5.70771 20.8522 7.1149 19.4011 8.47158 17.5001C8.91092 16.8845 9.79664 16.8221 10.3173 17.3693L10.3367 17.3895C10.755 17.8292 10.7871 18.5149 10.4081 18.9894C7.81196 22.2393 6.31707 25.4457 6.2956 29.0012C6.28881 30.1276 5.35562 31.0232 4.23946 30.9811Z',
+      'M13.0105 14.1382C13.0105 14.7895 12.487 15.3175 11.8412 15.3175C11.1954 15.3175 10.6719 14.7895 10.6719 14.1382C10.6719 13.487 11.1954 12.959 11.8412 12.959C12.487 12.959 13.0105 13.487 13.0105 14.1382Z'
+    ]
+    const colors = ['#00BDEC', '#00A2DF', '#5FC9E0', '#5FC9E0']
+
+    // Create and append the path elements
+    paths.forEach((d, i) => {
+      const path = document.createElementNS(svgNS, 'path')
+      path.setAttribute('d', d)
+      path.setAttribute('fill', colors[i])
+      gElement.appendChild(path)
+    })
+
+    // Append the g element to the SVG element
+    svgElement.appendChild(gElement)
+
+    // Set the transform attribute for positioning
+    svgElement.setAttribute('transform', `translate(${x}, ${y - 32})`)
 
     // Append the SVG to the water drop layer
     if (waterDropLayer.value) {
@@ -179,7 +195,7 @@ export const useCareTimeBubbles = () => {
     }
     waterDropPositions.value.push({ x, y, id })
 
-    // Animate the waterDrop for a more realistic effect
+    // Animate the waterDrop
     gsap.fromTo(svgElement, { scale: 0 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' })
   }
 
