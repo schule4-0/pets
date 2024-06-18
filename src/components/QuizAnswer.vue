@@ -41,11 +41,12 @@ watch(
 
 <style scoped>
 .answer-card {
-  margin-top: 70px;
+  margin-top: 40px;
   background-color: var(--vt-c-white);
   border-radius: 60px;
   padding: 50px;
   cursor: pointer;
+  border: 2px solid #3a3e56;
 }
 
 .answer-card.correct {
@@ -57,8 +58,8 @@ watch(
 }
 
 .answer-image {
-  width: 160px;
-  height: 160px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
 }
 </style>
