@@ -47,20 +47,23 @@ const stringResources = {
       'Ja, der Fressnapf ist wichtig, damit Rocky sein Futter und Wasser daraus essen und trinken kann.'
   },
   STAGE1_TREATS: {
-    content: ''
+    content:
+      'Sehr gut! Leckerli sind kleine Belohnungen für Rocky, wenn er etwas gut gemacht hat. Sie machen ihn glücklich!'
   },
   STAGE1_TOYS: {
-    content: ''
+    content:
+      'Genau! Das Spielzeug ist zum Spielen da. Rocky hat Spaß damit und es hilft ihm, sich nicht zu langweilen.'
   },
   STAGE1_BONE: {
     content:
       'Richtig! Der Knochen ist ein leckeres Kauspielzeug für Rocky. Er kann darauf herumkauen und seine Zähne sauber halten.'
   },
   STAGE1_PLASTIC_BAG: {
-    content: ''
+    content:
+      'Klasse! Die Plastiktüte brauchen wir, um Rockys Haufen aufzuheben, wenn wir spazieren gehen. So bleibt die Umgebung sauber.'
   },
   STAGE1_ALL_PACKED: {
-    content: ''
+    content: 'Spitze! Jetzt hast du alles, was Rocky braucht.'
   },
   STAGE2_TIME_TO_FEED: {
     content:
@@ -84,13 +87,15 @@ const stringResources = {
       'Bist du bereit für einen Spaziergang? Los geht’s! Achte  darauf, Hindernissen auszuweichen und Hundehaufen, die Rocky hinterlässt,  einzusammeln. Tippe auf Rocky, damit er losläuft. Siehst du ein Hindernis, tippst auf den Knopf unten links. Um die Hundehaufen aufzusammeln, berühre sie mit  deinem Finger'
   },
   STAGE3_WAS_CLOSE: {
-    content: 'Hmm...' //TODO
+    content: 'Hmm… Das war knapp! Versuch es noch einmal, du schaffst das bestimmt!'
   },
   STAGE3_OUTCH: {
-    content: 'Hoppla...' //TODO
+    content:
+      'Hoppla! Achte darauf, dass Rocky den Hindernissen ausweicht, damit er sich nicht wehtut.'
   },
   STAGE3_MISSED_POO: {
-    content: '' //TODO
+    content:
+      'Oh, du hast da etwas übersehen. Denk daran, alle Hundehaufen einzusammeln, damit der Weg sauber bleibt.'
   },
   STAGE3_SUPER: {
     content: 'Das hast du super gemacht!'
@@ -127,7 +132,8 @@ const stringResources = {
       'Wunderbar, du bist ein richtiger Tierexperte! Da Rocky so brav beim Waschen war, sollten wir ihm eine Belohnung geben!'
   },
   STAGE5_INTRODUCTION: {
-    content: '' //TODO
+    content:
+      'Du hast dich wunderbar um Rocky gekümmert. Jetzt wollen wir mal schauen, wie gut du Rocky auch kennst. Bist du bereit dein Wissen zu testen? Na dann lass uns mit dem Quiz starten!'
   },
   STAGE5_QUESTION1: {
     content: 'Was sollte in der Tasche für Rocky sein?'
@@ -187,7 +193,8 @@ const stringResources = {
       'Toll gemacht! Du hast alle Fragen richtig beantwortet. Du kennst Rocky wirklich wirklich gut!'
   },
   GAME_FINISHED: {
-    content: '' //TODO
+    content:
+      'Du hast großartig geholfen! Rocky ist dank dir jetzt glücklich und zufrieden. Wir hatten heute viel Spaß miteinander und freuen uns schon aufs nächste Mal!'
   }
 } as const
 
