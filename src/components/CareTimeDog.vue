@@ -174,7 +174,7 @@
   </div>
   <RewardGame
     v-if="showReward"
-    :solution-images="[imgShampoo, imgShowerHead, imgTowel]"
+    :solution-images="[imgShampoo, imgShowerHead, imgDryer]"
     @finish="handleRewardFinish"
   ></RewardGame>
 </template>
@@ -190,7 +190,7 @@ import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
-import imgTowel from '@/assets/Towel.svg'
+import imgDryer from '@/assets/dryer.png'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 
@@ -215,7 +215,7 @@ const toolImage = computed(() =>
   currentState.value === 'showering'
     ? imgShowerHead
     : currentState.value === 'drying'
-      ? imgTowel
+      ? imgDryer
       : imgShampoo
 )
 
