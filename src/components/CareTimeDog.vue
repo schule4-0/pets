@@ -310,7 +310,7 @@ watch(
       mascot.showMessage('STAGE4_IS_SHOWERED')
       currentState.value = 'drying'
       isActionActive.value = false
-    } else if (bubbles.length === 10 && currState === 'shampooing') {
+    } else if (bubbles.length === 100 && currState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
       mascot.showMessage('STAGE4_IS_SHAMPOOED')
       currentState.value = 'showering'

@@ -8,7 +8,7 @@
   </div>
   <RewardGame
     v-if="showReward"
-    :solution-images="[imgCake, imgChocolate]"
+    :solution-images="[imgMeat, imgBone]"
     @finish="goToNextStage"
   ></RewardGame>
 </template>
@@ -23,8 +23,8 @@ import RewardGame from '@/components/RewardCard.vue'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgFoodBowl from '@/assets/equipment/dogfood.svg'
-import imgCake from '@/assets/cake.svg'
-import imgChocolate from '@/assets/chocolate.svg'
+import imgBone from '@/assets/bone_border_space.png'
+import imgMeat from '@/assets/meat.png'
 import { useStageNavigator } from '@/composables/useNavigation'
 
 const { goToNextStage } = useStageNavigator()
@@ -37,7 +37,10 @@ const showReward = ref(false)
 
 watch(score, () => {
   if (score.value >= MAX_NUTRITION_GAME_SCORE) {
-    showReward.value = true
+    mascot.showMessage('STAGE2_FEEDING_DONE')
+    setTimeout(() => {
+      showReward.value = true
+    }, 8000)
   }
 })
 
