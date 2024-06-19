@@ -48,6 +48,9 @@ import type { StringResourceKey } from '@/config/mascotMessages'
 import { useSound } from '@/composables/sound'
 import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import { useStageNavigator } from '@/composables/useNavigation'
+
+const { goToNextStage } = useStageNavigator()
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
@@ -120,7 +123,10 @@ const nextQuestion = () => {
     mascot.showMessage(currentQuestionMessage, () => {}, true)
   } else {
     mascot.showMessage('STAGE5_FINISH', () => {}, true)
-    showModal.value = true
+    setTimeout(() => {
+      goToNextStage()
+    }, 10000)
+    //showModal.value = true
   }
 }
 
