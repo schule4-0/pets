@@ -113,24 +113,26 @@ const handleDropInArea = (item: {
   type: 'accepted' | 'rejected'
   message: string
 }) => {
+  let TIME = 0
   if (item.type === 'accepted') {
     collectItem(item.id)
     sound.play(correctSound)
     //TODO: clean up by using message from item
     if (item.id === 1) {
       mascot.showMessage('STAGE1_BONE')
-    }
-    if (item.id === 2) {
+      TIME = 10000
+    } else if (item.id === 2) {
       mascot.showMessage('STAGE1_FEEDING_BOWL')
-    }
-    if (item.id === 3) {
+      TIME = 8000
+    } else if (item.id === 3) {
+      TIME = 6000
       mascot.showMessage('STAGE1_BALL')
     }
 
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
         showReward.value = true
-      }, 4000)
+      }, TIME)
     }
   } else {
     sound.play(wrongSound)
