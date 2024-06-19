@@ -91,7 +91,7 @@ const handleNextButtonClick = () => {
   position: absolute;
   background-color: var(--s40-color-contrast);
   box-shadow: rgba(0, 0, 0, 0.171) 10px 10px 10px;
-  width: 99%;
+  width: calc(100% - 2 * 20px);
   height: 90%;
   border-radius: 20px;
   display: flex;
