@@ -50,7 +50,8 @@ defineProps<{
     color: white;
     -webkit-user-select: none;
     user-select: none;
-    font-size: 25px;
+    font-size: 24px;
+    line-height: 1.3;
   }
 }
 
@@ -65,7 +66,7 @@ defineProps<{
 }
 
 .speech-bubble-default {
-  @include speech-bubble(300px, 50px);
+  @include speech-bubble(340px, 50px);
 }
 
 .speech-bubble-quiz {
