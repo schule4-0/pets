@@ -93,13 +93,14 @@ const handleNextButtonClick = () => {
   background-color: var(--s40-color-contrast);
   box-shadow: rgba(0, 0, 0, 0.171) 10px 10px 10px;
   width: calc(100% - 2 * 20px);
-  height: 90%;
+  height: 88dvh;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   color: var(--s40-color-primary);
-  margin-top: 40px;
+  margin-top: 80px;
+  margin-bottom: 20px;
   z-index: 200;
 }
 
@@ -147,6 +148,7 @@ const handleNextButtonClick = () => {
   z-index: 202;
 
   img {
+    z-index: 202;
     width: 15vh !important;
   }
 }
