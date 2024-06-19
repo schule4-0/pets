@@ -12,7 +12,7 @@
         <button @click="goBack" class="navigationButtons">
           <img src="@/assets/icons/icon_back.svg" />
         </button>
-        <h2>Game</h2>
+        <h2>Minispiel</h2>
         <button @click="goNext" class="navigationButtons">
           <!-- should be removed, because of cheating? -->
           <img src="@/assets/icons/icon_next.svg" />
