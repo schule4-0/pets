@@ -68,7 +68,9 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     wasBoneGiven.value = true
     sound.play(barkSound)
-    mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
+    //TODO: activate when audio is ready
+    //mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
+    displayNextButton()
   }
 }
 
@@ -89,7 +91,7 @@ const handleNextButtonClick = () => {
   position: absolute;
   background-color: var(--s40-color-contrast);
   box-shadow: rgba(0, 0, 0, 0.171) 10px 10px 10px;
-  width: 95%;
+  width: 99%;
   height: 90%;
   border-radius: 20px;
   display: flex;
@@ -97,6 +99,7 @@ const handleNextButtonClick = () => {
   justify-content: space-between;
   color: var(--s40-color-primary);
   margin-top: 40px;
+  z-index: 200;
 }
 
 .solution {
@@ -111,6 +114,7 @@ const handleNextButtonClick = () => {
   border-radius: 20px;
   justify-content: space-around;
   padding-bottom: 20px;
+  z-index: 201;
 }
 
 .solution-images {
@@ -122,16 +126,17 @@ const handleNextButtonClick = () => {
   gap: 40px;
   flex-wrap: wrap;
   height: 40%;
+  z-index: 201;
 }
 
 .solution-image {
-  width: 10%;
+  height: 80px;
 }
 
 .dogImg {
   position: relative;
   top: 0;
-  z-index: 1;
+  z-index: 201;
 }
 
 .boneImg {
@@ -156,6 +161,7 @@ const handleNextButtonClick = () => {
   border: none;
   margin-bottom: 20px;
   color: white;
+  z-index: 201;
 }
 
 .drop-area-container {
