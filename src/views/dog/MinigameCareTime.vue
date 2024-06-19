@@ -1,36 +1,83 @@
 <template>
   <div class="container">
-    <button @click="goToNextStage">Nächstes Minigame</button>
-    <div class="dog-container">
-      <CareTimeDog
-        :width="dogSize"
-        :height="dogSize"
-        :current-state="currentState"
-        :on-is-showered="onIsShowered"
-        :on-is-shampooed="onIsShampooed"
-        :on-is-dryed="onIsDryed"
-        :on-is-completed="onIsCompleted"
+    <div style="position: fixed; top: 80px; left: 16px; width: 320px">
+      <ProgressBar
+        :img-src="progressObject.imgSrc"
+        :progress="progressObject.currentProgress ?? 0"
+        :max="progressObject.maxProgress"
       />
     </div>
-    <div class="toolbar-container">
-      <CareTimeToolbar :current-state="currentState" />
+    <div class="dog-container">
+      <CareTimeDog
+        @bubble-counter="handleBubbleChange"
+        @water-drop-counter="handleWaterDropChange"
+        :width="dogSize"
+        :height="dogSize"
+        :on-completed="() => (showReward = true)"
+      />
     </div>
   </div>
+  <RewardGame
+    v-if="showReward"
+    :solution-images="[imgShampoo, imgShowerHead, imgDryer]"
+    @finish="handleRewardFinish"
+  ></RewardGame>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import CareTimeDog from '@/components/CareTimeDog.vue'
-import CareTimeToolbar from '@/components/CareTimeToolbar.vue'
+import ProgressBar from '@/components/ProgressBar.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
+import imgShampoo from '@/assets/shampoo.svg'
+import imgShowerHead from '@/assets/Showerhead_water.svg'
+import imgDryer from '@/assets/dryer.png'
+import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
+import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
+import { storeToRefs } from 'pinia'
 
-const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 
+const { currentState } = storeToRefs(useCareTimeToolStore())
 export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameCompleted'
-export type CareTimeTool = 'shampoo' | 'shower' | 'hairDryer'
-const currentState = ref<CareTimeState>('shampooing')
+
+const bubbleCounter = ref(0)
+const waterDropCounter = ref(0)
+const maxWaterDropCounter = ref(0)
+
+const { goToNextStage } = useStageNavigator()
+const showReward = ref(false)
+
+const handleBubbleChange = (counter: number) => {
+  bubbleCounter.value = counter
+}
+
+const handleWaterDropChange = (counter: number) => {
+  waterDropCounter.value = counter
+  if (counter > maxWaterDropCounter.value) maxWaterDropCounter.value = counter
+}
+
+const progressObject = computed(() => {
+  switch (currentState.value) {
+    case 'shampooing':
+      return { imgSrc: imgShampoo, maxProgress: 100, currentProgress: bubbleCounter.value }
+    case 'showering':
+      return {
+        imgSrc: imgShowerHead,
+        maxProgress: 100,
+        currentProgress: 100 - bubbleCounter.value
+      }
+    case 'drying':
+      return {
+        imgSrc: imgDryer,
+        maxProgress: maxWaterDropCounter.value,
+        currentProgress: maxWaterDropCounter.value - waterDropCounter.value
+      }
+    default:
+      return { imgSrc: imgDryer, maxProgress: 100, currentProgress: 100 }
+  }
+})
 
 const dogSize = computed(() => {
   const viewWidth = window.innerWidth
@@ -39,57 +86,31 @@ const dogSize = computed(() => {
   return size
 })
 
+const handleRewardFinish = () => {
+  goToNextStage()
+  showReward.value = false
+}
+
 onMounted(() => {
   mascot.showMessage('STAGE4_INTRODUCTION')
 })
-
-const onIsShampooed = () => {
-  mascot.showMessage('STAGE4_IS_SHAMPOOED')
-
-  currentState.value = 'showering'
-}
-
-const onIsShowered = () => {
-  mascot.showMessage('STAGE4_IS_SHOWERED')
-
-  currentState.value = 'drying'
-}
-
-const onIsDryed = () => {
-  mascot.showMessage('STAGE4_IS_DRYED')
-
-  currentState.value = 'gameCompleted'
-}
-
-const onIsCompleted = () => {
-  // TODO: Do something
-}
 </script>
 
 <style scoped>
 .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
   box-sizing: border-box;
-  padding: 20px;
+  width: 100%;
+  height: 100%;
+  background-image: url('@/assets/BathBlank.svg');
+  background-size: cover;
+  background-position: center;
 }
 
 .dog-container {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.toolbar-container {
+  height: 100%;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
 }
 </style>

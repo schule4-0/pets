@@ -3,15 +3,16 @@ import { ref, computed } from 'vue'
 
 export interface Food {
   id: number
-  top: number
   left: number
   isGood: boolean
 }
 
-export const useGameStore = defineStore('game', () => {
-  const FOOD_DROP_DELAY = 1500 as const
-  const NUM_GOOD_FOOD_NEEDED_FOR_WIN = 3 as const
+export const NUTRITION_GAME_FOOD_DROP_DELAY = 2000 as const
+export const MAX_NUTRITION_GAME_SCORE = 5 as const
+export const NUTRITION_GAME_FALL_DURATION = 5 as const
+export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => {
   const foods = ref<Food[]>([])
+  const hasStarted = ref(false)
   const score = ref(0)
   let nextId = 0
   const intervalId = ref<number | null>(null)
@@ -21,35 +22,63 @@ export const useGameStore = defineStore('game', () => {
     const foodWidth = 64 // 16 * 4
     const newFood: Food = {
       id: nextId++,
-      top: 0,
       left: Math.random() * (screenWidth - foodWidth * 2) + foodWidth,
-      isGood: Math.random() > 0.3
+      isGood: Math.random() > 0.5
     }
     foods.value.push(newFood)
   }
 
   const startGame = () => {
+    if (hasStarted.value) return
+    hasStarted.value = true
+
     if (intervalId.value === null) {
       intervalId.value = window.setInterval(() => {
-        if (score.value < NUM_GOOD_FOOD_NEEDED_FOR_WIN) {
+        if (score.value < MAX_NUTRITION_GAME_SCORE) {
           dropFood()
         } else {
-          console.log('GAME COMPLETED')
+          foods.value = []
           if (intervalId.value !== null) {
             clearInterval(intervalId.value)
             intervalId.value = null
           }
         }
-      }, FOOD_DROP_DELAY)
+      }, NUTRITION_GAME_FOOD_DROP_DELAY)
     }
   }
 
+  const stopGame = () => {
+    hasStarted.value = false
+    if (intervalId.value !== null) {
+      clearInterval(intervalId.value)
+      intervalId.value = null
+    }
+    score.value = 0
+    nextId = 0
+    foods.value = []
+  }
+
+  const resetGame = () => {
+    hasStarted.value = false
+    if (intervalId.value !== null) {
+      clearInterval(intervalId.value)
+      intervalId.value = null
+    }
+    score.value = 0
+    nextId = 0
+    foods.value = []
+  }
+
   const incrementScore = () => {
-    score.value++
+    if (score.value < MAX_NUTRITION_GAME_SCORE) {
+      score.value++
+    }
   }
 
   const decrementScore = () => {
-    score.value--
+    if (score.value > 0) {
+      score.value--
+    }
   }
 
   const removeFood = (id: number) => {
@@ -58,5 +87,15 @@ export const useGameStore = defineStore('game', () => {
 
   const currentScore = computed(() => score.value)
 
-  return { foods, score, startGame, incrementScore, decrementScore, removeFood, currentScore }
+  return {
+    foods,
+    score,
+    startGame,
+    stopGame,
+    resetGame,
+    incrementScore,
+    decrementScore,
+    removeFood,
+    currentScore
+  }
 })

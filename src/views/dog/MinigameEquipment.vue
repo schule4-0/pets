@@ -1,6 +1,8 @@
 <template>
   <div class="game-container">
-    <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
+    <div class="drop-area-container">
+      <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
+    </div>
 
     <DraggableItem
       v-for="item in items"
@@ -10,53 +12,97 @@
       :image="item.image"
       :initialX="item.initialX"
       :initialY="item.initialY"
+      :collected="item.collected"
     />
 
-    <button @click="goToNextStage">Nächstes Minigame</button>
+    <ScoreBoard :items="collectableItems" />
 
-    <RewardGame v-if="showReward" :solution-images="solutionImages" @finish="handleRewardFinish">
-      <template #solution="{ solutionImages }">
-        <div class="solution">
-          <p>Rockys Utensilien</p>
-          <div class="solution-images">
-            <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
-          </div>
-        </div>
-      </template>
-    </RewardGame>
+    <RewardGame
+      v-if="showReward"
+      :solution-images="solutionImages"
+      @finish="handleRewardFinish"
+    ></RewardGame>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/equipment/bone.png'
-import bookImg from '@/assets/equipment/book.png'
-import backpackImg from '@/assets/equipment/backpack.png'
+import bookImg from '@/assets/equipment/book.svg'
+import feedingBowlImg from '@/assets/equipment/dogfood.svg'
+import backpackImg from '@/assets/equipment/backpack_closed.svg'
+import boneImg from '@/assets/equipment/bone_border.png'
+import cardGameImg from '@/assets/equipment/Cardgame.svg'
+import dogleashImg from '@/assets/equipment/Dogleash.svg'
+import ballImg from '@/assets/equipment/Ball.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
+import ScoreBoard from '@/components/ScoreBoard.vue'
+import { useSound } from '@/composables/sound'
+import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
+import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
+const sound = useSound()
 
 onMounted(() => {
-  mascot.showMessage('STAGE1_BACKPACK', 1000)
-  solutionImages.value = items.value.filter(item => item.type === 'accepted').map(item => item.image)
+  mascot.showMessage('STAGE1_BACKPACK')
+  solutionImages.value = items.value
+    .filter((item) => item.type === 'accepted')
+    .map((item) => item.image)
 })
 
 const items = ref<DraggableItemType[]>([
-  { id: 1, type: 'accepted', image: boneImg, initialX: 10, initialY: 80 },
-  { id: 2, type: 'rejected', image: bookImg, initialX: 10, initialY: 50 }
+  {
+    id: 1,
+    type: 'accepted',
+    image: boneImg,
+    initialX: 45,
+    initialY: 90,
+    collected: false,
+    message: 'STAGE1_BONE'
+  },
+  {
+    id: 2,
+    type: 'accepted',
+    image: feedingBowlImg,
+    initialX: 24,
+    initialY: 83,
+    collected: false,
+    message: 'STAGE1_FEEDING_BOWL'
+  },
+  {
+    id: 3,
+    type: 'accepted',
+    image: ballImg,
+    initialX: 34,
+    initialY: 54.5,
+    collected: false,
+    message: 'STAGE1_BALL'
+  },
+  //{ id: 4, type: 'accepted', image: dogleashImg, initialX: 72, initialY: 21.5, collected: false },
+  { id: 5, type: 'rejected', image: bookImg, initialX: 60, initialY: 68, collected: false },
+  { id: 6, type: 'rejected', image: cardGameImg, initialX: 85, initialY: 15.5, collected: false }
 ])
 
-const removeItem = (id: number) => {
-  items.value = items.value.filter((i) => i.id !== id)
+const collectableItems = computed(() => items.value.filter((item) => item.type === 'accepted'))
+
+const collectItem = (id: number) => {
+  items.value = items.value.map((item) => {
+    if (item.id === id) {
+      return { ...item, collected: true }
+    }
+    return item
+  })
 }
 
 const checkAllAcceptedItemsRemoved = () => {
-  return items.value.every(item => item.type !== 'accepted')
+  return collectableItems.value.every(
+    (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
+  )
 }
 
 const solutionImages = ref<string[]>([])
@@ -65,18 +111,32 @@ const handleDropInArea = (item: {
   id: number
   isWithin: boolean
   type: 'accepted' | 'rejected'
+  message: string
 }) => {
-  console.log('handleDropInArea', item)
+  let TIME = 0
   if (item.type === 'accepted') {
-    removeItem(item.id)
-    mascot.showMessage('GENERAL_RIGHT')
+    collectItem(item.id)
+    sound.play(correctSound)
+    //TODO: clean up by using message from item
+    if (item.id === 1) {
+      mascot.showMessage('STAGE1_BONE')
+      TIME = 10000
+    } else if (item.id === 2) {
+      mascot.showMessage('STAGE1_FEEDING_BOWL')
+      TIME = 8000
+    } else if (item.id === 3) {
+      TIME = 6000
+      mascot.showMessage('STAGE1_BALL')
+    }
+
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
         showReward.value = true
-      }, 4000);
+      }, TIME)
     }
   } else {
-    mascot.showMessage('GENERAL_WRONG')
+    sound.play(wrongSound)
+    mascot.showMessage('STAGE1_WRONG')
   }
 }
 
@@ -91,7 +151,7 @@ const handleRewardFinish = () => {
 <style scoped>
 .game-container {
   position: relative;
-  background-image: url('@/assets/equipment/test-room.jpeg');
+  background-image: url('@/assets/equipment/Room.svg');
   background-size: cover;
   background-position: center;
   padding: 20px;
@@ -103,7 +163,16 @@ const handleRewardFinish = () => {
   align-items: center;
 }
 
-.drop-area-wrapper {
-  margin-bottom: 20px;
+.drop-area-container {
+  position: absolute;
+  bottom: 3vw;
+  left: 3vw;
+  background-color: rgb(255, 255, 255, 0.7);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20vw;
+  width: 20vw;
 }
 </style>

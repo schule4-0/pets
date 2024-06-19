@@ -1,23 +1,43 @@
 <template>
-  <div
-    v-if="visible"
-    :class="`food-item food-item-${food.id}`"
-    :style="{ top: `${food.top}px`, left: `${food.left}px` }"
-  >
-    {{ food.isGood ? '🍖' : '🍫' }}
+  <div :class="`food-item food-item-${food.id}`" :style="{ top: `-100px`, left: `${food.left}px` }">
+    <img :src="foodImg" alt="food" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
-import { useGameStore, type Food } from '@/stores/nutritionGameStore'
+import { computed, nextTick, onMounted, onUnmounted } from 'vue'
+import {
+  useNutritionMinigameStore,
+  type Food,
+  NUTRITION_GAME_FALL_DURATION
+} from '@/stores/nutritionGameStore'
+import imgBone from '@/assets/bone_border_space.png'
+import imgMeat from '@/assets/meat.png'
+import imgChocolate from '@/assets/chocolate.svg'
+import imgPhone from '@/assets/phone.svg'
+import imgPoop from '@/assets/poop.svg'
 import gsap from 'gsap'
+import { useSound } from '@/composables/sound'
+import wrongItemSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import correctItemSound from '@/assets/audio/soundEffects/bite.mp3'
+import { useMascotStore } from '@/stores/useMascotStore'
 
 const props = defineProps<{ food: Food }>()
+const sound = useSound()
+const mascot = useMascotStore()
 
-const store = useGameStore()
-const visible = ref(true)
+const nutritionMinigameStore = useNutritionMinigameStore()
 let animation: gsap.core.Tween | null = null
+
+const foodImg = computed(() => {
+  const goodItems = [imgBone, imgMeat]
+  const badItems = [imgPhone, imgPoop, imgChocolate]
+
+  const items = props.food.isGood ? goodItems : badItems
+  const randomIndex = Math.floor(Math.random() * items.length)
+
+  return items[randomIndex]
+})
 
 const dropFood = async () => {
   const checkCollision = () => {
@@ -30,7 +50,7 @@ const dropFood = async () => {
       if (
         bowlRect.left < foodRect.right &&
         bowlRect.right > foodRect.left &&
-        bowlRect.top < foodRect.bottom &&
+        bowlRect.top + 50 < foodRect.bottom &&
         bowlRect.bottom > foodRect.top
       ) {
         handleCollision()
@@ -42,31 +62,27 @@ const dropFood = async () => {
     if (animation) {
       animation.kill() // Stop the animation
     }
-    visible.value = false // Hide the food item
-
     if (props.food.isGood) {
-      console.log('GOOD')
-      store.incrementScore()
+      nutritionMinigameStore.incrementScore()
+      sound.play(correctItemSound)
     } else {
-      console.log('BAD')
-      store.decrementScore()
+      nutritionMinigameStore.decrementScore()
+      //sound.play(wrongItemSound)
+      mascot.showMessage('STAGE2_UNHEALTHY')
+      mascot.hideMascotItem()
     }
 
-    store.removeFood(props.food.id)
+    nutritionMinigameStore.removeFood(props.food.id)
   }
 
   const handleDropEnd = () => {
-    if (visible.value) {
-      console.log('MISSED')
-      visible.value = false // Hide the food item
-      store.removeFood(props.food.id)
-    }
+    nutritionMinigameStore.removeFood(props.food.id)
   }
 
   await nextTick() // Wait for the DOM to update
   animation = gsap.to(`.food-item-${props.food.id}`, {
-    y: window.innerHeight,
-    duration: 6,
+    y: window.innerHeight + 100,
+    duration: NUTRITION_GAME_FALL_DURATION,
     ease: 'linear',
     onUpdate: checkCollision,
     onComplete: handleDropEnd
@@ -87,7 +103,8 @@ onUnmounted(() => {
 <style scoped>
 .food-item {
   position: absolute;
-  font-size: 4rem;
+  height: 48px;
+  width: 48px;
   transition: top 0.1s linear;
 }
 </style>

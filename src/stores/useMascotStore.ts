@@ -1,41 +1,38 @@
 import { defineStore } from 'pinia'
-import type { Message, StringResourceKey } from '@/config/mascotMessages'
+import type { StringResourceKey } from '@/config/mascotMessages'
 import { getStringRes } from '@/config/mascotMessages'
 import { useReading } from '@/composables/reading'
 
-const { readAloud } = useReading()
+const { readAloud, cancelAudio } = useReading()
 
 export const useMascotStore = defineStore('popup', {
   state: () => ({
     showMascot: false,
     speechBubbleShown: false,
-    messageKey: '' as StringResourceKey
+    messageKey: '' as StringResourceKey,
+    defaultPosition: true
   }),
   getters: {
-    messageString: (state) => {
+    currentMessageString: (state) => {
       return getStringRes(state.messageKey).content
     }
   },
   actions: {
-    /** @deprecated
-     * use showMessage(key: StringResourceKey, delay?: number) instead
-     */
-    setMessage(message: Message) {
-      console.log(message.content)
-    },
-    showMessage(key: StringResourceKey, delay?: number) {
+    showMessage(key: StringResourceKey, onEnd = () => {}, overrideDefaultPosition = false) {
+      this.defaultPosition = !overrideDefaultPosition
       this.hideSpeechBubble() //Support animation
       this.showMascotItem()
-      setTimeout(() => {
-        this.showSpeechBubble()
-        this.messageKey = key
-        this.readMessage()
-      }, delay)
+
+      this.showSpeechBubble()
+
+      this.messageKey = key
+      this.readMessage(onEnd)
     },
-    showMascotItem(delay?: number) {
-      setTimeout(() => {
-        this.showMascot = true
-      }, delay)
+    getMessageString: (key: StringResourceKey) => {
+      return getStringRes(key).content
+    },
+    showMascotItem() {
+      this.showMascot = true
     },
     hideMascotItem() {
       this.showMascot = false
@@ -50,8 +47,11 @@ export const useMascotStore = defineStore('popup', {
       this.showSpeechBubble()
       this.readMessage()
     },
-    readMessage() {
-      readAloud(this.messageKey)
+    readMessage(onEnd?: Function) {
+      readAloud(this.messageKey, onEnd)
+    },
+    cancelMessage() {
+      cancelAudio()
     }
   }
 })

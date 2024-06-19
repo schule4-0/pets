@@ -1,46 +1,54 @@
 <template>
   <div class="home-view">
     <div class="home-container">
-      <div class="header-box">
-        <h1>Mein erstes Haustier</h1>
-        <img src="../assets/icon_audio.svg" alt="Audio">
-      </div>
+      <h1>Mein erstes Haustier</h1>
 
-      <p>Bereit, in die Welt der Haustiere einzutauchen?
-      <br>Tippe auf das Tier, das dich am meisten interessiert!</p>
+      <p>
+        Bereit, in die Welt der Haustiere einzutauchen? <br />Wähle ein Tier aus, über das du mehr
+        erfahren möchtest.
+      </p>
     </div>
 
     <div class="pet-cards">
-        <PetCardComponent v-for="(pet, index) in pets" :key="index" :pet="pet"/>
+      <PetCardComponent
+        v-for="(pet, index) in pets"
+        :key="index"
+        :pet="pet"
+        :is-locked="!pet.isImplemented"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import PetCardComponent from '@/components/PetCard.vue';
-import pets from '@/config/petsConfig';
+import PetCardComponent from '@/components/PetCard.vue'
+import pets from '@/config/petsConfig'
 </script>
 
 <style scoped>
 .home-view {
+  margin: auto;
+  max-width: 1080px;
   padding: 40px;
 }
 
 .home-container {
-  margin: auto;
   display: flex;
   flex-direction: column;
-  align-items: left;
-  font-size: 30px;
-  line-height: 100%;
+  align-items: flex-start;
+  font-size: 24px;
+  line-height: 1.2;
 
   h1 {
-    font-size: 3rm;
-    padding: 25px 0 20px 0;
+    font-size: 3rem;
+    margin-top: 24px;
+    color: var(--s40-color-primary);
   }
 
   p {
-    padding: 20px 0;
+    margin-top: 16px;
+    color: #333333;
+    font-size: 1.2rem;
   }
 
   .header-box {
@@ -48,16 +56,18 @@ import pets from '@/config/petsConfig';
     align-items: center;
 
     img {
-      width: 5%;
-      margin: 15px 0 15px 40px;
-      fill: var(--color-text);
+      width: 40px;
+      height: 40px;
+      margin-left: 15px;
     }
   }
 }
 
 .pet-cards {
+  margin-top: 48px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  gap: 20px;
 }
 </style>

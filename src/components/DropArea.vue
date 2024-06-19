@@ -8,7 +8,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps<{
-  image: string,
+  image: string
   width: string
 }>()
 
@@ -28,7 +28,11 @@ const handleDropEvent = (event: MouseEvent | TouchEvent) => {
   const type = target?.dataset.type as 'accepted' | 'rejected'
 
   const bounds = dropArea.value?.getBoundingClientRect()
-  const isWithin = clientX >= (bounds?.left || 0) && clientX <= (bounds?.right || 0) && clientY >= (bounds?.top || 0) && clientY <= (bounds?.bottom || 0)
+  const isWithin =
+    clientX >= (bounds?.left || 0) &&
+    clientX <= (bounds?.right || 0) &&
+    clientY >= (bounds?.top || 0) &&
+    clientY <= (bounds?.bottom || 0)
 
   if (isWithin && id !== -1) {
     emit('droppedInArea', { id, x: clientX, y: clientY, type })

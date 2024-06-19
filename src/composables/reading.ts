@@ -3,7 +3,11 @@ import { getStringRes } from '@/config/mascotMessages'
 import { useMascotStore } from '@/stores/useMascotStore'
 
 export function useReading() {
-  const audioFiles = import.meta.glob('../assets/audio/mascot/*.mp3')
+  //TODO: correct type
+  const audioFiles = import.meta.glob('@/assets/audio/mascot/*.mp3') as Record<
+    string,
+    () => Promise<{ default: string }>
+  >
 
   const speech = new SpeechSynthesisUtterance()
   speech.lang = 'de'
@@ -11,17 +15,21 @@ export function useReading() {
   speech.pitch = 1.3
 
   const audio = new Audio()
+  let nextAction: Function
 
-  function hideSpeechBubble() {
+  function onSpeechEnd() {
     const mascot = useMascotStore() //TODO: initialize mascot store outside this function
     setTimeout(() => {
       if (audio.paused && !window.speechSynthesis.speaking) {
         mascot.hideSpeechBubble()
       }
+      if (nextAction) {
+        nextAction()
+      }
     }, 1500)
   }
 
-  audio.addEventListener('ended', hideSpeechBubble)
+  audio.addEventListener('ended', onSpeechEnd)
 
   function cancelAudio() {
     window.speechSynthesis.cancel()
@@ -29,7 +37,9 @@ export function useReading() {
   }
 
   async function playFile(filePath: string) {
-    const module = await import(/* @vite-ignore */ filePath)
+    //get import function by filePath-key
+    const getFile = audioFiles[filePath]
+    const module = await getFile()
     audio.src = module.default
     await audio.play()
   }
@@ -39,12 +49,16 @@ export function useReading() {
     if (audio.paused) {
       window.speechSynthesis.speak(speech)
     }
-    speech.onend = () => hideSpeechBubble()
+    speech.onend = () => onSpeechEnd()
   }
 
-  async function readAloud(key: StringResourceKey) {
-    const filePath = `../assets/audio/mascot/${key}.mp3`
+  async function readAloud(key: StringResourceKey, onEnd?: Function) {
+    const filePath = `/src/assets/audio/mascot/${key}.mp3`
     cancelAudio()
+    if (onEnd) {
+      nextAction = onEnd //define follow up action
+    }
+
     try {
       //check if file exists
       if (!audioFiles[filePath]) {
@@ -58,6 +72,7 @@ export function useReading() {
   }
 
   return {
-    readAloud
+    readAloud,
+    cancelAudio
   }
 }

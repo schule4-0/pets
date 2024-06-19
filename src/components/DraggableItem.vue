@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!props.collected"
     ref="elementRef"
     :data-id="props.id"
     :data-type="props.type"
@@ -27,6 +28,8 @@ export interface DraggableItemType {
   image: string
   initialX: number
   initialY: number
+  collected: boolean
+  message?: string
 }
 
 const props = defineProps<DraggableItemType>()
@@ -50,7 +53,6 @@ const { startDrag, transitionStyle } = useDraggable(position, elementRef)
   user-select: none;
 }
 .images {
-  width: 5vw;
-  transform: rotate(90deg);
+  width: 7vw;
 }
 </style>

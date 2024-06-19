@@ -1,63 +1,94 @@
 <template>
-  <div class="pet-selection" @click="handlePetSelected">
-    <div class="pet-card">
-      <img :src="pet.image" :alt="pet.name">
-      <div class="pet-card-name">
-        <p>{{ pet.name }}</p>
-        <img src="../assets/icon_arrow.png">
+  <div class="pet-card" @click="handlePetSelected" :class="{ locked: props.isLocked }">
+    <div class="pet-card-image-container">
+      <img :src="pet.image" :alt="pet.name" />
+      <div v-if="props.isLocked" class="lock-overlay">
+        <img :src="iconLock" alt="locked" />
       </div>
+    </div>
+    <div class="pet-card-title-container">
+      <p>{{ pet.name }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { Pet } from '@/config/petsConfig';
-import { useRouter } from 'vue-router';
+import type { Pet } from '@/config/petsConfig'
+import { useRouter } from 'vue-router'
+import { useSound } from '@/composables/sound'
+import iconLock from '@/assets/icon_lock.svg'
+import clickSound from '@/assets/audio/soundEffects/click.mp3'
 
 const props = defineProps<{
-  pet: Pet;
-}>();
+  pet: Pet
+  isLocked: boolean
+}>()
 
-const router = useRouter();
+const router = useRouter()
+const sound = useSound()
 
 const handlePetSelected = () => {
-  router.push(`/pets/${props.pet.englishName}/stages/1`);
-};
+  if (!props.isLocked) {
+    sound.play(clickSound)
+    router.push(`/pets/${props.pet.englishName}/stages/0`)
+  }
+}
 </script>
 
-
 <style scoped>
-.pet-selection {
-  width: 31%;
-  margin-top: 20px;
+.pet-card {
+  width: 100%;
+  max-width: 300px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  position: relative;
+}
 
-  .pet-card {
-    background-color: rgb(231, 231, 231);
-    box-shadow: 3px 3px 15px rgb(186, 186, 186);
-    border-radius: 5px;
+.pet-card.locked {
+  pointer-events: none;
 
-    img {
-      width: 100%;
-      height: 200px;
-      border-radius: 5px;
-      object-fit: cover;
-      background-position: center;
-    }
-  }
-
-  .pet-card-name {
-    font-size: 30px;
-    padding: 5px 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    img {
-      width: 10%;
-      height: auto;
-      margin: 10px 0 15px 15px;
-    }
+  .pet-card-title-container {
+    opacity: 0.6;
   }
 }
 
+.pet-card-image-container {
+  width: 100%;
+  height: 200px;
+  position: relative;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(136, 136, 136, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 58px;
+    height: 58px;
+  }
+}
+
+.pet-card-title-container {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 12px 24px;
+  font-size: 24px;
+  color: var(--s40-color-primary);
+}
 </style>

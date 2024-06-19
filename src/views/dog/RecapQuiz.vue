@@ -6,10 +6,12 @@
         :key="index"
         :class="{ answered: answered }"
         class="progress-buttons"
-      ></button>
+      >
+        <img src="@/assets/icons/icon_check.svg" />
+      </button>
     </div>
 
-    <QuestionComponent :question="currentQuestion.question" />
+    <MascotItem :quiz-appearance="true" />
 
     <div class="answers-container">
       <AnswerComponent
@@ -21,10 +23,6 @@
       />
     </div>
   </div>
-
-  <button @click="nextQuestion" :class="{ 'next-button': true, visible: isAnswerSelected }">
-    <img src="@/assets/icon_arrow.png" />
-  </button>
 
   <div class="modal">
     <div v-if="showModal" class="modal-overlay">
@@ -40,37 +38,68 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import QuestionComponent from '@/components/QuizQuestion.vue'
+import MascotItem from '@/components/MascotItem.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import type { StringResourceKey } from '@/config/mascotMessages'
+import { useSound } from '@/composables/sound'
+import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
+import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 
 const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
 const correctAnswerSelected = ref(false)
 
 const mascot = useMascotStore()
-
+const sound = useSound()
 const router = useRouter()
+
 const showModal = ref(false)
 
 const currentQuestion = computed(() => {
   return quizData[currentQuestionIndex.value]
 })
 
-const handleAnswerSelected = (isCorrect: boolean) => {
+onMounted(() => {
+  mascot.showMessage('STAGE5_QUESTION1', () => {}, true)
+})
+
+const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
   if (isCorrect) {
     isAnswerSelected.value = true
     correctAnswerSelected.value = true
-    mascot.showMessage('STAGEQUIZ_CORRECT')
+
+    const currentCorrectAnswerNumber = currentQuestionIndex.value + 1
+    const currentCorrectAnswerMessage =
+      `STAGE5_CORRECT${currentCorrectAnswerNumber}` as StringResourceKey
+    sound.play(correctSound)
+
+    setTimeout(() => {
+      mascot.showMessage(currentCorrectAnswerMessage, () => {}, true)
+    }, 1000)
+
+    setTimeout(nextQuestion, 10400)
   } else {
-    correctAnswerSelected.value = false
-    const currentAnswerNumber = currentQuestionIndex.value + 1
-    const currentAnswerMessage = `STAGEQUIZ_INCORRECT${currentAnswerNumber}` as StringResourceKey
-    mascot.hideMascotItem()
-    mascot.showMessage(currentAnswerMessage)
+    const currentWrongAnswerNumber = currentQuestionIndex.value + 1
+    const currentWrongAnswerMessage =
+      `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
+    sound.play(wrongSound)
+
+    setTimeout(() => {
+      mascot.showMessage(
+        currentWrongAnswerMessage,
+        () => {
+          const currentQuestionNumber = currentQuestionIndex.value + 1
+          const currentQuestionMessage =
+            `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+          mascot.showMessage(currentQuestionMessage, () => {}, true)
+        },
+        true
+      )
+    }, 1000)
   }
 }
 
@@ -80,14 +109,17 @@ const nextQuestion = () => {
 
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
-    mascot.hideMascotItem()
+    const currentQuestionNumber = currentQuestionIndex.value + 1
+    const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+    mascot.showMessage(currentQuestionMessage, () => {}, true)
   } else {
+    mascot.showMessage('STAGE5_FINISH', () => {}, true)
     showModal.value = true
   }
 }
 
 const finishQuiz = () => {
-  router.push(`/pets/dog/stages/1`)
+  router.push(`/`)
 }
 
 const progress = computed(() => {
@@ -109,9 +141,6 @@ const progress = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 70%;
-  margin-right: 200px;
 
   img {
     width: 5%;
@@ -126,46 +155,32 @@ const progress = computed(() => {
   gap: 40px;
 }
 
-.next-button {
-  margin-top: 30px;
-  margin-bottom: 10px;
-  margin-left: 150px;
-  align-self: flex-end;
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  display: flex;
-  justify-content: end;
-  visibility: hidden;
-
-  img {
-    width: 20px;
-    height: auto;
-    object-fit: contain;
-  }
-}
-
-.next-button.visible {
-  visibility: visible;
-}
-
 .progress-bar {
   display: flex;
   justify-content: center;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 70px;
 }
 
 .progress-buttons {
-  width: 30px;
-  height: 30px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
   margin: 0 5px;
-  background-color: gainsboro;
+  background-color: var(--s40-color-secondary);
+  border: 2px solid #60668F;
 }
 
 .progress-buttons.answered {
-  background-color: green;
+  background-color: var(--s40-color-primary);
+  display: flex;
+  justify-content: end;
+
+  img {
+    width: 18px;
+    height: 28px;
+    object-fit: contain;
+  }
 }
 
 .finish-button {
@@ -189,7 +204,7 @@ const progress = computed(() => {
 }
 
 .modal-content {
-  background: white;
+  background: var(--vt-c-white);
   padding: 20px;
   border-radius: 5px;
   position: relative;
