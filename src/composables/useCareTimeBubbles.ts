@@ -12,7 +12,7 @@ export const useCareTimeBubbles = () => {
   const bubblePositions = ref<{ x: number; y: number; r: number }[]>([])
   const bubblesLayer = ref<SVGGElement | null>(null)
 
-  const dirtPositions = ref<{ id: number; points: string }[]>([])
+  const dirtPositions = ref<{ id: string; path: string; fill: string }[]>([])
   const dirtLayer = ref<SVGGElement | null>(null)
 
   const waterDropPositions = ref<{ x: number; y: number; id: number }[]>([])
@@ -61,7 +61,7 @@ export const useCareTimeBubbles = () => {
   }
 
   const removeBubbles = (x: number, y: number) => {
-    const radius = 20 // Radius around the touch/mouse point to remove bubbles
+    const radius = 30 // Radius around the touch/mouse point to remove bubbles
     const bubbles = bubblesLayer.value?.querySelectorAll('circle')
 
     if (bubbles) {
@@ -99,37 +99,54 @@ export const useCareTimeBubbles = () => {
   }
 
   const generateDirt = () => {
-    const dirtCount = 10
-    let currentCount = 0
-    let id = 0
-
-    while (currentCount < dirtCount) {
-      const x = Math.random() * 705
-      const y = Math.random() * 530
-
-      if (isPointInDog(x, y)) {
-        const points = generateDirtShape(x, y)
-        dirtPositions.value.push({ id: id++, points })
-        currentCount++
+    dirtPositions.value.push(
+      {
+        id: '0',
+        fill: '#5B310B',
+        path: 'M162.5 135C186.506 114.366 215.337 129.111 243 144.5C266.807 157.744 290.913 169.294 289.5 196.5C287.552 234.018 232.023 207.876 195 201.5C175.271 198.102 157.922 213.278 147 196.5C133.487 175.742 143.717 151.145 162.5 135Z'
+      },
+      {
+        id: '1',
+        fill: '#543110',
+        path: 'M27 140C51.0059 119.366 73.514 115.265 101.177 130.654C124.983 143.898 62.6604 130.654 61.5 153C59.5518 190.518 48 165 40 175C27.4937 190.633 16.099 199.432 5.17691 182.654C-8.33577 161.896 8.21689 156.145 27 140Z'
+      },
+      {
+        id: '2',
+        fill: '#351C05',
+        path: 'M107.5 248C100.777 240.92 94.3979 231.621 100.5 224C107.082 215.779 120.213 220.947 127 229C133.92 237.212 136.944 252.444 127 256.5C119.308 259.638 113.22 254.024 107.5 248Z'
+      },
+      {
+        id: '3',
+        fill: '#372311',
+        path: 'M398.5 1.5C419.005 6.6258 435.184 17.5523 438 38.5C441.908 67.5682 399.715 63.8506 377.5 83C357.734 100.038 355.832 133.697 330 130C297.913 125.408 314.61 75.5271 330 47C345.247 18.736 367.344 -6.2882 398.5 1.5Z'
       }
-    }
+    )
   }
 
   const removeDirt = (x: number, y: number) => {
-    const radius = 20 // Radius around the touch/mouse point to remove dirt
-    const dirtElements = dirtLayer.value?.querySelectorAll('polygon')
+    const correctedX = x - 50
+    const correctedY = y - 135
+    const dirtElements = dirtLayer.value?.querySelectorAll('path')
 
     if (dirtElements) {
       dirtElements.forEach((dirt) => {
-        const points = dirt.getAttribute('points') || ''
-        const pointPairs = points.split(' ').map((p) => p.split(',').map(Number))
-        const distances = pointPairs.map(([dx, dy]) => Math.sqrt((dx - x) ** 2 + (dy - y) ** 2))
-        const minDistance = Math.min(...distances)
+        const dirtBoundingBox = dirt.getBBox()
 
-        if (minDistance < radius) {
-          gsap.to(dirt, { y: 20, opacity: 0, duration: 1, onComplete: () => dirt.remove() })
-          // Remove dirt position from the array
-          dirtPositions.value = dirtPositions.value.filter((pos) => pos.points !== points)
+        // Check if the coordinates (x, y) are inside the bounding box
+        if (
+          correctedX >= dirtBoundingBox.x &&
+          correctedX <= dirtBoundingBox.x + dirtBoundingBox.width &&
+          correctedY >= dirtBoundingBox.y &&
+          correctedY <= dirtBoundingBox.y + dirtBoundingBox.height
+        ) {
+          // Animate the dirt removal and then remove it from the DOM
+          gsap.to(dirt, { opacity: 0, duration: 1, onComplete: () => dirt.remove() })
+
+          // Remove dirt position from the array using id
+          const dirtId = dirt.getAttribute('id')
+          if (dirtId) {
+            dirtPositions.value = dirtPositions.value.filter((pos) => pos.id.toString() !== dirtId)
+          }
         }
       })
     }
@@ -197,7 +214,7 @@ export const useCareTimeBubbles = () => {
   }
 
   const removeWaterDrops = (x: number, y: number) => {
-    const radius = 20 // Radius around the touch/mouse point to remove water drops
+    const radius = 30 // Radius around the touch/mouse point to remove water drops
     const waterDrops = waterDropLayer.value?.querySelectorAll('.waterdrop-container')
 
     if (waterDrops) {

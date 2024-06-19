@@ -1,6 +1,6 @@
 <template>
   <div class="goal" :style="{ left: `${props.positionX}px` }">
-    <img src="@/assets/recapQuiz/Dogfood.svg" alt="goal" class="image" />
+    <img src="@/assets/Waterbowl.svg" alt="goal" class="image" />
   </div>
 </template>
 

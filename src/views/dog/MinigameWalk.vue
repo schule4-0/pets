@@ -42,6 +42,11 @@
       :element="element"
     />
   </div>
+  <RewardGame
+    v-if="showReward"
+    :solution-images="[leashImg]"
+    @finish="handleRewardFinish"
+  ></RewardGame>
 </template>
 
 <script setup lang="ts">
@@ -53,6 +58,7 @@ import PooComponent from '@/components/minigame-walk/PooComponent.vue'
 import Goal from '@/components/minigame-walk/GoalComponent.vue'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import AnimatedComponent from '@/components/minigame-walk/AnimatedComponent.vue'
+import RewardGame from '@/components/RewardCard.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useGameState } from '@/composables/useGameState'
@@ -67,6 +73,7 @@ import { useSound } from '@/composables/sound'
 import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
+import leashImg from '@/assets/recapQuiz/Dogleash.svg'
 
 const mascot = useMascotStore()
 const sound = useSound()
@@ -82,6 +89,7 @@ const hasGameStarted = ref(false)
 let collisionTimeout: number | null = null
 let animationTimeline: gsap.core.Timeline | null = null
 const isAnimating = ref(false)
+const showReward = ref(false)
 
 const btnIcon = computed(() => (hasGameStarted.value ? imgIconArrowUp : imgIconPlay))
 
@@ -273,7 +281,8 @@ const isCollidingWithGoal = () => {
 
 const checkWin = () => {
   characterAction.value = 'sit'
-  gsap.delayedCall(2.5, goToNextStage)
+  showReward.value = true
+  //gsap.delayedCall(2.5, goToNextStage)
 }
 
 const resetGame = () => {
@@ -287,6 +296,10 @@ const resetGame = () => {
   animatedElements.length = 0
   hasGameStarted.value = false
   spawnInitialElements()
+}
+
+const handleRewardFinish = () => {
+  goToNextStage()
 }
 
 onMounted(() => {

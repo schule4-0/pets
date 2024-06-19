@@ -143,13 +143,14 @@
           </g>
         </g>
 
-        <g ref="dirtLayer">
-          <polygon
+        <g ref="dirtLayer" transform="translate(50, 130)">
+          <path
             v-for="dirt in dirtPositions"
             :key="dirt.id"
-            :points="dirt.points"
-            fill="#813a00"
-          />
+            :id="dirt.id"
+            :d="dirt.path"
+            :fill="dirt.fill"
+          ></path>
         </g>
         <g ref="bubblesLayer"></g>
         <g ref="waterDropLayer"></g>
@@ -171,6 +172,11 @@
       @touchcancel="stopAction"
     />
   </div>
+  <RewardGame
+    v-if="showReward"
+    :solution-images="[imgShampoo, imgShowerHead, imgTowel]"
+    @finish="handleRewardFinish"
+  ></RewardGame>
 </template>
 
 <script lang="ts" setup>
@@ -185,6 +191,8 @@ import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgTowel from '@/assets/Towel.svg'
+import RewardGame from '@/components/RewardCard.vue'
+import { useStageNavigator } from '@/composables/useNavigation'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
@@ -194,11 +202,14 @@ defineProps<{
 }>()
 
 const mascot = useMascotStore()
+const { goToNextStage } = useStageNavigator()
 const { currentState } = storeToRefs(useCareTimeToolStore())
 const sound = useSound()
 
 const svgElement = ref<SVGSVGElement | null>(null)
 const toolElement = ref<HTMLImageElement | null>(null)
+
+const showReward = ref(false)
 
 const toolImage = computed(() =>
   currentState.value === 'showering'
@@ -225,6 +236,11 @@ const {
 } = useCareTimeBubbles()
 const isActionActive = ref(false)
 const toolPosition = ref({ x: window.innerWidth - 150, y: 150 })
+
+const handleRewardFinish = () => {
+  goToNextStage()
+  showReward.value = false
+}
 
 const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: SVGSVGElement) => {
   const point = svgElement.createSVGPoint()
