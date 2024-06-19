@@ -133,7 +133,7 @@ const stringResources = {
   },
   STAGE5_INTRODUCTION: {
     content:
-      'Du hast dich wunderbar um Rocky gekümmert. Jetzt wollen wir mal schauen, wie gut du Rocky auch kennst. Bist du bereit dein Wissen zu testen? Na dann lass uns mit dem Quiz starten!'
+      'Du hast dich wunderbar um Rocky gekümmert - vielen Dank! Jetzt wollen wir mal schauen, wie gut du Rocky auch kennst. Bist du bereit dein Wissen zu testen? Na dann lass uns mit dem Quiz starten!'
   },
   STAGE5_QUESTION1: {
     content: 'Was sollte in der Tasche für Rocky sein?'
