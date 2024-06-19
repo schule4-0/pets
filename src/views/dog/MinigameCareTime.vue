@@ -13,9 +13,15 @@
         @water-drop-counter="handleWaterDropChange"
         :width="dogSize"
         :height="dogSize"
+        :on-completed="() => (showReward = true)"
       />
     </div>
   </div>
+  <RewardGame
+    v-if="showReward"
+    :solution-images="[imgShampoo, imgShowerHead, imgDryer]"
+    @finish="handleRewardFinish"
+  ></RewardGame>
 </template>
 
 <script lang="ts" setup>
@@ -25,8 +31,10 @@ import ProgressBar from '@/components/ProgressBar.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
-import imgTowel from '@/assets/Towel.svg'
+import imgDryer from '@/assets/dryer.png'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
+import RewardGame from '@/components/RewardCard.vue'
+import { useStageNavigator } from '@/composables/useNavigation'
 import { storeToRefs } from 'pinia'
 
 const mascot = useMascotStore()
@@ -37,6 +45,9 @@ export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameComplet
 const bubbleCounter = ref(0)
 const waterDropCounter = ref(0)
 const maxWaterDropCounter = ref(0)
+
+const { goToNextStage } = useStageNavigator()
+const showReward = ref(false)
 
 const handleBubbleChange = (counter: number) => {
   bubbleCounter.value = counter
@@ -59,12 +70,12 @@ const progressObject = computed(() => {
       }
     case 'drying':
       return {
-        imgSrc: imgTowel,
+        imgSrc: imgDryer,
         maxProgress: maxWaterDropCounter.value,
         currentProgress: maxWaterDropCounter.value - waterDropCounter.value
       }
     default:
-      return { imgSrc: imgTowel, maxProgress: 100, currentProgress: 100 }
+      return { imgSrc: imgDryer, maxProgress: 100, currentProgress: 100 }
   }
 })
 
@@ -74,6 +85,11 @@ const dogSize = computed(() => {
   const size = Math.min(viewWidth, viewHeight) * 0.8
   return size
 })
+
+const handleRewardFinish = () => {
+  goToNextStage()
+  showReward.value = false
+}
 
 onMounted(() => {
   mascot.showMessage('STAGE4_INTRODUCTION')

@@ -223,7 +223,7 @@ export const useCareTimeBubbles = () => {
         if (transform) {
           const position = parseTransform(transform)
           if (position) {
-            const dropX = position.x
+            const dropX = position.x + 65 // Should be on the left of dryer
             const dropY = position.y + 32 // Adjusting for the initial translation in createWaterDrop
             const distance = Math.sqrt((dropX - x) ** 2 + (dropY - y) ** 2)
 

@@ -172,11 +172,6 @@
       @touchcancel="stopAction"
     />
   </div>
-  <RewardGame
-    v-if="showReward"
-    :solution-images="[imgShampoo, imgShowerHead, imgDryer]"
-    @finish="handleRewardFinish"
-  ></RewardGame>
 </template>
 
 <script lang="ts" setup>
@@ -191,25 +186,21 @@ import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgDryer from '@/assets/dryer.png'
-import RewardGame from '@/components/RewardCard.vue'
-import { useStageNavigator } from '@/composables/useNavigation'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
-defineProps<{
+const props = defineProps<{
   width: number
   height: number
+  onCompleted: () => void
 }>()
 
 const mascot = useMascotStore()
-const { goToNextStage } = useStageNavigator()
 const { currentState } = storeToRefs(useCareTimeToolStore())
 const sound = useSound()
 
 const svgElement = ref<SVGSVGElement | null>(null)
 const toolElement = ref<HTMLImageElement | null>(null)
-
-const showReward = ref(false)
 
 const toolImage = computed(() =>
   currentState.value === 'showering'
@@ -236,11 +227,6 @@ const {
 } = useCareTimeBubbles()
 const isActionActive = ref(false)
 const toolPosition = ref({ x: window.innerWidth - 150, y: 150 })
-
-const handleRewardFinish = () => {
-  goToNextStage()
-  showReward.value = false
-}
 
 const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: SVGSVGElement) => {
   const point = svgElement.createSVGPoint()
@@ -303,7 +289,10 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 }
 
 const performSound = () => {
-  if (!isActionActive.value) return
+  if (!isActionActive.value) {
+    sound.stopLoop()
+    return
+  }
   if (currentState.value === 'showering') {
     sound.playLoop(waterSound)
   } else if (currentState.value === 'drying') {
@@ -321,7 +310,7 @@ watch(
       mascot.showMessage('STAGE4_IS_SHOWERED')
       currentState.value = 'drying'
       isActionActive.value = false
-    } else if (bubbles.length === 100 && currState === 'shampooing') {
+    } else if (bubbles.length === 10 && currState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
       mascot.showMessage('STAGE4_IS_SHAMPOOED')
       currentState.value = 'showering'
@@ -331,7 +320,7 @@ watch(
       currentState.value = 'gameCompleted'
       isActionActive.value = false
     } else if (currState === 'gameCompleted') {
-      //
+      props.onCompleted()
     }
   },
   { deep: true }
