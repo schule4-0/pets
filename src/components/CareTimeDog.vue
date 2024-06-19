@@ -307,19 +307,23 @@ watch(
       // Do nothing - Game just started
     } else if (bubbles.length === 0 && currState === 'showering') {
       // All bubbles showered off
+      sound.stopLoop() // Hotfix
       mascot.showMessage('STAGE4_IS_SHOWERED')
       currentState.value = 'drying'
       isActionActive.value = false
     } else if (bubbles.length === 100 && currState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
+      sound.stopLoop() // Hotfix
       mascot.showMessage('STAGE4_IS_SHAMPOOED')
       currentState.value = 'showering'
       isActionActive.value = false
     } else if (waterDrops.length === 0 && currState === 'drying') {
+      sound.stopLoop() // Hotfix
       mascot.showMessage('STAGE4_WASHING_DONE')
       currentState.value = 'gameCompleted'
       isActionActive.value = false
     } else if (currState === 'gameCompleted') {
+      sound.stopLoop() // Hotfix
       props.onCompleted()
     }
   },

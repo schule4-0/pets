@@ -1,6 +1,6 @@
 <template>
   <div class="question-section">
-    <div class="progress-bar">
+    <div v-if="hasQuizIntroductionFinished" class="progress-bar">
       <button
         v-for="(answered, index) in progress"
         :key="index"
@@ -13,7 +13,7 @@
 
     <MascotItem :quiz-appearance="true" />
 
-    <div class="answers-container">
+    <div v-if="hasQuizIntroductionFinished" class="answers-container">
       <AnswerComponent
         v-for="(answer, index) in currentQuestion.answers"
         :key="index"
@@ -58,13 +58,19 @@ const sound = useSound()
 const router = useRouter()
 
 const showModal = ref(false)
+const hasQuizIntroductionFinished = ref(false)
 
 const currentQuestion = computed(() => {
   return quizData[currentQuestionIndex.value]
 })
 
 onMounted(() => {
-  mascot.showMessage('STAGE5_QUESTION1', () => {}, true)
+  mascot.showMessage('STAGE5_INTRODUCTION', () => {}, true)
+
+  setTimeout(() => {
+    hasQuizIntroductionFinished.value = true
+    mascot.showMessage('STAGE5_QUESTION1', () => {}, true)
+  }, 15000)
 })
 
 const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
@@ -168,7 +174,7 @@ const progress = computed(() => {
   border-radius: 50%;
   margin: 0 5px;
   background-color: var(--s40-color-secondary);
-  border: 2px solid #60668F;
+  border: 2px solid #60668f;
 }
 
 .progress-buttons.answered {
