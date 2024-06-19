@@ -70,6 +70,7 @@ const handleDropInArea = (item: {
     sound.play(barkSound)
     //TODO: activate when audio is ready
     //mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
+    mascot.hideMascotItem()
     displayNextButton()
   }
 }
@@ -143,6 +144,7 @@ const handleNextButtonClick = () => {
   position: absolute;
   z-index: 100;
   animation: wiggle 1s ease;
+  z-index: 202;
 
   img {
     width: 15vh !important;
