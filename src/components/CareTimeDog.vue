@@ -185,6 +185,7 @@ import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgTowel from '@/assets/Towel.svg'
+import imgDryer from '@/assets/dryer.png'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
@@ -204,7 +205,7 @@ const toolImage = computed(() =>
   currentState.value === 'showering'
     ? imgShowerHead
     : currentState.value === 'drying'
-      ? imgTowel
+      ? imgDryer
       : imgShampoo
 )
 
