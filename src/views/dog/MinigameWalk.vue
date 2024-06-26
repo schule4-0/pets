@@ -70,6 +70,7 @@ import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
 import leashImg from '@/assets/recapQuiz/Dogleash.svg'
 import { useRewardStore } from '@/stores/useRewardStore'
+import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
 
 const mascot = useMascotStore()
 const sound = useSound()
@@ -301,6 +302,7 @@ const handleRewardFinish = () => {
 
 onMounted(() => {
   mascot.showMessage('STAGE3_GOWALK')
+  solutionImages.value = [dogLeashSvg] // evtl add poop bag
   resetGame()
 })
 

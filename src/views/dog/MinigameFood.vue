@@ -6,11 +6,6 @@
     <DogBowl @start-drag="handleStartDogBowlDrag" />
     <FoodItem v-for="food in foods" :key="food.id" :food="food" />
   </div>
-  <RewardGame
-    v-if="showReward"
-    :solution-images="[imgMeat, imgBone]"
-    @finish="goToNextStage"
-  ></RewardGame>
 </template>
 
 <script setup lang="ts">
@@ -26,20 +21,20 @@ import imgFoodBowl from '@/assets/equipment/dogfood.svg'
 import imgBone from '@/assets/bone_border_space.png'
 import imgMeat from '@/assets/meat.png'
 import { useStageNavigator } from '@/composables/useNavigation'
+import { useRewardStore } from '@/stores/useRewardStore'
 
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
-
+const rewardStore = useRewardStore()
+const solutionImages = ref<string[]>([])
 const { foods, score } = storeToRefs(useNutritionMinigameStore())
 const { startGame, stopGame, resetGame } = useNutritionMinigameStore()
-
-const showReward = ref(false)
 
 watch(score, () => {
   if (score.value >= MAX_NUTRITION_GAME_SCORE) {
     mascot.showMessage('STAGE2_FEEDING_DONE')
     setTimeout(() => {
-      showReward.value = true
+      rewardStore.show(solutionImages.value)
     }, 8000)
   }
 })
@@ -51,6 +46,7 @@ const handleStartDogBowlDrag = () => {
 
 onMounted(() => {
   mascot.showMessage('STAGE2_INTRODUCTION')
+  solutionImages.value = [imgMeat, imgBone]
 })
 
 onUnmounted(() => {
