@@ -28,6 +28,7 @@ export function useStageNavigator() {
     // Navigate to the next stage if available
     if (parentRoute.children[nextStageIndex]) {
       router.push({ name: parentRoute.children[nextStageIndex].name })
+      console.log('nextStageIndex: ', nextStageIndex)
     } else {
       console.warn('You have reached the last stage of this pet.')
     }

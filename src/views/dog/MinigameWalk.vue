@@ -42,11 +42,6 @@
       :element="element"
     />
   </div>
-  <RewardGame
-    v-if="showReward"
-    :solution-images="[leashImg]"
-    @finish="handleRewardFinish"
-  ></RewardGame>
 </template>
 
 <script setup lang="ts">
@@ -74,6 +69,7 @@ import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
 import leashImg from '@/assets/recapQuiz/Dogleash.svg'
+import { useRewardStore } from '@/stores/useRewardStore'
 
 const mascot = useMascotStore()
 const sound = useSound()
@@ -83,13 +79,14 @@ const { characterAction, characterRef, triggerJump, handleJumpComplete } = useCh
 const animatedElements = reactive([] as AnimatedComponentWithSpeedMultiplier[])
 const { spawnElementWithConfig, spawnInitialElements, lastElementSpawnTimes } =
   useElementSpawning(animatedElements)
+const rewardStore = useRewardStore()
+const solutionImages = ref<string[]>([])
 
 const goalRef = ref<InstanceType<typeof Goal> | null>(null)
 const hasGameStarted = ref(false)
 let collisionTimeout: number | null = null
 let animationTimeline: gsap.core.Timeline | null = null
 const isAnimating = ref(false)
-const showReward = ref(false)
 
 const btnIcon = computed(() => (hasGameStarted.value ? imgIconArrowUp : imgIconPlay))
 
@@ -281,7 +278,7 @@ const isCollidingWithGoal = () => {
 
 const checkWin = () => {
   characterAction.value = 'sit'
-  showReward.value = true
+  rewardStore.show(solutionImages.value)
   //gsap.delayedCall(2.5, goToNextStage)
 }
 
