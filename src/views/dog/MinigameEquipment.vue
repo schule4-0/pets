@@ -16,12 +16,6 @@
     />
 
     <ScoreBoard :items="collectableItems" />
-
-    <RewardGame
-      v-if="showReward"
-      :solution-images="solutionImages"
-      @finish="handleRewardFinish"
-    ></RewardGame>
   </div>
 </template>
 
@@ -29,8 +23,6 @@
 import { ref, computed, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
-import RewardGame from '@/components/RewardCard.vue'
-import { useStageNavigator } from '@/composables/useNavigation'
 import bookImg from '@/assets/equipment/book.svg'
 import feedingBowlImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack_closed.svg'
@@ -39,14 +31,16 @@ import cardGameImg from '@/assets/equipment/Cardgame.svg'
 import dogleashImg from '@/assets/equipment/Dogleash.svg'
 import ballImg from '@/assets/equipment/Ball.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
+import { useRewardStore } from '@/stores/useRewardStore'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import { useSound } from '@/composables/sound'
 import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 
-const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 const sound = useSound()
+const rewardStore = useRewardStore()
+const solutionImages = ref<string[]>([])
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -83,7 +77,6 @@ const items = ref<DraggableItemType[]>([
     collected: false,
     message: 'STAGE1_BALL'
   },
-  //{ id: 4, type: 'accepted', image: dogleashImg, initialX: 72, initialY: 21.5, collected: false },
   { id: 5, type: 'rejected', image: bookImg, initialX: 60, initialY: 68, collected: false },
   { id: 6, type: 'rejected', image: cardGameImg, initialX: 85, initialY: 15.5, collected: false }
 ])
@@ -105,8 +98,6 @@ const checkAllAcceptedItemsRemoved = () => {
   )
 }
 
-const solutionImages = ref<string[]>([])
-
 const handleDropInArea = (item: {
   id: number
   isWithin: boolean
@@ -117,7 +108,6 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     collectItem(item.id)
     sound.play(correctSound)
-    //TODO: clean up by using message from item
     if (item.id === 1) {
       mascot.showMessage('STAGE1_BONE')
       TIME = 10000
@@ -131,20 +121,13 @@ const handleDropInArea = (item: {
 
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
-        showReward.value = true
+        rewardStore.show(solutionImages.value)
       }, TIME)
     }
   } else {
     sound.play(wrongSound)
     mascot.showMessage('STAGE1_WRONG')
   }
-}
-
-const showReward = ref(false)
-
-const handleRewardFinish = () => {
-  goToNextStage()
-  showReward.value = false
 }
 </script>
 
