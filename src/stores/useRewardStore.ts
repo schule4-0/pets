@@ -6,11 +6,11 @@ export const useRewardStore = defineStore('rewardStore', () => {
   const router = useRouter();
   const solutionImages = ref<string[]>([]);
 
-  const show = (images: string[]) => {
+  const show = (images: string[], stage: string) => {
     solutionImages.value = images;
     router.push({
       name: 'reward-card',
-      params: { stage: '1' }
+      params: { stage }
     });
   };
 

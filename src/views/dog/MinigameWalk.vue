@@ -82,6 +82,7 @@ const { spawnElementWithConfig, spawnInitialElements, lastElementSpawnTimes } =
   useElementSpawning(animatedElements)
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
+const currentStageNumber = 3
 
 const goalRef = ref<InstanceType<typeof Goal> | null>(null)
 const hasGameStarted = ref(false)
@@ -90,6 +91,12 @@ let animationTimeline: gsap.core.Timeline | null = null
 const isAnimating = ref(false)
 
 const btnIcon = computed(() => (hasGameStarted.value ? imgIconArrowUp : imgIconPlay))
+
+onMounted(() => {
+  mascot.showMessage('STAGE3_GOWALK')
+  solutionImages.value = [dogLeashSvg] // evtl add poop bag
+  resetGame()
+})
 
 const startGame = () => {
   if (!hasGameStarted.value) {
@@ -279,7 +286,7 @@ const isCollidingWithGoal = () => {
 
 const checkWin = () => {
   characterAction.value = 'sit'
-  rewardStore.show(solutionImages.value)
+  rewardStore.show(solutionImages.value, currentStageNumber.toString())
   //gsap.delayedCall(2.5, goToNextStage)
 }
 
@@ -295,16 +302,6 @@ const resetGame = () => {
   hasGameStarted.value = false
   spawnInitialElements()
 }
-
-const handleRewardFinish = () => {
-  goToNextStage()
-}
-
-onMounted(() => {
-  mascot.showMessage('STAGE3_GOWALK')
-  solutionImages.value = [dogLeashSvg] // evtl add poop bag
-  resetGame()
-})
 
 onUnmounted(() => {
   if (collisionTimeout) clearTimeout(collisionTimeout)

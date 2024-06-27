@@ -41,6 +41,7 @@ const mascot = useMascotStore()
 const sound = useSound()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
+const currentStageNumber = 1
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -121,7 +122,7 @@ const handleDropInArea = (item: {
 
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
-        rewardStore.show(solutionImages.value)
+        rewardStore.show(solutionImages.value, currentStageNumber.toString())
       }, TIME)
     }
   } else {

@@ -14,7 +14,6 @@ import { useNutritionMinigameStore, MAX_NUTRITION_GAME_SCORE } from '@/stores/nu
 import DogBowl from '@/components/DogBowl.vue'
 import FoodItem from '@/components/FoodItem.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
-import RewardGame from '@/components/RewardCard.vue'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgFoodBowl from '@/assets/equipment/dogfood.svg'
@@ -29,12 +28,13 @@ const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
 const { foods, score } = storeToRefs(useNutritionMinigameStore())
 const { startGame, stopGame, resetGame } = useNutritionMinigameStore()
+const currentStageNumber = 2
 
 watch(score, () => {
   if (score.value >= MAX_NUTRITION_GAME_SCORE) {
     mascot.showMessage('STAGE2_FEEDING_DONE')
     setTimeout(() => {
-      rewardStore.show(solutionImages.value)
+      rewardStore.show(solutionImages.value, currentStageNumber.toString())
     }, 8000)
   }
 })
