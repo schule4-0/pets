@@ -22,7 +22,6 @@ import imgMeat from '@/assets/meat.png'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useRewardStore } from '@/stores/useRewardStore'
 
-const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])

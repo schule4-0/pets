@@ -28,7 +28,6 @@ import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgDryer from '@/assets/dryer.png'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
-import { useStageNavigator } from '@/composables/useNavigation'
 import { storeToRefs } from 'pinia'
 import { useRewardStore } from '@/stores/useRewardStore'
 

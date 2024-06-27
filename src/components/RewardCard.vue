@@ -4,7 +4,7 @@
       <p>Das braucht Rocky:</p>
       <div class="solution-images">
         <img
-          v-for="image in localSolutionImages"
+          v-for="image in solutionImages"
           :key="image"
           :src="image"
           class="solution-image"
@@ -59,13 +59,11 @@ const showNextButton = ref(false)
 
 const rewardStore = useRewardStore()
 
-const solutionImages = rewardStore.solutionImages
-
-const localSolutionImages = ref<string[]>([])
+const solutionImages = ref<string[]>([])
 
 onMounted(() => {
   mascot.showMessage('REWARD_EXPLANATION')
-  localSolutionImages.value = rewardStore.solutionImages
+  solutionImages.value = rewardStore.solutionImages
 })
 
 const handleDropInArea = (item: {

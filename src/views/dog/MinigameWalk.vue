@@ -74,7 +74,6 @@ import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
 
 const mascot = useMascotStore()
 const sound = useSound()
-const { goToNextStage } = useStageNavigator()
 const { goalPositionX, isGoalVisible, gameState, collectedPoos } = useGameState()
 const { characterAction, characterRef, triggerJump, handleJumpComplete } = useCharacterActions()
 const animatedElements = reactive([] as AnimatedComponentWithSpeedMultiplier[])
