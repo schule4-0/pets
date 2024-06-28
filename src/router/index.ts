@@ -9,11 +9,13 @@ import MinigameCareTime from '@/views/dog/MinigameCareTime.vue'
 import MinigameFood from '@/views/dog/MinigameFood.vue'
 import DogOnboarding from '@/views/dog/DogOnboarding.vue'
 import DogOffboarding from '@/views/dog/DogOffboarding.vue'
+import RewardView from '@/views/dog/RewardView.vue'
 
 type PetStage = {
   path: string
   component: ReturnType<typeof defineComponent>
   name: string
+  children?: RouteRecordRaw[]
 }
 
 type PetStages = {
@@ -29,7 +31,8 @@ const petStages: PetStages = {
     { path: 'stages/3', component: MinigameWalk, name: 'dog-walk' },
     { path: 'stages/4', component: MinigameCareTime, name: 'dog-caretime' },
     { path: 'stages/5', component: RecapQuiz, name: 'dog-recap-quiz' },
-    { path: 'stages/6', component: DogOffboarding, name: 'dog-offboarding' }
+    { path: 'stages/6', component: DogOffboarding, name: 'dog-offboarding' },
+    { path: 'stages/:stageId/reward', component: RewardView, name: 'dog-reward' }
   ]
   //cat: [
   //  { path: 'stages/1', component: MinigameEquipment, name: 'cat-one' },
@@ -41,7 +44,7 @@ const petStages: PetStages = {
 const petRoutes: RouteRecordRaw[] = Object.keys(petStages).map((pet) => ({
   path: `/pets/${pet}`,
   component: MainGameView,
-  children: petStages[pet]
+  children: petStages[pet] as RouteRecordRaw[]
 }))
 
 const routes: RouteRecordRaw[] = [

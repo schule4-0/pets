@@ -17,7 +17,8 @@
       type="accepted"
       :image="boneImg"
       :initialX="44"
-      :initialY="5"
+      :initialY="10"
+      width="120px"
       v-if="!wasBoneGiven"
       :collected="false"
     />
@@ -42,6 +43,7 @@ import cartoondogImg from '@/assets/rocky/Rocky_happy.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useSound } from '@/composables/sound'
 import barkSound from '@/assets/audio/soundEffects/bark.mp3'
+import { useRewardStore } from '@/stores/useRewardStore'
 
 const emit = defineEmits(['finish'])
 const { goToNextStage } = useStageNavigator()
@@ -50,14 +52,13 @@ const sound = useSound()
 const wasBoneGiven = ref(false)
 const showNextButton = ref(false)
 
-defineProps<{ solutionImages: string[] }>()
+const rewardStore = useRewardStore()
+
+const solutionImages = ref<string[]>([])
 
 onMounted(() => {
-  //too much?
-  //sound.play(winSound)
-  //setTimeout(() => {
   mascot.showMessage('REWARD_EXPLANATION')
-  //}, 3000)
+  solutionImages.value = rewardStore.solutionImages
 })
 
 const handleDropInArea = (item: {
@@ -68,9 +69,7 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     wasBoneGiven.value = true
     sound.play(barkSound)
-    //TODO: activate when audio is ready
-    //mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
-    mascot.hideMascotItem()
+    mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
     displayNextButton()
   }
 }
@@ -87,31 +86,32 @@ const handleNextButtonClick = () => {
 }
 </script>
 
-<style>
+<style scoped>
 .reward-game-container {
   position: absolute;
-  background-color: var(--s40-color-contrast);
-  box-shadow: rgba(0, 0, 0, 0.171) 10px 10px 10px;
-  width: calc(100% - 2 * 20px);
-  height: 88dvh;
-  border-radius: 20px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--s40-color-contrast) url('@/assets/RewardSysBackground.png') no-repeat center
+    center;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   color: var(--s40-color-primary);
-  margin-top: 80px;
-  margin-bottom: 20px;
-  z-index: 200;
 }
 
 .solution {
-  margin-top: 30px;
-  background-color: rgb(224, 224, 224);
+  margin-top: 75px;
+  background-color: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
   font-size: 3em;
   height: 30%;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 85%;
   align-self: center;
   border-radius: 20px;
   justify-content: space-around;
@@ -124,49 +124,42 @@ const handleNextButtonClick = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  bottom: 3vh;
   gap: 40px;
   flex-wrap: wrap;
   height: 40%;
-  z-index: 201;
 }
 
 .solution-image {
-  height: 80px;
+  width: 90px;
 }
 
 .dogImg {
   position: relative;
   top: 0;
-  z-index: 201;
 }
 
 .boneImg {
   position: absolute;
-  z-index: 100;
+  z-index: 5;
   animation: wiggle 1s ease;
-  z-index: 202;
+}
 
-  img {
-    z-index: 202;
-    width: 15vh !important;
-  }
+.boneImg img {
+  width: 3vh !important;
 }
 
 .nextBtn {
   height: 70px;
   width: 50%;
   align-self: center;
-  justify-self: center;
   background-color: var(--s40-color-primary);
   border-radius: 10px;
   font-size: 2.5em;
   font-family: Poppins;
   border: none;
-  margin-bottom: 20px;
   color: white;
   z-index: 201;
+  margin-bottom: 20px;
 }
 
 .drop-area-container {
