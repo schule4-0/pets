@@ -1,7 +1,7 @@
 <template>
   <div class="reward-game-container">
     <div v-if="wasBoneGiven" class="solution">
-      <p>Das braucht Rocky:</p>
+      <h5>Das braucht Rocky:</h5>
       <div class="solution-images">
         <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
       </div>
@@ -117,6 +117,7 @@ const handleNextButtonClick = () => {
   justify-content: space-around;
   padding-bottom: 20px;
   z-index: 201;
+  font-weight: 400;
 }
 
 .solution-images {
@@ -161,7 +162,7 @@ const handleNextButtonClick = () => {
   background-color: var(--s40-color-primary);
   border-radius: 10px;
   font-size: 2.5em;
-  font-family: Jua;
+  font-family: Poppins;
   border: none;
   margin-bottom: 20px;
   color: white;
