@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="pet-card-title-container">
-      <p>{{ pet.name }}</p>
+      <h4>{{ pet.name }}</h4>
     </div>
   </div>
 </template>
