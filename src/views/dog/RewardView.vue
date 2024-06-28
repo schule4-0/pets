@@ -105,12 +105,13 @@ const handleNextButtonClick = () => {
 
 .solution {
   margin-top: 75px;
-  background-color: rgb(224, 224, 224);
+  background-color: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
   font-size: 3em;
   height: 30%;
   display: flex;
   flex-direction: column;
-  width: 95%;
+  width: 85%;
   align-self: center;
   border-radius: 20px;
   justify-content: space-around;
