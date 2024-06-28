@@ -17,7 +17,8 @@
       type="accepted"
       :image="boneImg"
       :initialX="44"
-      :initialY="5"
+      :initialY="10"
+      width="120px"
       v-if="!wasBoneGiven"
       :collected="false"
     />
@@ -141,7 +142,7 @@ const handleNextButtonClick = () => {
 }
 
 .boneImg img {
-  width: 15vh !important;
+  width: 3vh !important;
 }
 
 .nextBtn {
