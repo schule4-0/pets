@@ -100,7 +100,6 @@ const handleNextButtonClick = () => {
   justify-content: space-between;
   align-items: center;
   color: var(--s40-color-primary);
-  z-index: 200;
 }
 
 .solution {
@@ -115,7 +114,6 @@ const handleNextButtonClick = () => {
   border-radius: 20px;
   justify-content: space-around;
   padding-bottom: 20px;
-  z-index: 201;
 }
 
 .solution-images {
@@ -134,12 +132,11 @@ const handleNextButtonClick = () => {
 .dogImg {
   position: relative;
   top: 0;
-  z-index: 201;
 }
 
 .boneImg {
   position: absolute;
-  z-index: 202;
+  z-index: 5;
   animation: wiggle 1s ease;
 }
 
