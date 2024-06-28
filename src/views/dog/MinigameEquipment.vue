@@ -28,7 +28,6 @@ import feedingBowlImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack_closed.svg'
 import boneImg from '@/assets/equipment/bone_border.png'
 import cardGameImg from '@/assets/equipment/Cardgame.svg'
-import dogleashImg from '@/assets/equipment/Dogleash.svg'
 import ballImg from '@/assets/equipment/Ball.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useRewardStore } from '@/stores/useRewardStore'
@@ -41,7 +40,6 @@ const mascot = useMascotStore()
 const sound = useSound()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
-const currentStageNumber = 1
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -122,7 +120,7 @@ const handleDropInArea = (item: {
 
     if (checkAllAcceptedItemsRemoved()) {
       setTimeout(() => {
-        rewardStore.show(solutionImages.value, currentStageNumber.toString())
+        rewardStore.show(solutionImages.value)
       }, TIME)
     }
   } else {

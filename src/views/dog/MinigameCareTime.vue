@@ -13,7 +13,7 @@
         @water-drop-counter="handleWaterDropChange"
         :width="dogSize"
         :height="dogSize"
-        @completed="() => rewardStore.show(solutionImages, currentStageNumber.toString())"
+        @completed="() => rewardStore.show(solutionImages)"
       />
     </div>
   </div>
@@ -41,7 +41,6 @@ const waterDropCounter = ref(0)
 const maxWaterDropCounter = ref(0)
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
-const currentStageNumber = 4
 
 const handleBubbleChange = (counter: number) => {
   bubbleCounter.value = counter

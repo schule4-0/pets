@@ -3,12 +3,7 @@
     <div v-if="wasBoneGiven" class="solution">
       <p>Das braucht Rocky:</p>
       <div class="solution-images">
-        <img
-          v-for="image in solutionImages"
-          :key="image"
-          :src="image"
-          class="solution-image"
-        />
+        <img v-for="image in solutionImages" :key="image" :src="image" class="solution-image" />
       </div>
     </div>
 
@@ -47,7 +42,6 @@ import cartoondogImg from '@/assets/rocky/Rocky_happy.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useSound } from '@/composables/sound'
 import barkSound from '@/assets/audio/soundEffects/bark.mp3'
-import RewardSysBackground from '@/assets/RewardSysBackground.png'
 import { useRewardStore } from '@/stores/useRewardStore'
 
 const emit = defineEmits(['finish'])

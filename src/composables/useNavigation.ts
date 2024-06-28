@@ -4,12 +4,19 @@ export function useStageNavigator() {
   const router = useRouter()
   const route = useRoute()
 
+  function getCurrentStageNumber() {
+    // URL is like `/pets/{pet}/stages/{stageNumber}`
+    // Extract the current pet type from the URL
+    const pathSegments = route.path.split('/')
+    return parseInt(pathSegments[4])
+  }
+
   function goToNextStage() {
     // URL is like `/pets/{pet}/stages/{stageNumber}`
     // Extract the current pet type from the URL
     const pathSegments = route.path.split('/')
     const pet = pathSegments[2]
-    const currentStageNumber = parseInt(pathSegments[4])
+    const currentStageNumber = getCurrentStageNumber()
 
     // Find the parent route for the pet
     const parentRoute = router.getRoutes().find((r) => r.path === `/pets/${pet}`)
@@ -34,6 +41,7 @@ export function useStageNavigator() {
   }
 
   return {
-    goToNextStage
+    goToNextStage,
+    getCurrentStageNumber
   }
 }

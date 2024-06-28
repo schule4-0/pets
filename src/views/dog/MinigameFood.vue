@@ -19,7 +19,6 @@ import { useMascotStore } from '@/stores/useMascotStore'
 import imgFoodBowl from '@/assets/equipment/dogfood.svg'
 import imgBone from '@/assets/bone_border_space.png'
 import imgMeat from '@/assets/meat.png'
-import { useStageNavigator } from '@/composables/useNavigation'
 import { useRewardStore } from '@/stores/useRewardStore'
 
 const mascot = useMascotStore()
@@ -27,13 +26,12 @@ const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
 const { foods, score } = storeToRefs(useNutritionMinigameStore())
 const { startGame, stopGame, resetGame } = useNutritionMinigameStore()
-const currentStageNumber = 2
 
 watch(score, () => {
   if (score.value >= MAX_NUTRITION_GAME_SCORE) {
     mascot.showMessage('STAGE2_FEEDING_DONE')
     setTimeout(() => {
-      rewardStore.show(solutionImages.value, currentStageNumber.toString())
+      rewardStore.show(solutionImages.value)
     }, 8000)
   }
 })

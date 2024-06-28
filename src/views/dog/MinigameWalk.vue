@@ -53,8 +53,6 @@ import PooComponent from '@/components/minigame-walk/PooComponent.vue'
 import Goal from '@/components/minigame-walk/GoalComponent.vue'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import AnimatedComponent from '@/components/minigame-walk/AnimatedComponent.vue'
-import RewardGame from '@/components/RewardCard.vue'
-import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useGameState } from '@/composables/useGameState'
 import { useCharacterActions } from '@/composables/useCharacterActions'
@@ -68,7 +66,6 @@ import { useSound } from '@/composables/sound'
 import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
-import leashImg from '@/assets/recapQuiz/Dogleash.svg'
 import { useRewardStore } from '@/stores/useRewardStore'
 import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
 
@@ -81,8 +78,6 @@ const { spawnElementWithConfig, spawnInitialElements, lastElementSpawnTimes } =
   useElementSpawning(animatedElements)
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
-const currentStageNumber = 3
-
 const goalRef = ref<InstanceType<typeof Goal> | null>(null)
 const hasGameStarted = ref(false)
 let collisionTimeout: number | null = null
@@ -93,7 +88,7 @@ const btnIcon = computed(() => (hasGameStarted.value ? imgIconArrowUp : imgIconP
 
 onMounted(() => {
   mascot.showMessage('STAGE3_GOWALK')
-  solutionImages.value = [dogLeashSvg] // evtl add poop bag
+  solutionImages.value = [dogLeashSvg] // TODO: add poop bag
   resetGame()
 })
 
@@ -285,7 +280,7 @@ const isCollidingWithGoal = () => {
 
 const checkWin = () => {
   characterAction.value = 'sit'
-  rewardStore.show(solutionImages.value, currentStageNumber.toString())
+  rewardStore.show(solutionImages.value)
   //gsap.delayedCall(2.5, goToNextStage)
 }
 
