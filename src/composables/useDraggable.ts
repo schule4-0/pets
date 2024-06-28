@@ -23,10 +23,10 @@ export function useDraggable(
     }
   })
 
-  let offsetX = 0
-  let offsetY = 0
-
   function startDrag(event: MouseEvent | TouchEvent) {
+    let offsetX = 0
+    let offsetY = 0
+
     event.preventDefault()
 
     const cursorInitialX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
