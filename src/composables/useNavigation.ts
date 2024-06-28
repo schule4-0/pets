@@ -11,7 +11,7 @@ export function useStageNavigator() {
     return parseInt(pathSegments[4])
   }
 
-  function goToNextStage() {
+  function goToStage(direction: 'previous' | 'next') {
     // URL is like `/pets/{pet}/stages/{stageNumber}`
     // Extract the current pet type from the URL
     const pathSegments = route.path.split('/')
@@ -26,22 +26,27 @@ export function useStageNavigator() {
       return
     }
 
-    // Find current stage and calculate the next stage index
+    // Find current stage and calculate the new stage index
     const currentStageIndex = parentRoute.children.findIndex(
       (stage) => stage.path === `stages/${currentStageNumber}`
     )
-    const nextStageIndex = currentStageIndex + 1
+    const newStageIndex = direction === 'next' ? currentStageIndex + 1 : currentStageIndex - 1
 
-    // Navigate to the next stage if available
-    if (parentRoute.children[nextStageIndex]) {
-      router.push({ name: parentRoute.children[nextStageIndex].name })
+    // Navigate to the new stage if available
+    if (parentRoute.children[newStageIndex]) {
+      router.push({ name: parentRoute.children[newStageIndex].name })
     } else {
-      console.warn('You have reached the last stage of this pet.')
+      if (direction === 'next') {
+        console.warn('You have reached the last stage of this pet.')
+      } else {
+        console.warn('You are at the first stage of this pet.')
+      }
     }
   }
 
   return {
-    goToNextStage,
+    goToNextStage: () => goToStage('next'),
+    goToPreviousStage: () => goToStage('previous'),
     getCurrentStageNumber
   }
 }
