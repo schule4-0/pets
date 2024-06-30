@@ -82,6 +82,7 @@ const dogSize = computed(() => {
 onMounted(() => {
   solutionImages.value = [imgShampoo, imgShowerHead, imgDryer]
   mascot.showMessage('STAGE4_INTRODUCTION')
+  currentState.value = 'shampooing'
 })
 </script>
 
