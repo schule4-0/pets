@@ -117,7 +117,7 @@ const stringResources = {
   },
   STAGE4_SHAMPOO_EXPLANATION: {
     content:
-      'Zuerst müssen wir Rocky einseifen, damit der ganze Schmutz aus seinem Fell entfernt wird. Wische mit deinem Finger hin und her, um Rocky einzuseifen.'
+      'Zuerst müssen wir Rocky einseifen, damit der ganze Schmutz und die Bakterien aus seinem Fell entfernt werden. Wische mit deinem Finger hin und her, um Rocky einzuseifen.'
   },
   STAGE4_IS_SHAMPOOED: {
     content:
