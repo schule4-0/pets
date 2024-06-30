@@ -60,7 +60,7 @@ body {
     background-color 0.5s;
   line-height: 1.6;
   font-family:
-    'Jua',
+    'Poppins',
     Inter,
     -apple-system,
     BlinkMacSystemFont,
@@ -107,4 +107,13 @@ body {
     height: 60vh;
     background-image: url('/bg_wave_right.svg');
   }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+p {
+  font-family: 'Andika', sans-serif;
 }

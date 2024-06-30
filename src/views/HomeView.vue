@@ -48,7 +48,7 @@ import pets from '@/config/petsConfig'
   p {
     margin-top: 16px;
     color: #333333;
-    font-size: 1.2rem;
+    font-size: 1.7rem;
   }
 
   .header-box {

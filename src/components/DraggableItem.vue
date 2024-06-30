@@ -14,7 +14,13 @@
     }"
     style="cursor: grab"
   >
-    <img v-if="props.image" :src="props.image" alt="Draggable Image" class="images" />
+    <img
+      v-if="props.image"
+      :src="props.image"
+      :width="width ?? '64px'"
+      alt="Draggable Image"
+      class="images"
+    />
   </div>
 </template>
 
@@ -24,6 +30,7 @@ import { useDraggable } from '@/composables/useDraggable'
 
 export interface DraggableItemType {
   id: number
+  width?: string
   type: 'accepted' | 'rejected'
   image: string
   initialX: number
@@ -49,10 +56,6 @@ const { startDrag, transitionStyle } = useDraggable(position, elementRef)
 <style scoped>
 .draggable {
   position: absolute;
-  padding: 1vw;
   user-select: none;
-}
-.images {
-  width: 7vw;
 }
 </style>
