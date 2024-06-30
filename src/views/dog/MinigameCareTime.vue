@@ -93,6 +93,7 @@ const handleRewardFinish = () => {
 
 onMounted(() => {
   mascot.showMessage('STAGE4_INTRODUCTION')
+  currentState.value = 'shampooing'
 })
 </script>
 
