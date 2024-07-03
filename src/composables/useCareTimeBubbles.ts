@@ -113,7 +113,7 @@ export const useCareTimeBubbles = () => {
       {
         id: '2',
         fill: '#351C05',
-        path: 'M107.5 248C100.777 240.92 94.3979 231.621 100.5 224C107.082 215.779 120.213 220.947 127 229C133.92 237.212 136.944 252.444 127 256.5C119.308 259.638 113.22 254.024 107.5 248Z'
+        path: 'M107.5 248C100.777 240.92 94.3979 231.621 100.5 224C107.082 215.779 120.213 220.947 200 229C133.92 257.212 236.944 252.444 200 256.5C119.308 259.638 113.22 254.024 107.5 248Z'
       },
       {
         id: '3',
@@ -139,13 +139,27 @@ export const useCareTimeBubbles = () => {
           correctedY >= dirtBoundingBox.y &&
           correctedY <= dirtBoundingBox.y + dirtBoundingBox.height
         ) {
-          // Animate the dirt removal and then remove it from the DOM
-          gsap.to(dirt, { opacity: 0, duration: 1, onComplete: () => dirt.remove() })
+          // Reduce the opacity of the dirt element
+          const currentOpacity = parseFloat(dirt.style.opacity || '1')
+          const newOpacity = currentOpacity - 0.09
 
-          // Remove dirt position from the array using id
-          const dirtId = dirt.getAttribute('id')
-          if (dirtId) {
-            dirtPositions.value = dirtPositions.value.filter((pos) => pos.id.toString() !== dirtId)
+          // Apply the new opacity
+          dirt.style.opacity = newOpacity.toString()
+
+          if (newOpacity <= 0) {
+            gsap.to(dirt, {
+              opacity: 0,
+              duration: 1,
+              onComplete: () => dirt.remove()
+            })
+
+            // Remove dirt position from the array using id
+            const dirtId = dirt.getAttribute('id')
+            if (dirtId) {
+              dirtPositions.value = dirtPositions.value.filter(
+                (pos) => pos.id.toString() !== dirtId
+              )
+            }
           }
         }
       })
