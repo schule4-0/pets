@@ -11,8 +11,9 @@ import {
   type Food,
   NUTRITION_GAME_FALL_DURATION
 } from '@/stores/nutritionGameStore'
-import imgBone from '@/assets/bone_border_space.png'
-import imgMeat from '@/assets/meat.png'
+import imgSausage from '@/assets/sausage.svg'
+import imgSteak from '@/assets/steak.svg'
+import imgCarrot from '@/assets/carrot.svg'
 import imgChocolate from '@/assets/chocolate.svg'
 import imgPhone from '@/assets/phone.svg'
 import imgPoop from '@/assets/poop.svg'
@@ -30,7 +31,7 @@ const nutritionMinigameStore = useNutritionMinigameStore()
 let animation: gsap.core.Tween | null = null
 
 const foodImg = computed(() => {
-  const goodItems = [imgBone, imgMeat]
+  const goodItems = [imgSausage, imgSteak, imgCarrot]
   const badItems = [imgPhone, imgPoop, imgChocolate]
 
   const items = props.food.isGood ? goodItems : badItems

@@ -69,7 +69,7 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     wasBoneGiven.value = true
     sound.play(barkSound)
-    mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton())
+    //mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton()) // TODO: missing voice recording!
     displayNextButton()
   }
 }

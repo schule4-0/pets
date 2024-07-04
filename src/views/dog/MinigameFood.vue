@@ -17,8 +17,9 @@ import ProgressBar from '@/components/ProgressBar.vue'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgFoodBowl from '@/assets/equipment/dogfood.svg'
-import imgBone from '@/assets/bone_border_space.png'
-import imgMeat from '@/assets/meat.png'
+import imgSausage from '@/assets/sausage.svg'
+import imgSteak from '@/assets/steak.svg'
+import imgCarrot from '@/assets/carrot.svg'
 import { useRewardStore } from '@/stores/useRewardStore'
 
 const mascot = useMascotStore()
@@ -43,7 +44,7 @@ const handleStartDogBowlDrag = () => {
 
 onMounted(() => {
   mascot.showMessage('STAGE2_INTRODUCTION')
-  solutionImages.value = [imgMeat, imgBone]
+  solutionImages.value = [imgSteak, imgCarrot, imgSausage]
 })
 
 onUnmounted(() => {
