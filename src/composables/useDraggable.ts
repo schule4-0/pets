@@ -24,13 +24,19 @@ export function useDraggable(
   })
 
   function startDrag(event: MouseEvent | TouchEvent) {
+    let offsetX = 0
+    let offsetY = 0
+
     event.preventDefault()
 
     const cursorInitialX = event instanceof TouchEvent ? event.touches[0].clientX : event.clientX
     const cursorInitialY = event instanceof TouchEvent ? event.touches[0].clientY : event.clientY
 
-    const startX = (position.value.x / window.innerWidth) * 100
-    const startY = (position.value.y / window.innerHeight) * 100
+    if (elementRef.value) {
+      const rect = elementRef.value.getBoundingClientRect()
+      offsetX = cursorInitialX - rect.left
+      offsetY = cursorInitialY - rect.top
+    }
 
     const onMove = (moveEvent: MouseEvent | TouchEvent) => {
       moveEvent.preventDefault()
@@ -40,12 +46,8 @@ export function useDraggable(
       const moveY =
         moveEvent instanceof TouchEvent ? moveEvent.touches[0].clientY : moveEvent.clientY
 
-      position.value.x =
-        ((moveX - startX) / window.innerWidth) * 100 -
-        ((elementWidth.value / window.innerWidth) * 100) / 2
-      position.value.y =
-        ((moveY - startY) / window.innerHeight) * 100 -
-        ((elementHeight.value / window.innerHeight) * 100) / 3
+      position.value.x = ((moveX - offsetX) / window.innerWidth) * 100
+      position.value.y = ((moveY - offsetY) / window.innerHeight) * 100
     }
 
     const onEnd = () => {

@@ -13,19 +13,14 @@
         @water-drop-counter="handleWaterDropChange"
         :width="dogSize"
         :height="dogSize"
-        :on-completed="() => (showReward = true)"
+        @completed="() => rewardStore.show(solutionImages)"
       />
     </div>
   </div>
-  <RewardGame
-    v-if="showReward"
-    :solution-images="[imgShampoo, imgShowerHead, imgDryer]"
-    @finish="handleRewardFinish"
-  ></RewardGame>
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CareTimeDog from '@/components/CareTimeDog.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
@@ -33,9 +28,8 @@ import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgDryer from '@/assets/dryer.png'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
-import RewardGame from '@/components/RewardCard.vue'
-import { useStageNavigator } from '@/composables/useNavigation'
 import { storeToRefs } from 'pinia'
+import { useRewardStore } from '@/stores/useRewardStore'
 
 const mascot = useMascotStore()
 
@@ -45,9 +39,10 @@ export type CareTimeState = 'shampooing' | 'showering' | 'drying' | 'gameComplet
 const bubbleCounter = ref(0)
 const waterDropCounter = ref(0)
 const maxWaterDropCounter = ref(0)
+const rewardStore = useRewardStore()
+const solutionImages = ref<string[]>([])
 
-const { goToNextStage } = useStageNavigator()
-const showReward = ref(false)
+let messageTimeOut: number
 
 const handleBubbleChange = (counter: number) => {
   bubbleCounter.value = counter
@@ -86,13 +81,17 @@ const dogSize = computed(() => {
   return size
 })
 
-const handleRewardFinish = () => {
-  goToNextStage()
-  showReward.value = false
-}
-
 onMounted(() => {
+  solutionImages.value = [imgShampoo, imgShowerHead, imgDryer]
   mascot.showMessage('STAGE4_INTRODUCTION')
+  messageTimeOut = setTimeout(() => {
+    mascot.showMessage('STAGE4_SHAMPOO_EXPLANATION')
+  }, 12000)
+  currentState.value = 'shampooing'
+})
+
+onUnmounted(() => {
+  clearTimeout(messageTimeOut)
 })
 </script>
 

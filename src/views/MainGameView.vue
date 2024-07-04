@@ -55,7 +55,7 @@ const mascot = useMascotStore()
 const { isActive: isStageOverlayActive } = storeToRefs(useStageStore())
 const sound = useSound()
 
-const { goToNextStage } = useStageNavigator()
+const { goToNextStage, goToPreviousStage } = useStageNavigator()
 
 const showModal = ref(false)
 
@@ -65,7 +65,7 @@ function goNext() {
 }
 function goBack() {
   sound.play(clickSound)
-  router.back()
+  goToPreviousStage()
 }
 
 function goBackToHome() {
