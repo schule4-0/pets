@@ -26,6 +26,7 @@ const props = defineProps<{
   action: CharacterActions
   hurtSound: String
   walkSound: String
+  jumpSound: String
   playSound: Function
   playLoopSound: Function
   stopLoopSound: Function
@@ -65,9 +66,9 @@ const handleAction = (action: CharacterActions) => {
 }
 
 const handleSound = (action: CharacterActions) => {
-  /*if (action === 'jump') {
+  if (action === 'jump') {
     props.playSound(props.jumpSound)
-  } else */ if (action === 'hurt') {
+  } else if (action === 'hurt') {
     props.playSound(props.hurtSound)
   } else if (action === 'run') {
     props.playLoopSound(props.walkSound)
