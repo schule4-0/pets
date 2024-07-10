@@ -1,5 +1,7 @@
+import { useSound } from '@/composables/sound'
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import backgroundMusic from '@/assets/audio/backgroundMusic/minigameFood_backgroundMusic.mp3'
 
 export interface Food {
   id: number
@@ -16,6 +18,7 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
   const score = ref(0)
   let nextId = 0
   const intervalId = ref<number | null>(null)
+  const sound = useSound()
 
   const dropFood = () => {
     const screenWidth = window.innerWidth
@@ -30,6 +33,7 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
 
   const startGame = () => {
     if (hasStarted.value) return
+    sound.playBackgroundMusic(backgroundMusic, 0.5)
     hasStarted.value = true
 
     if (intervalId.value === null) {
@@ -48,6 +52,7 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
   }
 
   const stopGame = () => {
+    sound.stopBackgroundMusic()
     hasStarted.value = false
     if (intervalId.value !== null) {
       clearInterval(intervalId.value)
