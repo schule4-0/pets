@@ -66,6 +66,7 @@ import { useSound } from '@/composables/sound'
 import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
 import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
+import backgroundMusic from '@/assets/audio/backgroundMusic/minigameWalk_backgroundMusic.mp3'
 import { useRewardStore } from '@/stores/useRewardStore'
 import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
 
@@ -96,6 +97,10 @@ const startGame = () => {
   if (!hasGameStarted.value) {
     mascot.hideMascotItem()
     run()
+    console.log('backgroundMusic: ', sound.isBackgroundMusicPlaying.value)
+    if (!sound.isBackgroundMusicPlaying.value) {
+      sound.playBackgroundMusic(backgroundMusic, 0.1)
+    }
     hasGameStarted.value = true
   }
 }
@@ -299,6 +304,7 @@ const resetGame = () => {
 
 onUnmounted(() => {
   if (collisionTimeout) clearTimeout(collisionTimeout)
+  sound.stopBackgroundMusic()
 })
 </script>
 
