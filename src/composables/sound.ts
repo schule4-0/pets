@@ -6,6 +6,10 @@ export function useSound() {
   const currentSound = ref<HTMLAudioElement | null>(null)
   const isPlaying = ref(false)
 
+  // Separate audio instance for background music
+  const backgroundMusic = new Audio()
+  const isBackgroundMusicPlaying = ref(false)
+
   // Load a list of sound URLs
   function loadSounds(soundUrls: string[]) {
     sounds.value = soundUrls.map((url) => new Audio(url))
@@ -78,11 +82,34 @@ export function useSound() {
     }
   }
 
+  // Play background music
+  async function playBackgroundMusic(filePath: string, volume: number = 1) {
+    try {
+      backgroundMusic.src = filePath
+      backgroundMusic.loop = true
+      backgroundMusic.volume = volume
+
+      await backgroundMusic.play()
+      isBackgroundMusicPlaying.value = true
+    } catch (e) {
+      isBackgroundMusicPlaying.value = false
+    }
+  }
+
+  // Stop background music
+  function stopBackgroundMusic() {
+    backgroundMusic.pause()
+    isBackgroundMusicPlaying.value = false
+  }
+
   return {
     loadSounds,
     play,
     playLoop,
     stopLoop,
-    playRandomSound
+    playRandomSound,
+    playBackgroundMusic,
+    stopBackgroundMusic,
+    isBackgroundMusicPlaying
   }
 }
