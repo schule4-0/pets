@@ -6,6 +6,7 @@
       :action="characterAction"
       :hurtSound="hurtSound"
       :walkSound="walkSound"
+      :jumpSound="jumpSound"
       :playSound="sound.play"
       :playLoopSound="sound.playLoop"
       :stopLoopSound="sound.stopLoop"
@@ -64,6 +65,7 @@ import {
 } from '@/composables/useElementSpawning'
 import { useSound } from '@/composables/sound'
 import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
+import jumpSound from '@/assets/audio/soundEffects/jump.mp3'
 import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import walkSound from '@/assets/audio/soundEffects/walk.mp3'
 import backgroundMusic from '@/assets/audio/backgroundMusic/minigameWalk_backgroundMusic.mp3'
