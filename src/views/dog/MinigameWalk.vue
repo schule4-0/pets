@@ -4,12 +4,6 @@
     <div class="skyline"></div>
     <Character
       :action="characterAction"
-      :hurtSound="hurtSound"
-      :walkSound="walkSound"
-      :jumpSound="jumpSound"
-      :playSound="sound.play"
-      :playLoopSound="sound.playLoop"
-      :stopLoopSound="sound.stopLoop"
       @click="startGame"
       ref="characterRef"
       @jump-completed="handleJumpComplete"
@@ -63,23 +57,21 @@ import {
   useElementSpawning,
   type AnimatedComponentWithSpeedMultiplier
 } from '@/composables/useElementSpawning'
-import { useSound } from '@/composables/sound'
-import collectSound from '@/assets/audio/soundEffects/correct_answer.mp3'
-import jumpSound from '@/assets/audio/soundEffects/jump.mp3'
-import hurtSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
-import walkSound from '@/assets/audio/soundEffects/walk.mp3'
-import backgroundMusic from '@/assets/audio/backgroundMusic/minigameWalk_backgroundMusic.mp3'
 import { useRewardStore } from '@/stores/useRewardStore'
 import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const mascot = useMascotStore()
-const sound = useSound()
+const audioManager = useAudioManager()
+const bgMusicId = ref<string | undefined>(undefined)
+
 const { goalPositionX, isGoalVisible, gameState, collectedPoos } = useGameState()
 const { characterAction, characterRef, triggerJump, handleJumpComplete } = useCharacterActions()
 const animatedElements = reactive([] as AnimatedComponentWithSpeedMultiplier[])
 const { spawnElementWithConfig, spawnInitialElements, lastElementSpawnTimes } =
   useElementSpawning(animatedElements)
 const rewardStore = useRewardStore()
+
 const solutionImages = ref<string[]>([])
 const goalRef = ref<InstanceType<typeof Goal> | null>(null)
 const hasGameStarted = ref(false)
@@ -99,9 +91,8 @@ const startGame = () => {
   if (!hasGameStarted.value) {
     mascot.hideMascotItem()
     run()
-    console.log('backgroundMusic: ', sound.isBackgroundMusicPlaying.value)
-    if (!sound.isBackgroundMusicPlaying.value) {
-      sound.playBackgroundMusic(backgroundMusic, 0.1)
+    if (!bgMusicId.value) {
+      bgMusicId.value = audioManager.playSound('BG_MUSIC_WALK', { volume: 0.1 })
     }
     hasGameStarted.value = true
   }
@@ -154,11 +145,7 @@ const collectPoo = () => {
     gameState.poo = null
     gameState.pooCount++
     checkGoalVisibility()
-    sound.play(collectSound)
-    //TODO: dont use timeout here
-    setTimeout(() => {
-      sound.playLoop(walkSound)
-    }, 500)
+    audioManager.playSound('CORRECT_BLING_SOUND')
     if (!isGoalVisible.value) {
       spawnObstacle()
     }
@@ -185,7 +172,6 @@ const checkGoalVisibility = () => {
 const handleCollision = () => {
   characterRef.value?.abortAnimation()
   characterAction.value = 'hurt'
-  sound.play(hurtSound)
   mascot.showMessage('STAGE3_OUTCH')
   collisionTimeout = window.setTimeout(resetGame, 2000)
 }
@@ -306,7 +292,10 @@ const resetGame = () => {
 
 onUnmounted(() => {
   if (collisionTimeout) clearTimeout(collisionTimeout)
-  sound.stopBackgroundMusic()
+  if (bgMusicId.value) {
+    audioManager.stopSound(bgMusicId.value)
+    bgMusicId.value = undefined
+  }
 })
 </script>
 

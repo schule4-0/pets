@@ -23,17 +23,6 @@
       />
     </div>
   </div>
-
-  <div class="modal">
-    <div v-if="showModal" class="modal-overlay">
-      <div class="modal-content">
-        <h2>
-          Toll gemacht! Du hast alle Fragen richtig beantwortet. Du kennst Rocky wirklich gut!
-        </h2>
-        <button @click="finishQuiz" class="finish-button">Beenden</button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -42,13 +31,10 @@ import MascotItem from '@/components/MascotItem.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
-import { useRouter } from 'vue-router'
 import { onMounted } from 'vue'
 import type { StringResourceKey } from '@/config/mascotMessages'
-import { useSound } from '@/composables/sound'
-import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
-import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
 import { useStageNavigator } from '@/composables/useNavigation'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const { goToNextStage } = useStageNavigator()
 
@@ -56,11 +42,9 @@ const currentQuestionIndex = ref(0)
 const isAnswerSelected = ref(false)
 const correctAnswerSelected = ref(false)
 
+const audioManager = useAudioManager()
 const mascot = useMascotStore()
-const sound = useSound()
-const router = useRouter()
 
-const showModal = ref(false)
 const hasQuizIntroductionFinished = ref(false)
 
 const currentQuestion = computed(() => {
@@ -84,7 +68,8 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
     const currentCorrectAnswerNumber = currentQuestionIndex.value + 1
     const currentCorrectAnswerMessage =
       `STAGE5_CORRECT${currentCorrectAnswerNumber}` as StringResourceKey
-    sound.play(correctSound)
+
+    audioManager.playSound('CORRECT_BLING_SOUND')
 
     setTimeout(() => {
       mascot.showMessage(currentCorrectAnswerMessage, () => {}, true)
@@ -95,7 +80,7 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
     const currentWrongAnswerNumber = currentQuestionIndex.value + 1
     const currentWrongAnswerMessage =
       `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
-    sound.play(wrongSound)
+    audioManager.playSound('DOG_HOWLING')
 
     setTimeout(() => {
       mascot.showMessage(
@@ -126,12 +111,7 @@ const nextQuestion = () => {
     setTimeout(() => {
       goToNextStage()
     }, 10000)
-    //showModal.value = true
   }
-}
-
-const finishQuiz = () => {
-  router.push(`/`)
 }
 
 const progress = computed(() => {

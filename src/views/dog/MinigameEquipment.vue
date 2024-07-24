@@ -32,14 +32,12 @@ import ballImg from '@/assets/equipment/Ball.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useRewardStore } from '@/stores/useRewardStore'
 import ScoreBoard from '@/components/ScoreBoard.vue'
-import { useSound } from '@/composables/sound'
-import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
-import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const mascot = useMascotStore()
-const sound = useSound()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
+const audioManager = useAudioManager()
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -106,7 +104,7 @@ const handleDropInArea = (item: {
   let TIME = 0
   if (item.type === 'accepted') {
     collectItem(item.id)
-    sound.play(correctSound)
+    audioManager.playSound('CORRECT_BLING_SOUND')
     if (item.id === 1) {
       mascot.showMessage('STAGE1_BONE')
       TIME = 10000
@@ -124,7 +122,7 @@ const handleDropInArea = (item: {
       }, TIME)
     }
   } else {
-    sound.play(wrongSound)
+    audioManager.playSound('DOG_HOWLING')
     mascot.showMessage('STAGE1_WRONG')
   }
 }

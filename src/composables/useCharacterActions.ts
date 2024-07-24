@@ -1,8 +1,12 @@
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { CharacterActions } from '@/components/minigame-walk/JumpNRunCharacter.vue'
 import type JumpNRunCharacter from '@/components/minigame-walk/JumpNRunCharacter.vue'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 export const useCharacterActions = () => {
+  const audioManager = useAudioManager()
+  const currentActionSoundId = ref<string | undefined>(undefined)
+
   const characterAction = ref<CharacterActions>('sit')
   const characterRef = ref<InstanceType<typeof JumpNRunCharacter> | null>(null)
 
@@ -17,6 +21,32 @@ export const useCharacterActions = () => {
       characterAction.value = 'run'
     }
   }
+
+  // Play audio based on character action
+  watch(characterAction, (newAction) => {
+    if (currentActionSoundId.value) {
+      audioManager.stopSound(currentActionSoundId.value)
+      currentActionSoundId.value = undefined
+    }
+
+    switch (newAction) {
+      case 'sit':
+        // No sound
+        break
+      case 'run':
+        currentActionSoundId.value = audioManager.playSound('DOG_WALK', { loop: true })
+        break
+      case 'jump':
+        currentActionSoundId.value = audioManager.playSound('DOG_JUMP')
+        break
+      case 'poop':
+        // No sound
+        break
+      case 'hurt':
+        currentActionSoundId.value = audioManager.playSound('DOG_HOWLING')
+        break
+    }
+  })
 
   return {
     characterAction,

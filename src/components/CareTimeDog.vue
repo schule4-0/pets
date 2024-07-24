@@ -178,14 +178,12 @@
 import { computed, ref, watch } from 'vue'
 import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
-import { useSound } from '@/composables/sound'
-import waterSound from '@/assets/audio/soundEffects/water.mp3'
-import dryerSound from '@/assets/audio/soundEffects/dryer.mp3'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgDryer from '@/assets/dryer.png'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
@@ -197,7 +195,8 @@ const props = defineProps<{
 
 const mascot = useMascotStore()
 const { currentState } = storeToRefs(useCareTimeToolStore())
-const sound = useSound()
+const audioManager = useAudioManager()
+const toolAudioId = ref<string | undefined>(undefined)
 
 const svgElement = ref<SVGSVGElement | null>(null)
 const toolElement = ref<HTMLImageElement | null>(null)
@@ -250,7 +249,6 @@ const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: S
 const startAction = (event: MouseEvent | TouchEvent) => {
   isActionActive.value = true
   mascot.hideSpeechBubble()
-  performSound()
   performAction(event)
 }
 
@@ -270,33 +268,37 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 
     if (currentState.value === 'shampooing') {
       if (isPointInDog(transformedX, transformedY)) {
-        createBubble(transformedX, transformedY)
+        const bubbleCreated = createBubble(transformedX, transformedY)
         emit('bubbleCounter', bubblePositions.value.length)
+        if (bubbleCreated) {
+          audioManager.playSound('RANDOM_BUBBLES')
+        }
       }
     } else if (currentState.value === 'showering') {
+      // Remove bubbles and dirt
       removeBubbles(transformedX, transformedY)
       emit('bubbleCounter', bubblePositions.value.length)
       removeDirt(transformedX, transformedY)
+
+      // Create water drop
       if (isPointInDog(transformedX, transformedY)) {
         createWaterDrop(transformedX, transformedY)
         emit('waterDropCounter', waterDropPositions.value.length)
+
+        // Play audio
+        if (!toolAudioId.value) {
+          toolAudioId.value = audioManager.playSound('SHOWER', { loop: true })
+        }
       }
     } else if (currentState.value === 'drying') {
       removeWaterDrops(transformedX, transformedY)
       emit('waterDropCounter', waterDropPositions.value.length)
-    }
-  }
-}
 
-const performSound = () => {
-  if (!isActionActive.value) {
-    sound.stopLoop()
-    return
-  }
-  if (currentState.value === 'showering') {
-    sound.playLoop(waterSound)
-  } else if (currentState.value === 'drying') {
-    sound.playLoop(dryerSound)
+      // Play audio
+      if (!toolAudioId.value) {
+        toolAudioId.value = audioManager.playSound('DRYER', { loop: true })
+      }
+    }
   }
 }
 
@@ -307,23 +309,23 @@ watch(
       // Do nothing - Game just started
     } else if (bubbles.length === 0 && currState === 'showering') {
       // All bubbles showered off
-      sound.stopLoop() // Hotfix
+      stopAction()
       mascot.showMessage('STAGE4_IS_SHOWERED')
       currentState.value = 'drying'
       isActionActive.value = false
     } else if (bubbles.length === 100 && currState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
-      sound.stopLoop() // Hotfix
+      stopAction()
       mascot.showMessage('STAGE4_IS_SHAMPOOED')
       currentState.value = 'showering'
       isActionActive.value = false
     } else if (waterDrops.length === 0 && currState === 'drying') {
-      sound.stopLoop() // Hotfix
+      stopAction()
       mascot.showMessage('STAGE4_WASHING_DONE')
       currentState.value = 'gameCompleted'
       isActionActive.value = false
     } else if (currState === 'gameCompleted') {
-      sound.stopLoop() // Hotfix
+      stopAction()
       props.onCompleted()
     }
   },
@@ -332,7 +334,10 @@ watch(
 
 const stopAction = () => {
   isActionActive.value = false
-  sound.stopLoop()
+  if (toolAudioId.value) {
+    audioManager.stopSound(toolAudioId.value)
+    toolAudioId.value = undefined
+  }
 }
 </script>
 

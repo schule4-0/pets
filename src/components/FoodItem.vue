@@ -18,13 +18,11 @@ import imgChocolate from '@/assets/chocolate.svg'
 import imgPhone from '@/assets/phone.svg'
 import imgPoop from '@/assets/poop.svg'
 import gsap from 'gsap'
-import { useSound } from '@/composables/sound'
-import wrongItemSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
-import correctItemSound from '@/assets/audio/soundEffects/bite.mp3'
 import { useMascotStore } from '@/stores/useMascotStore'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const props = defineProps<{ food: Food }>()
-const sound = useSound()
+const audioManager = useAudioManager()
 const mascot = useMascotStore()
 
 const nutritionMinigameStore = useNutritionMinigameStore()
@@ -65,10 +63,9 @@ const dropFood = async () => {
     }
     if (props.food.isGood) {
       nutritionMinigameStore.incrementScore()
-      sound.play(correctItemSound)
+      audioManager.playSound('CORRECT_FOOD')
     } else {
       nutritionMinigameStore.decrementScore()
-      //sound.play(wrongItemSound)
       mascot.showMessage('STAGE2_UNHEALTHY')
       mascot.hideMascotItem()
     }
