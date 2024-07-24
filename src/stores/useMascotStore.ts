@@ -22,12 +22,23 @@ export const useMascotStore = defineStore('audio', () => {
   const isPlaying = ref(false)
   const onEnd = ref<(() => void) | null>(null)
   const currentAudio = ref<HTMLAudioElement | null>(null)
+  const isAudioInitialized = ref(false)
   const { speak, cancel, isSpeaking, onFinished } = useSpeechSynthesis()
+
+  // Initialize audio element on user interaction
+  const initializeAudio = () => {
+    if (!isAudioInitialized.value && currentAudio.value === null) {
+      currentAudio.value = new Audio()
+      isAudioInitialized.value = true
+    }
+  }
 
   // Play the audio file or use speech synthesis
   const showMessage = async (key: StringResourceKey, options: Options = {}) => {
+    initializeAudio() // Ensure audio is initialized on user interaction
+
     const _showMascot = options?.showMascot ?? true
-    const _showSpeechBubble = options?.showMascot ?? true
+    const _showSpeechBubble = options?.showSpeechBubble ?? true
     const _hideMessageAfterRead = options?.hideMessageAfterRead ?? true
 
     mascotResourceKey.value = key
@@ -70,14 +81,13 @@ export const useMascotStore = defineStore('audio', () => {
     const audioPath = `/src/assets/audio/mascot/${key}.mp3`
     const importAudio = audioFiles[audioPath]
 
-    if (importAudio) {
+    if (importAudio && currentAudio.value) {
       try {
         const module = await importAudio()
         const audioUrl = (module as { default: string }).default
-        const audio = new Audio(audioUrl)
-        currentAudio.value = audio
+        currentAudio.value.src = audioUrl
 
-        audio.onended = () => {
+        currentAudio.value.onended = () => {
           isPlaying.value = false
           if (onEndCallback) {
             onEndCallback()
@@ -87,13 +97,16 @@ export const useMascotStore = defineStore('audio', () => {
           }
         }
 
-        audio.onerror = (event) => {
+        currentAudio.value.onerror = (event) => {
           console.error('Audio playback error:', event)
           isPlaying.value = false
         }
 
         isPlaying.value = true
-        audio.play()
+        currentAudio.value.play().catch((error) => {
+          console.error('Audio play error:', error)
+          speak(getStringRes(key).content, onEndCallback)
+        })
       } catch (error) {
         console.error('Error importing audio file:', error)
         speak(getStringRes(key).content, onEndCallback)
@@ -122,6 +135,7 @@ export const useMascotStore = defineStore('audio', () => {
     cancelMessage,
     readMessage,
     getMessageString,
-    hideMascotItem
+    hideMascotItem,
+    initializeAudio
   }
 })
