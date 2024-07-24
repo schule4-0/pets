@@ -24,7 +24,7 @@
         </button>
       </div>
     </div>
-    <div v-if="mascot.defaultPosition && mascot.showMascot" class="mascot">
+    <div v-if="mascot.showMascot" class="mascot">
       <mascot-item :quizAppearance="false" />
     </div>
     <div class="modal">

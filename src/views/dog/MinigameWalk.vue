@@ -274,7 +274,6 @@ const isCollidingWithGoal = () => {
 const checkWin = () => {
   characterAction.value = 'sit'
   rewardStore.show(solutionImages.value)
-  //gsap.delayedCall(2.5, goToNextStage)
 }
 
 const resetGame = () => {

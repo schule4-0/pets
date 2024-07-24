@@ -18,9 +18,9 @@ import imgRockyStep1 from '@/assets/rocky/Rocky_step_1.svg'
 import imgRockyStep2 from '@/assets/rocky/Rocky_step_2.svg'
 import imgRockyStep3 from '@/assets/rocky/Rocky_step_3.svg'
 import imgRockySitting from '@/assets/rocky/Rocky_sitting.svg'
-import { useMascotStore } from '@/stores/useMascotStore'
 import { useStageStore } from '@/stores/useStageStore'
 import { useStageNavigator } from '@/composables/useNavigation'
+import { useMascotStore } from '@/stores/useMascotStore'
 
 const frames = [imgRockyStep1, imgRockyStep2, imgRockyStep3]
 
@@ -32,7 +32,7 @@ const currentFrame = ref(frames[0])
 const walking = ref(true)
 const isMounted = ref(false) // Hotfix: stop playing mascot message
 let animationInterval: any
-let transitionTimeout: any
+let dogWalkTimeout: number
 let gsapAnimation: gsap.core.Tween
 
 const animateWalking = () => {
@@ -69,31 +69,24 @@ const moveWalkingImage = () => {
 onMounted(() => {
   isMounted.value = true
   setTimeout(() => {
-    mascot.showMessage(
-      'ONBOARDING_PART1' /*, () => {
-    animateWalking()
-    moveWalkingImage()
-  }*/
-    )
-    mascot.hideMascotItem()
+    mascot.showMessage('ONBOARDING', {
+      showMascot: false,
+      onFinished: () => {
+        stageTransition.startStageTransition(goToNextStage)
+      }
+    })
 
-    setTimeout(() => {
+    dogWalkTimeout = setTimeout(() => {
       animateWalking()
       moveWalkingImage()
     }, 3500)
-
-    // Hotfix: should later be called in the mascots on end callback
-    transitionTimeout = setTimeout(() => {
-      stageTransition.startStageTransition(goToNextStage)
-    }, 30000)
   })
 })
 
 onUnmounted(() => {
   isMounted.value = false
-  mascot.cancelMessage()
   clearInterval(animationInterval)
-  clearTimeout(transitionTimeout)
+  clearTimeout(dogWalkTimeout)
   if (gsapAnimation) {
     gsapAnimation.kill()
   }

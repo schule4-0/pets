@@ -25,12 +25,9 @@ const stringResources = {
   REWARD_GIVE_BONE: {
     content: 'Super gemacht! Gib Rocky einen Knochen!'
   },
-  ONBOARDING_PART1: {
-    content: 'Hallo, ich bin Lisa und ich möchte dir jemanden ganz Besonderen vorstellen'
-  },
-  ONBOARDING_PART2: {
+  ONBOARDING: {
     content:
-      'Das ist Rocky, mein treuer und fröhlicher Hund. Es ist ein wunderschöner Morgen, und Rocky ist voller Energie. Ich habe jedoch eine Menge Dinge zu erledigen und brauche dringend deine Hilfe. Du wirst einen Tag voller Spaß mit Rocky erleben. Es warten viele spannende Aufgaben, die du zusammen mit Rocky bewältigen wirst. Doch bevor ihr loszieht, müsst ihr zuerst noch Rockys Rucksack packen.'
+      'Hallo, ich bin Lisa und ich möchte dir jemanden ganz Besonderen vorstellen. Das ist Rocky, mein treuer und fröhlicher Hund. Es ist ein wunderschöner Morgen, und Rocky ist voller Energie. Ich habe jedoch eine Menge Dinge zu erledigen und brauche dringend deine Hilfe. Du wirst einen Tag voller Spaß mit Rocky erleben. Es warten viele spannende Aufgaben, die du zusammen mit Rocky bewältigen wirst. Doch bevor ihr loszieht, müsst ihr zuerst noch Rockys Rucksack packen.'
   },
   STAGE1_BACKPACK: {
     content:

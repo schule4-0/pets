@@ -52,12 +52,15 @@ const currentQuestion = computed(() => {
 })
 
 onMounted(() => {
-  mascot.showMessage('STAGE5_INTRODUCTION', () => {}, true)
-
-  setTimeout(() => {
-    hasQuizIntroductionFinished.value = true
-    mascot.showMessage('STAGE5_QUESTION1', () => {}, true)
-  }, 15000)
+  mascot.showMessage('STAGE5_INTRODUCTION', {
+    showMascot: false,
+    onFinished: () => {
+      hasQuizIntroductionFinished.value = true
+      mascot.showMessage('STAGE5_QUESTION1', {
+        showMascot: false
+      })
+    }
+  })
 })
 
 const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
@@ -71,29 +74,27 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
 
     audioManager.playSound('CORRECT_BLING_SOUND')
 
-    setTimeout(() => {
-      mascot.showMessage(currentCorrectAnswerMessage, () => {}, true)
-    }, 1000)
-
-    setTimeout(nextQuestion, 10400)
+    mascot.showMessage(currentCorrectAnswerMessage, {
+      showMascot: false,
+      onFinished: nextQuestion
+    })
   } else {
     const currentWrongAnswerNumber = currentQuestionIndex.value + 1
     const currentWrongAnswerMessage =
       `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
     audioManager.playSound('DOG_HOWLING')
 
-    setTimeout(() => {
-      mascot.showMessage(
-        currentWrongAnswerMessage,
-        () => {
-          const currentQuestionNumber = currentQuestionIndex.value + 1
-          const currentQuestionMessage =
-            `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
-          mascot.showMessage(currentQuestionMessage, () => {}, true)
-        },
-        true
-      )
-    }, 1000)
+    mascot.showMessage(currentWrongAnswerMessage, {
+      showMascot: false,
+      onFinished: () => {
+        const currentQuestionNumber = currentQuestionIndex.value + 1
+        const currentQuestionMessage =
+          `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+        mascot.showMessage(currentQuestionMessage, {
+          showMascot: false
+        })
+      }
+    })
   }
 }
 
@@ -105,12 +106,15 @@ const nextQuestion = () => {
     currentQuestionIndex.value++
     const currentQuestionNumber = currentQuestionIndex.value + 1
     const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
-    mascot.showMessage(currentQuestionMessage, () => {}, true)
+    mascot.showMessage(currentQuestionMessage, {
+      showMascot: false
+    })
   } else {
-    mascot.showMessage('STAGE5_FINISH', () => {}, true)
-    setTimeout(() => {
-      goToNextStage()
-    }, 10000)
+    hasQuizIntroductionFinished.value = false
+    mascot.showMessage('STAGE5_FINISH', {
+      showMascot: false,
+      onFinished: goToNextStage
+    })
   }
 }
 

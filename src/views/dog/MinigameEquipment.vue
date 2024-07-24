@@ -90,9 +90,13 @@ const collectItem = (id: number) => {
 }
 
 const checkAllAcceptedItemsRemoved = () => {
-  return collectableItems.value.every(
-    (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
-  )
+  if (
+    collectableItems.value.every(
+      (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
+    )
+  ) {
+    rewardStore.show(solutionImages.value)
+  }
 }
 
 const handleDropInArea = (item: {
@@ -101,25 +105,21 @@ const handleDropInArea = (item: {
   type: 'accepted' | 'rejected'
   message: string
 }) => {
-  let TIME = 0
   if (item.type === 'accepted') {
     collectItem(item.id)
     audioManager.playSound('CORRECT_BLING_SOUND')
     if (item.id === 1) {
-      mascot.showMessage('STAGE1_BONE')
-      TIME = 10000
+      mascot.showMessage('STAGE1_BONE', {
+        onFinished: checkAllAcceptedItemsRemoved
+      })
     } else if (item.id === 2) {
-      mascot.showMessage('STAGE1_FEEDING_BOWL')
-      TIME = 8000
+      mascot.showMessage('STAGE1_FEEDING_BOWL', {
+        onFinished: checkAllAcceptedItemsRemoved
+      })
     } else if (item.id === 3) {
-      TIME = 6000
-      mascot.showMessage('STAGE1_BALL')
-    }
-
-    if (checkAllAcceptedItemsRemoved()) {
-      setTimeout(() => {
-        rewardStore.show(solutionImages.value)
-      }, TIME)
+      mascot.showMessage('STAGE1_BALL', {
+        onFinished: checkAllAcceptedItemsRemoved
+      })
     }
   } else {
     audioManager.playSound('DOG_HOWLING')

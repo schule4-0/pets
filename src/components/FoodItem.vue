@@ -66,8 +66,7 @@ const dropFood = async () => {
       audioManager.playSound('CORRECT_FOOD')
     } else {
       nutritionMinigameStore.decrementScore()
-      mascot.showMessage('STAGE2_UNHEALTHY')
-      mascot.hideMascotItem()
+      mascot.showMessage('STAGE2_UNHEALTHY', { showMascot: false })
     }
 
     nutritionMinigameStore.removeFood(props.food.id)
