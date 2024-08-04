@@ -32,7 +32,7 @@ import AnswerComponent from '@/components/QuizAnswer.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import quizData from '@/config/quizConfig'
 import { onMounted } from 'vue'
-import type { StringResourceKey } from '@/config/mascotMessages'
+import type { MascotMessageKey } from '@/config/mascotMessages'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useAudioManager } from '@/stores/useAudioManager'
 
@@ -70,7 +70,7 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
 
     const currentCorrectAnswerNumber = currentQuestionIndex.value + 1
     const currentCorrectAnswerMessage =
-      `STAGE5_CORRECT${currentCorrectAnswerNumber}` as StringResourceKey
+      `STAGE5_CORRECT${currentCorrectAnswerNumber}` as MascotMessageKey
 
     audioManager.playSound('CORRECT_BLING_SOUND')
 
@@ -81,15 +81,14 @@ const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
   } else {
     const currentWrongAnswerNumber = currentQuestionIndex.value + 1
     const currentWrongAnswerMessage =
-      `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as StringResourceKey
+      `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as MascotMessageKey
     audioManager.playSound('DOG_HOWLING')
 
     mascot.showMessage(currentWrongAnswerMessage, {
       showMascot: false,
       onFinished: () => {
         const currentQuestionNumber = currentQuestionIndex.value + 1
-        const currentQuestionMessage =
-          `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+        const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as MascotMessageKey
         mascot.showMessage(currentQuestionMessage, {
           showMascot: false
         })
@@ -105,7 +104,7 @@ const nextQuestion = () => {
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
     const currentQuestionNumber = currentQuestionIndex.value + 1
-    const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as StringResourceKey
+    const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as MascotMessageKey
     mascot.showMessage(currentQuestionMessage, {
       showMascot: false
     })

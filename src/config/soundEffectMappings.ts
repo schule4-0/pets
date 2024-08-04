@@ -4,7 +4,7 @@ import BG_MUSIC_NUTRITION from '@/assets/audio/backgroundMusic/minigameFood_back
 import SHOWER from '@/assets/audio/soundEffects/water.mp3'
 import DRYER from '@/assets/audio/soundEffects/dryer.mp3'
 import CORRECT_BLING_SOUND from '@/assets/audio/soundEffects/correct_answer.mp3'
-import DOG_HOWLING from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import DOG_HOWLING from '@/assets/audio/soundEffects/dog_howling.mp3'
 import DOG_JUMP from '@/assets/audio/soundEffects/jump.mp3'
 import DOG_WALK from '@/assets/audio/soundEffects/walk.mp3'
 import BG_MUSIC_WALK from '@/assets/audio/backgroundMusic/minigameWalk_backgroundMusic.mp3'
@@ -14,7 +14,7 @@ import BUBBLE_SOUND_2 from '@/assets/audio/soundEffects/bubbles/bubble2.mp3'
 import BUBBLE_SOUND_3 from '@/assets/audio/soundEffects/bubbles/bubble3.mp3'
 import BUBBLE_SOUND_4 from '@/assets/audio/soundEffects/bubbles/bubble4.mp3'
 
-export const soundMappings = {
+export const soundEffectMappings = {
   CLICK,
   CORRECT_FOOD,
   BG_MUSIC_NUTRITION,
@@ -29,4 +29,4 @@ export const soundMappings = {
   RANDOM_BUBBLES: [BUBBLE_SOUND_1, BUBBLE_SOUND_2, BUBBLE_SOUND_3, BUBBLE_SOUND_4]
 } as const
 
-export type SoundIdentifier = keyof typeof soundMappings
+export type SoundIdentifier = keyof typeof soundEffectMappings

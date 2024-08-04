@@ -87,12 +87,12 @@ onMounted(() => {
   resetGame()
 })
 
-const startGame = () => {
+const startGame = async () => {
   if (!hasGameStarted.value) {
     mascot.hideMascotItem()
     run()
     if (!bgMusicId.value) {
-      bgMusicId.value = audioManager.playSound('BG_MUSIC_WALK', { volume: 0.1 })
+      bgMusicId.value = await audioManager.playSound('BG_MUSIC_WALK', { volume: 0.1 })
     }
     hasGameStarted.value = true
   }

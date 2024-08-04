@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, onBeforeUnmount } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
-import { soundMappings, type SoundIdentifier } from '@/config/soundMappings' // Import the sound mappings
+import { soundEffectMappings, type SoundIdentifier } from '@/config/soundEffectMappings'
+import { useAudioContextStore } from '@/stores/useAudioContextStore'
 
 interface AudioOptions {
   loop?: boolean
@@ -11,17 +12,22 @@ interface AudioOptions {
 
 interface AudioInstance {
   id: string
-  audio: HTMLAudioElement
+  source: AudioBufferSourceNode
+  gainNode: GainNode
   options: AudioOptions
 }
 
 export const useAudioManager = defineStore('audioManager', () => {
+  const audioContextStore = useAudioContextStore()
+  audioContextStore.initializeAudioContext()
+
   const audios = ref<AudioInstance[]>([])
 
-  const playSound = (soundIdentifier: SoundIdentifier, options: AudioOptions = {}) => {
-    const soundMap = soundMappings[soundIdentifier] // Resolve the file path from the mapping
+  const playSound = async (soundIdentifier: SoundIdentifier, options: AudioOptions = {}) => {
+    const soundMap = soundEffectMappings[soundIdentifier]
     if (!soundMap) {
-      console.error(`Sound identifier "${soundIdentifier}" not found in soundMappings.`)
+      console.error(`Sound identifier "${soundIdentifier}" not found.`)
+      alert(`Sound identifier "${soundIdentifier}" not found.`)
       return
     }
 
@@ -33,49 +39,48 @@ export const useAudioManager = defineStore('audioManager', () => {
       soundFile = soundMap as string
     }
 
-    const audio = new Audio(soundFile)
-    audio.loop = !!options.loop
-    audio.volume = options.volume ?? 1.0
-    const id = uuidv4()
+    try {
+      const audioBuffer = await audioContextStore.loadSound(soundFile)
+      const source = audioContextStore.createSource(audioBuffer)
 
-    const handleEnded = () => {
-      if (options.onFinished) {
-        options.onFinished()
+      const gainNode = audioContextStore.audioContext!.createGain()
+      gainNode.gain.value = options.volume ?? 1.0
+
+      source.loop = !!options.loop
+      source.connect(gainNode).connect(audioContextStore.audioContext!.destination)
+
+      const id = uuidv4()
+
+      source.onended = () => {
+        if (options.onFinished) {
+          options.onFinished()
+        }
+        if (!source.loop) {
+          audios.value = audios.value.filter((a) => a.source !== source)
+        }
       }
-      if (!audio.loop) {
-        audios.value = audios.value.filter((a) => a.audio !== audio)
-      }
+
+      source.start()
+
+      audios.value.push({ id, source, gainNode, options })
+      return id
+    } catch (error) {
+      console.error('Error loading or playing audio:', error)
+      alert(error)
     }
-
-    audio.addEventListener('ended', handleEnded)
-
-    const playPromise = audio.play()
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          audios.value.push({ id, audio, options })
-        })
-        .catch((error) => {
-          console.error('Error attempting to play audio:', error)
-        })
-    }
-
-    return id
   }
 
   const stopSound = (id: string) => {
     const audioInstance = audios.value.find((a) => a.id === id)
     if (audioInstance) {
-      audioInstance.audio.pause()
-      audioInstance.audio.currentTime = 0
+      audioInstance.source.stop()
       audios.value = audios.value.filter((a) => a.id !== id)
     }
   }
 
   const stopAllSounds = () => {
     audios.value.forEach((a) => {
-      a.audio.pause()
-      a.audio.currentTime = 0
+      a.source.stop()
     })
     audios.value = []
   }

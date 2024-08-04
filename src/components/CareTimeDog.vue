@@ -251,7 +251,7 @@ const startAction = (event: MouseEvent | TouchEvent) => {
   performAction(event)
 }
 
-const performAction = (event: MouseEvent | TouchEvent) => {
+const performAction = async (event: MouseEvent | TouchEvent) => {
   if (!isActionActive.value) return
 
   if (svgElement.value && dogPath.value) {
@@ -286,7 +286,7 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 
         // Play audio
         if (!toolAudioId.value) {
-          toolAudioId.value = audioManager.playSound('SHOWER', { loop: true })
+          toolAudioId.value = await audioManager.playSound('SHOWER', { loop: true })
         }
       }
     } else if (currentState.value === 'drying') {
@@ -295,7 +295,7 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 
       // Play audio
       if (!toolAudioId.value) {
-        toolAudioId.value = audioManager.playSound('DRYER', { loop: true })
+        toolAudioId.value = await audioManager.playSound('DRYER', { loop: true })
       }
     }
   }

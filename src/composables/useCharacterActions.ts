@@ -23,7 +23,7 @@ export const useCharacterActions = () => {
   }
 
   // Play audio based on character action
-  watch(characterAction, (newAction) => {
+  watch(characterAction, async (newAction) => {
     if (currentActionSoundId.value) {
       audioManager.stopSound(currentActionSoundId.value)
       currentActionSoundId.value = undefined
@@ -34,16 +34,16 @@ export const useCharacterActions = () => {
         // No sound
         break
       case 'run':
-        currentActionSoundId.value = audioManager.playSound('DOG_WALK', { loop: true })
+        currentActionSoundId.value = await audioManager.playSound('DOG_WALK', { loop: true })
         break
       case 'jump':
-        currentActionSoundId.value = audioManager.playSound('DOG_JUMP')
+        currentActionSoundId.value = await audioManager.playSound('DOG_JUMP')
         break
       case 'poop':
         // No sound
         break
       case 'hurt':
-        currentActionSoundId.value = audioManager.playSound('DOG_HOWLING')
+        currentActionSoundId.value = await audioManager.playSound('DOG_HOWLING')
         break
     }
   })

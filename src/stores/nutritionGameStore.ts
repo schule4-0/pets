@@ -31,9 +31,9 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
     foods.value.push(newFood)
   }
 
-  const startGame = () => {
+  const startGame = async () => {
     if (hasStarted.value) return
-    bgMusicId.value = audioManager.playSound('BG_MUSIC_NUTRITION', {
+    bgMusicId.value = await audioManager.playSound('BG_MUSIC_NUTRITION', {
       loop: true,
       volume: 0.1
     })
