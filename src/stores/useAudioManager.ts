@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, onBeforeUnmount } from 'vue'
+import { ref } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { soundEffectMappings, type SoundIdentifier } from '@/config/soundEffectMappings'
 import { useAudioContextStore } from '@/stores/useAudioContextStore'
@@ -19,15 +19,15 @@ interface AudioInstance {
 
 export const useAudioManager = defineStore('audioManager', () => {
   const audioContextStore = useAudioContextStore()
-  audioContextStore.initializeAudioContext()
 
   const audios = ref<AudioInstance[]>([])
 
   const playSound = async (soundIdentifier: SoundIdentifier, options: AudioOptions = {}) => {
+    audioContextStore.initializeAudioContext()
+
     const soundMap = soundEffectMappings[soundIdentifier]
     if (!soundMap) {
       console.error(`Sound identifier "${soundIdentifier}" not found.`)
-      alert(`Sound identifier "${soundIdentifier}" not found.`)
       return
     }
 
@@ -66,7 +66,6 @@ export const useAudioManager = defineStore('audioManager', () => {
       return id
     } catch (error) {
       console.error('Error loading or playing audio:', error)
-      alert(error)
     }
   }
 
@@ -84,10 +83,6 @@ export const useAudioManager = defineStore('audioManager', () => {
     })
     audios.value = []
   }
-
-  onBeforeUnmount(() => {
-    stopAllSounds()
-  })
 
   return {
     audios,
