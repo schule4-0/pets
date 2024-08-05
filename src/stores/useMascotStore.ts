@@ -18,6 +18,7 @@ export const useMascotStore = defineStore('audio', () => {
   const isPlaying = ref(false)
   const currentAudio = ref<HTMLAudioElement | null>(null)
   const isAudioInitialized = ref(false)
+  const messageOptions = ref<Options>({})
 
   // Initialize audio element on user interaction
   const initializeAudio = () => {
@@ -31,11 +32,13 @@ export const useMascotStore = defineStore('audio', () => {
   const showMessage = async (key: MascotMessageKey, options: Options = {}) => {
     initializeAudio() // Ensure audio is initialized on user interaction
 
+    mascotResourceKey.value = key
+    messageOptions.value = options
+
     const _showMascot = options?.showMascot ?? true
     const _showSpeechBubble = options?.showSpeechBubble ?? true
     const _hideMessageAfterRead = options?.hideMessageAfterRead ?? true
 
-    mascotResourceKey.value = key
     defaultPosition.value = !options.overrideDefaultPosition
     showSpeechBubble.value = _showSpeechBubble && _showMascot
     showMascot.value = _showMascot
@@ -99,6 +102,11 @@ export const useMascotStore = defineStore('audio', () => {
     cancelPlayback()
   }
 
+  const repeatLastMessage = () => {
+    if (!mascotResourceKey.value) return
+    showMessage(mascotResourceKey.value, messageOptions.value)
+  }
+
   return {
     isPlaying,
     showMessage,
@@ -110,6 +118,7 @@ export const useMascotStore = defineStore('audio', () => {
 
     cancelMessage,
     readMessage,
+    repeatLastMessage,
     getMessageString,
     hideMascotItem,
     initializeAudio
