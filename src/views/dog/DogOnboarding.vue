@@ -104,7 +104,7 @@ onUnmounted(() => {
 .container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   background: linear-gradient(to bottom, #87ceeb, #f0f8ff);
 }

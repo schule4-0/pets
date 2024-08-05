@@ -138,7 +138,7 @@ const handleDropInArea = (item: {
   background-position: center;
   padding: 20px;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
