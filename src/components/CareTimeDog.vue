@@ -201,6 +201,8 @@ const toolAudioId = ref<string | undefined>(undefined)
 const svgElement = ref<SVGSVGElement | null>(null)
 const toolElement = ref<HTMLImageElement | null>(null)
 
+const isPlayingBubbleSound = ref(false)
+
 const toolImage = computed(() =>
   currentState.value === 'showering'
     ? imgShowerHead
@@ -285,8 +287,14 @@ const performAction = async (event: MouseEvent | TouchEvent) => {
       if (isPointInDog(transformedX, transformedY)) {
         const bubbleCreated = createBubble(transformedX, transformedY)
         emit('bubbleCounter', bubblePositions.value.length)
-        if (bubbleCreated) {
-          await audioManager.playSound('RANDOM_BUBBLES')
+        if (bubbleCreated && !isPlayingBubbleSound.value) {
+          isPlayingBubbleSound.value = true
+          await audioManager.playSound('RANDOM_BUBBLES', {
+            onFinished: () => {
+              isPlayingBubbleSound.value = false
+            },
+            volume: 0.6
+          })
         }
       }
     } else if (currentState.value === 'showering') {
