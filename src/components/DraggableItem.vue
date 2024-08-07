@@ -5,8 +5,8 @@
     :data-id="props.id"
     :data-type="props.type"
     :class="`draggable ${props.type}`"
-    @mousedown="startDrag"
-    @touchstart="startDrag"
+    @mousedown="handleStartDrag"
+    @touchstart="handleStartDrag"
     :style="{
       left: `${position.x}%`,
       top: `${position.y}%`,
@@ -37,6 +37,7 @@ export interface DraggableItemType {
   initialY: number
   collected: boolean
   message?: string
+  isInputBlocked?: boolean
 }
 
 const props = defineProps<DraggableItemType>()
@@ -51,6 +52,14 @@ const elementRef = ref<HTMLElement | null>(null)
 
 // Pass the element ref to the useDraggable composable
 const { startDrag, transitionStyle } = useDraggable(position, elementRef)
+
+const handleStartDrag = (event: MouseEvent | TouchEvent) => {
+  if (props.isInputBlocked) {
+    event.preventDefault()
+    return
+  }
+  startDrag(event)
+}
 </script>
 
 <style scoped>

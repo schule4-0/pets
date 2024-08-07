@@ -264,9 +264,11 @@ const playSoundOfAction = async () => {
 }
 
 const startAction = (event: MouseEvent | TouchEvent) => {
-  isActionActive.value = true
-  performAction(event)
-  playSoundOfAction()
+  if (!mascot.isPlaying) {
+    isActionActive.value = true
+    performAction(event)
+    playSoundOfAction()
+  }
 }
 
 const performAction = async (event: MouseEvent | TouchEvent) => {

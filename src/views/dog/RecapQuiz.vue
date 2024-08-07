@@ -20,6 +20,7 @@
         :answer="answer"
         :correctAnswerSelected="correctAnswerSelected"
         @answer-selected="handleAnswerSelected"
+        :isInputBlocked="isMascotPlaying"
       />
     </div>
   </div>
@@ -44,6 +45,7 @@ const correctAnswerSelected = ref(false)
 
 const audioManager = useAudioManager()
 const mascot = useMascotStore()
+const isMascotPlaying = computed(() => mascot.isPlaying)
 
 const hasQuizIntroductionFinished = ref(false)
 

@@ -18,13 +18,14 @@ import type { Answer } from '@/config/quizConfig'
 const props = defineProps<{
   answer: Answer
   correctAnswerSelected: boolean
+  isInputBlocked: boolean
 }>()
 
 const emit = defineEmits(['answer-selected'])
 const wasClicked = ref(false)
 
 const selectAnswer = () => {
-  if (!wasClicked.value) {
+  if (!wasClicked.value && !props.isInputBlocked) {
     wasClicked.value = true
     emit('answer-selected', props.answer.isCorrect, props.answer.isIncorrect)
   }
@@ -46,7 +47,7 @@ watch(
   border-radius: 60px;
   padding: 50px;
   cursor: pointer;
-  border: 3px solid #60668F;
+  border: 3px solid #60668f;
 }
 
 .answer-card.correct {
