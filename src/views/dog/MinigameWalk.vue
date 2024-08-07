@@ -88,7 +88,7 @@ onMounted(() => {
 })
 
 const startGame = async () => {
-  if (!hasGameStarted.value) {
+  if (!hasGameStarted.value && !mascot.isPlaying) {
     mascot.hideMascotItem()
     run()
     if (!bgMusicId.value) {
