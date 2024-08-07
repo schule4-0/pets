@@ -13,6 +13,7 @@
       :initialX="item.initialX"
       :initialY="item.initialY"
       :collected="item.collected"
+      :isInputBlocked="isPlayingMascot"
     />
 
     <ScoreBoard :items="collectableItems" />
@@ -38,6 +39,7 @@ const mascot = useMascotStore()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
 const audioManager = useAudioManager()
+const isPlayingMascot = computed(() => mascot.isPlaying)
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
