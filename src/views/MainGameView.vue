@@ -24,7 +24,7 @@
         </button>
       </div>
     </div>
-    <div v-if="mascot.defaultPosition && mascot.showMascot" class="mascot">
+    <div v-if="mascot.showMascot" class="mascot">
       <mascot-item :quizAppearance="false" />
     </div>
     <div class="modal">
@@ -45,41 +45,40 @@ import { ref } from 'vue'
 import MascotItem from '@/components/MascotItem.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
-import { useSound } from '@/composables/sound'
-import clickSound from '@/assets/audio/soundEffects/click.mp3'
 import { useStageStore } from '@/stores/useStageStore'
 import { storeToRefs } from 'pinia'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const router = useRouter()
 const mascot = useMascotStore()
 const { isActive: isStageOverlayActive } = storeToRefs(useStageStore())
-const sound = useSound()
+const audioManager = useAudioManager()
 
 const { goToNextStage, goToPreviousStage } = useStageNavigator()
 
 const showModal = ref(false)
 
 function goNext() {
-  sound.play(clickSound)
+  audioManager.playSound('CLICK')
   goToNextStage()
 }
 function goBack() {
-  sound.play(clickSound)
+  audioManager.playSound('CLICK')
   goToPreviousStage()
 }
 
 function goBackToHome() {
-  sound.play(clickSound)
+  audioManager.playSound('CLICK')
   router.push(`/`)
 }
 
 const openModal = () => {
-  sound.play(clickSound)
+  audioManager.playSound('CLICK')
   showModal.value = true
 }
 
 const closeModal = () => {
-  sound.play(clickSound)
+  audioManager.playSound('CLICK')
   showModal.value = false
 }
 </script>

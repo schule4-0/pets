@@ -10,6 +10,8 @@ import MinigameFood from '@/views/dog/MinigameFood.vue'
 import DogOnboarding from '@/views/dog/DogOnboarding.vue'
 import DogOffboarding from '@/views/dog/DogOffboarding.vue'
 import RewardView from '@/views/dog/RewardView.vue'
+import { useAudioManager } from '@/stores/useAudioManager'
+import { useMascotStore } from '@/stores/useMascotStore'
 
 type PetStage = {
   path: string
@@ -59,6 +61,14 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const audioManager = useAudioManager()
+  const mascot = useMascotStore()
+  audioManager.stopAllSounds()
+  mascot.cancelMessage()
+  next()
 })
 
 export default router

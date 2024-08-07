@@ -1,57 +1,126 @@
 import { defineStore } from 'pinia'
-import type { StringResourceKey } from '@/config/mascotMessages'
-import { getStringRes } from '@/config/mascotMessages'
-import { useReading } from '@/composables/reading'
+import { ref } from 'vue'
+import { getMascotMessage, type MascotMessageKey } from '@/config/mascotMessages'
 
-const { readAloud, cancelAudio } = useReading()
+interface Options {
+  overrideDefaultPosition?: boolean
+  showSpeechBubble?: boolean
+  showMascot?: boolean
+  hideMessageAfterRead?: boolean
+  onFinished?: () => void
+}
 
-export const useMascotStore = defineStore('popup', {
-  state: () => ({
-    showMascot: false,
-    speechBubbleShown: false,
-    messageKey: '' as StringResourceKey,
-    defaultPosition: true
-  }),
-  getters: {
-    currentMessageString: (state) => {
-      return getStringRes(state.messageKey).content
+export const useMascotStore = defineStore('audio', () => {
+  const mascotResourceKey = ref<MascotMessageKey | null>(null)
+  const showMascot = ref(false)
+  const showSpeechBubble = ref(false)
+  const defaultPosition = ref(true)
+  const isPlaying = ref(false)
+  const currentAudio = ref<HTMLAudioElement | null>(null)
+  const isAudioInitialized = ref(false)
+  const messageOptions = ref<Options>({})
+
+  // Initialize audio element on user interaction
+  const initializeAudio = () => {
+    if (!isAudioInitialized.value && currentAudio.value === null) {
+      currentAudio.value = new Audio()
+      isAudioInitialized.value = true
     }
-  },
-  actions: {
-    showMessage(key: StringResourceKey, onEnd = () => {}, overrideDefaultPosition = false) {
-      this.defaultPosition = !overrideDefaultPosition
-      this.hideSpeechBubble() //Support animation
-      this.showMascotItem()
+  }
 
-      this.showSpeechBubble()
+  // Play the audio file or use speech synthesis
+  const showMessage = async (key: MascotMessageKey, options: Options = {}) => {
+    initializeAudio() // Ensure audio is initialized on user interaction
 
-      this.messageKey = key
-      this.readMessage(onEnd)
-    },
-    getMessageString: (key: StringResourceKey) => {
-      return getStringRes(key).content
-    },
-    showMascotItem() {
-      this.showMascot = true
-    },
-    hideMascotItem() {
-      this.showMascot = false
-    },
-    showSpeechBubble() {
-      this.speechBubbleShown = true
-    },
-    hideSpeechBubble() {
-      this.speechBubbleShown = false
-    },
-    readMessageAgain() {
-      this.showSpeechBubble()
-      this.readMessage()
-    },
-    readMessage(onEnd?: Function) {
-      readAloud(this.messageKey, onEnd)
-    },
-    cancelMessage() {
-      cancelAudio()
+    mascotResourceKey.value = key
+    messageOptions.value = options
+
+    const _showMascot = options?.showMascot ?? true
+    const _showSpeechBubble = options?.showSpeechBubble ?? true
+    const _hideMessageAfterRead = options?.hideMessageAfterRead ?? true
+
+    defaultPosition.value = !options.overrideDefaultPosition
+    showSpeechBubble.value = _showSpeechBubble && _showMascot
+    showMascot.value = _showMascot
+
+    const extendedOnFinishCallback = () => {
+      if (_hideMessageAfterRead) showSpeechBubble.value = false
+      options.onFinished?.()
     }
+    readMessage(key, extendedOnFinishCallback)
+  }
+
+  // Cancel any ongoing playback or speech synthesis
+  const cancelPlayback = () => {
+    if (isPlaying.value) {
+      if (currentAudio.value) {
+        currentAudio.value.pause()
+        currentAudio.value.currentTime = 0
+      }
+      isPlaying.value = false
+    }
+  }
+
+  const getMessageString = (key: MascotMessageKey) => {
+    return getMascotMessage(key).content
+  }
+
+  const hideMascotItem = () => {
+    showMascot.value = false
+  }
+
+  const readMessage = async (key: MascotMessageKey, onEndCallback?: () => void) => {
+    if (isPlaying.value) {
+      cancelPlayback()
+    }
+
+    const audioSrc = getMascotMessage(key).audioSrc
+
+    if (currentAudio.value && audioSrc) {
+      currentAudio.value.src = audioSrc
+
+      currentAudio.value.onended = () => {
+        isPlaying.value = false
+        if (onEndCallback) {
+          onEndCallback()
+        }
+      }
+
+      currentAudio.value.onerror = (event) => {
+        console.error('Audio playback error:', event)
+        isPlaying.value = false
+      }
+
+      isPlaying.value = true
+      currentAudio.value.play().catch((error) => {
+        console.error('Audio play error:', error)
+      })
+    }
+  }
+
+  const cancelMessage = () => {
+    cancelPlayback()
+  }
+
+  const repeatLastMessage = () => {
+    if (!mascotResourceKey.value) return
+    showMessage(mascotResourceKey.value, messageOptions.value)
+  }
+
+  return {
+    isPlaying,
+    showMessage,
+    cancelPlayback,
+    mascotResourceKey,
+    showMascot,
+    showSpeechBubble,
+    defaultPosition,
+
+    cancelMessage,
+    readMessage,
+    repeatLastMessage,
+    getMessageString,
+    hideMascotItem,
+    initializeAudio
   }
 })

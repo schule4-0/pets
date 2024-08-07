@@ -32,14 +32,12 @@ import ballImg from '@/assets/equipment/Ball.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useRewardStore } from '@/stores/useRewardStore'
 import ScoreBoard from '@/components/ScoreBoard.vue'
-import { useSound } from '@/composables/sound'
-import correctSound from '@/assets/audio/soundEffects/correct_answer.mp3'
-import wrongSound from '@/assets/audio/soundEffects/dog_howling1.mp3'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const mascot = useMascotStore()
-const sound = useSound()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
+const audioManager = useAudioManager()
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -92,9 +90,13 @@ const collectItem = (id: number) => {
 }
 
 const checkAllAcceptedItemsRemoved = () => {
-  return collectableItems.value.every(
-    (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
-  )
+  if (
+    collectableItems.value.every(
+      (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
+    )
+  ) {
+    rewardStore.show(solutionImages.value)
+  }
 }
 
 const handleDropInArea = (item: {
@@ -103,28 +105,24 @@ const handleDropInArea = (item: {
   type: 'accepted' | 'rejected'
   message: string
 }) => {
-  let TIME = 0
   if (item.type === 'accepted') {
     collectItem(item.id)
-    sound.play(correctSound)
+    audioManager.playSound('CORRECT_BLING_SOUND')
     if (item.id === 1) {
-      mascot.showMessage('STAGE1_BONE')
-      TIME = 10000
+      mascot.showMessage('STAGE1_BONE', {
+        onFinished: checkAllAcceptedItemsRemoved
+      })
     } else if (item.id === 2) {
-      mascot.showMessage('STAGE1_FEEDING_BOWL')
-      TIME = 8000
+      mascot.showMessage('STAGE1_FEEDING_BOWL', {
+        onFinished: checkAllAcceptedItemsRemoved
+      })
     } else if (item.id === 3) {
-      TIME = 6000
-      mascot.showMessage('STAGE1_BALL')
-    }
-
-    if (checkAllAcceptedItemsRemoved()) {
-      setTimeout(() => {
-        rewardStore.show(solutionImages.value)
-      }, TIME)
+      mascot.showMessage('STAGE1_BALL', {
+        onFinished: checkAllAcceptedItemsRemoved
+      })
     }
   } else {
-    sound.play(wrongSound)
+    audioManager.playSound('DOG_HOWLING')
     mascot.showMessage('STAGE1_WRONG')
   }
 }

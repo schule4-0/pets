@@ -178,14 +178,12 @@
 import { computed, ref, watch } from 'vue'
 import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
-import { useSound } from '@/composables/sound'
-import waterSound from '@/assets/audio/soundEffects/water.mp3'
-import dryerSound from '@/assets/audio/soundEffects/dryer.mp3'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
 import imgShampoo from '@/assets/shampoo.svg'
 import imgShowerHead from '@/assets/Showerhead_water.svg'
 import imgDryer from '@/assets/dryer.png'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
@@ -197,10 +195,13 @@ const props = defineProps<{
 
 const mascot = useMascotStore()
 const { currentState } = storeToRefs(useCareTimeToolStore())
-const sound = useSound()
+const audioManager = useAudioManager()
+const toolAudioId = ref<string | undefined>(undefined)
 
 const svgElement = ref<SVGSVGElement | null>(null)
 const toolElement = ref<HTMLImageElement | null>(null)
+
+const isPlayingBubbleSound = ref(false)
 
 const toolImage = computed(() =>
   currentState.value === 'showering'
@@ -247,14 +248,28 @@ const getTransformedCoordinates = (event: MouseEvent | TouchEvent, svgElement: S
   }
 }
 
-const startAction = (event: MouseEvent | TouchEvent) => {
-  isActionActive.value = true
-  mascot.hideSpeechBubble()
-  performSound()
-  performAction(event)
+const playSoundOfAction = async () => {
+  switch (currentState.value) {
+    case 'showering':
+      if (!toolAudioId.value) {
+        toolAudioId.value = await audioManager.playSound('SHOWER', { loop: true, volume: 0.4 })
+      }
+      break
+    case 'drying':
+      if (!toolAudioId.value) {
+        toolAudioId.value = await audioManager.playSound('DRYER', { loop: true, volume: 0.4 })
+      }
+      break
+  }
 }
 
-const performAction = (event: MouseEvent | TouchEvent) => {
+const startAction = (event: MouseEvent | TouchEvent) => {
+  isActionActive.value = true
+  performAction(event)
+  playSoundOfAction()
+}
+
+const performAction = async (event: MouseEvent | TouchEvent) => {
   if (!isActionActive.value) return
 
   if (svgElement.value && dogPath.value) {
@@ -270,13 +285,25 @@ const performAction = (event: MouseEvent | TouchEvent) => {
 
     if (currentState.value === 'shampooing') {
       if (isPointInDog(transformedX, transformedY)) {
-        createBubble(transformedX, transformedY)
+        const bubbleCreated = createBubble(transformedX, transformedY)
         emit('bubbleCounter', bubblePositions.value.length)
+        if (bubbleCreated && !isPlayingBubbleSound.value) {
+          isPlayingBubbleSound.value = true
+          await audioManager.playSound('RANDOM_BUBBLES', {
+            onFinished: () => {
+              isPlayingBubbleSound.value = false
+            },
+            volume: 0.6
+          })
+        }
       }
     } else if (currentState.value === 'showering') {
+      // Remove bubbles and dirt
       removeBubbles(transformedX, transformedY)
       emit('bubbleCounter', bubblePositions.value.length)
       removeDirt(transformedX, transformedY)
+
+      // Create water drop
       if (isPointInDog(transformedX, transformedY)) {
         createWaterDrop(transformedX, transformedY)
         emit('waterDropCounter', waterDropPositions.value.length)
@@ -288,51 +315,41 @@ const performAction = (event: MouseEvent | TouchEvent) => {
   }
 }
 
-const performSound = () => {
-  if (!isActionActive.value) {
-    sound.stopLoop()
-    return
-  }
-  if (currentState.value === 'showering') {
-    sound.playLoop(waterSound)
-  } else if (currentState.value === 'drying') {
-    sound.playLoop(dryerSound)
-  }
-}
-
 watch(
   () => [bubblePositions.value, waterDropPositions.value, currentState.value],
   ([bubbles, waterDrops, currState]) => {
+    // Handle new action
     if (bubbles.length === 0 && currState === 'shampooing') {
       // Do nothing - Game just started
     } else if (bubbles.length === 0 && currState === 'showering') {
       // All bubbles showered off
-      sound.stopLoop() // Hotfix
+      stopAction()
       mascot.showMessage('STAGE4_IS_SHOWERED')
       currentState.value = 'drying'
-      isActionActive.value = false
     } else if (bubbles.length === 100 && currState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
-      sound.stopLoop() // Hotfix
+      stopAction()
       mascot.showMessage('STAGE4_IS_SHAMPOOED')
       currentState.value = 'showering'
-      isActionActive.value = false
     } else if (waterDrops.length === 0 && currState === 'drying') {
-      sound.stopLoop() // Hotfix
+      // Fully dryed => game is completed
+      stopAction()
       mascot.showMessage('STAGE4_WASHING_DONE')
       currentState.value = 'gameCompleted'
-      isActionActive.value = false
     } else if (currState === 'gameCompleted') {
-      sound.stopLoop() // Hotfix
+      stopAction()
       props.onCompleted()
     }
   },
   { deep: true }
 )
 
-const stopAction = () => {
+const stopAction = async () => {
   isActionActive.value = false
-  sound.stopLoop()
+  if (toolAudioId.value) {
+    audioManager.stopSound(toolAudioId.value)
+    toolAudioId.value = undefined
+  }
 }
 </script>
 

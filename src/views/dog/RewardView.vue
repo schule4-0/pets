@@ -41,14 +41,14 @@ import { useStageNavigator } from '@/composables/useNavigation'
 import boneImg from '@/assets/equipment/bone_border.png'
 import cartoondogImg from '@/assets/rocky/Rocky_happy.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
-import { useSound } from '@/composables/sound'
-import barkSound from '@/assets/audio/soundEffects/bark.mp3'
 import { useRewardStore } from '@/stores/useRewardStore'
+import { useAudioManager } from '@/stores/useAudioManager'
 
 const emit = defineEmits(['finish'])
 const { goToNextStage } = useStageNavigator()
 const mascot = useMascotStore()
-const sound = useSound()
+const audioManager = useAudioManager()
+
 const wasBoneGiven = ref(false)
 const showNextButton = ref(false)
 
@@ -68,8 +68,7 @@ const handleDropInArea = (item: {
 }) => {
   if (item.type === 'accepted') {
     wasBoneGiven.value = true
-    sound.play(barkSound)
-    //mascot.showMessage('REWARD_ROCKY_HAPPY', () => displayNextButton()) // TODO: missing voice recording!
+    audioManager.playSound('DOG_BARK')
     displayNextButton()
   }
 }

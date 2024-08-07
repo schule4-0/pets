@@ -11,7 +11,6 @@ import rockySit from '@/assets/rocky/Rocky_sitting.svg'
 import rockyStep1 from '@/assets/rocky/Rocky_step_1.svg'
 import rockyStep2 from '@/assets/rocky/Rocky_step_2.svg'
 import rockyStep3 from '@/assets/rocky/Rocky_step_3.svg'
-import rockyJump from '@/assets/rocky/Rocky_stand.svg'
 import rockyPoop from '@/assets/rocky/Rocky_sitting.svg'
 import rockyHurt from '@/assets/rocky/Rocky_lying_back.svg'
 
@@ -24,12 +23,6 @@ const globalConfig = {
 export type CharacterActions = 'sit' | 'run' | 'jump' | 'poop' | 'hurt'
 const props = defineProps<{
   action: CharacterActions
-  hurtSound: String
-  walkSound: String
-  jumpSound: String
-  playSound: Function
-  playLoopSound: Function
-  stopLoopSound: Function
 }>()
 
 const emit = defineEmits(['jumpCompleted'])
@@ -65,23 +58,10 @@ const handleAction = (action: CharacterActions) => {
   }
 }
 
-const handleSound = (action: CharacterActions) => {
-  if (action === 'jump') {
-    props.playSound(props.jumpSound)
-  } else if (action === 'hurt') {
-    props.playSound(props.hurtSound)
-  } else if (action === 'run') {
-    props.playLoopSound(props.walkSound)
-  } else {
-    props.stopLoopSound()
-  }
-}
-
 watch(
   () => props.action,
   (newAction) => {
     handleAction(newAction)
-    handleSound(newAction)
   },
   { immediate: true }
 )
