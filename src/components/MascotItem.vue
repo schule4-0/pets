@@ -1,17 +1,17 @@
 <template>
   <div
-    @click="mascot.readMessageAgain"
+    v-if="mascot.mascotResourceKey"
     :class="quizAppearance ? 'mascot-container-quiz' : 'mascot-container-default'"
   >
     <transition name="appear">
       <div
-        v-if="mascot.speechBubbleShown"
+        v-if="mascot.showSpeechBubble || quizAppearance"
         :class="quizAppearance ? 'speech-bubble-quiz' : 'speech-bubble-default'"
       >
-        <p>{{ mascot.currentMessageString }}</p>
+        <p>{{ mascot.getMessageString(mascot.mascotResourceKey) }}</p>
       </div>
     </transition>
-    <img src="../assets/mascot/Lisa.svg" alt="Lisa" />
+    <img src="../assets/mascot/Lisa.svg" alt="Lisa" @click="mascot.repeatLastMessage" />
   </div>
 </template>
 

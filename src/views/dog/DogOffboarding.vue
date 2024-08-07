@@ -18,10 +18,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { gsap } from 'gsap'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useStageStore } from '@/stores/useStageStore'
-import { useStageNavigator } from '@/composables/useNavigation'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -29,33 +27,24 @@ const mascot = useMascotStore()
 const stageTransition = useStageStore()
 
 const isMounted = ref(false) // Hotfix: stop playing mascot message
-let animationInterval: any
-let transitionTimeout: any
-let gsapAnimation: gsap.core.Tween
 
 onMounted(() => {
   isMounted.value = true
   setTimeout(() => {
-    mascot.showMessage('GAME_FINISHED')
-    mascot.hideMascotItem()
-
-    // Hotfix: should later be called in the mascots on end callback
-    transitionTimeout = setTimeout(() => {
-      stageTransition.startStageTransition(() => {
-        router.push(`/`)
-      })
-    }, 20000)
+    mascot.showMessage('GAME_FINISHED', {
+      showMascot: false,
+      onFinished: () => {
+        stageTransition.startStageTransition(() => {
+          router.push(`/`)
+        })
+      }
+    })
   })
 })
 
 onUnmounted(() => {
   isMounted.value = false
   mascot.cancelMessage()
-  clearInterval(animationInterval)
-  clearTimeout(transitionTimeout)
-  if (gsapAnimation) {
-    gsapAnimation.kill()
-  }
 })
 </script>
 
@@ -63,7 +52,7 @@ onUnmounted(() => {
 .container {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
 }
 

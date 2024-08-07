@@ -3,13 +3,13 @@
     <div style="position: fixed; top: 80px; left: 16px; width: 320px">
       <ProgressBar :img-src="imgFoodBowl" :progress="score" :max="MAX_NUTRITION_GAME_SCORE" />
     </div>
-    <DogBowl @start-drag="handleStartDogBowlDrag" />
+    <DogBowl />
     <FoodItem v-for="food in foods" :key="food.id" :food="food" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { useNutritionMinigameStore, MAX_NUTRITION_GAME_SCORE } from '@/stores/nutritionGameStore'
 import DogBowl from '@/components/DogBowl.vue'
 import FoodItem from '@/components/FoodItem.vue'
@@ -24,27 +24,24 @@ import { useRewardStore } from '@/stores/useRewardStore'
 
 const mascot = useMascotStore()
 const rewardStore = useRewardStore()
-const solutionImages = ref<string[]>([])
 const { foods, score } = storeToRefs(useNutritionMinigameStore())
 const { startGame, stopGame, resetGame } = useNutritionMinigameStore()
 
 watch(score, () => {
   if (score.value >= MAX_NUTRITION_GAME_SCORE) {
-    mascot.showMessage('STAGE2_FEEDING_DONE')
-    setTimeout(() => {
-      rewardStore.show(solutionImages.value)
-    }, 8000)
+    mascot.showMessage('STAGE2_FEEDING_DONE', {
+      onFinished: () => rewardStore.show([imgSteak, imgCarrot, imgSausage])
+    })
   }
 })
 
-const handleStartDogBowlDrag = () => {
-  startGame()
-  mascot.hideMascotItem()
-}
-
 onMounted(() => {
-  mascot.showMessage('STAGE2_INTRODUCTION')
-  solutionImages.value = [imgSteak, imgCarrot, imgSausage]
+  mascot.showMessage('STAGE2_INTRODUCTION', {
+    onFinished: () => {
+      startGame()
+      mascot.hideMascotItem()
+    }
+  })
 })
 
 onUnmounted(() => {
@@ -57,7 +54,7 @@ onUnmounted(() => {
 .game {
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   overflow: hidden;
   background-color: antiquewhite; /* TODO: replace with background graphic */
 }

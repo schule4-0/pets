@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { useAudioManager } from './useAudioManager'
 
 export interface Food {
   id: number
@@ -16,6 +17,8 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
   const score = ref(0)
   let nextId = 0
   const intervalId = ref<number | null>(null)
+  const audioManager = useAudioManager()
+  const bgMusicId = ref<string | undefined>(undefined)
 
   const dropFood = () => {
     const screenWidth = window.innerWidth
@@ -28,8 +31,12 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
     foods.value.push(newFood)
   }
 
-  const startGame = () => {
+  const startGame = async () => {
     if (hasStarted.value) return
+    bgMusicId.value = await audioManager.playSound('BG_MUSIC_NUTRITION', {
+      loop: true,
+      volume: 0.1
+    })
     hasStarted.value = true
 
     if (intervalId.value === null) {
@@ -48,18 +55,16 @@ export const useNutritionMinigameStore = defineStore('nutritionMinigame', () => 
   }
 
   const stopGame = () => {
-    hasStarted.value = false
-    if (intervalId.value !== null) {
-      clearInterval(intervalId.value)
-      intervalId.value = null
-    }
-    score.value = 0
-    nextId = 0
-    foods.value = []
+    resetGame()
   }
 
   const resetGame = () => {
     hasStarted.value = false
+
+    if (bgMusicId.value) {
+      audioManager.stopSound(bgMusicId.value)
+    }
+
     if (intervalId.value !== null) {
       clearInterval(intervalId.value)
       intervalId.value = null
