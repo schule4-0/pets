@@ -14,52 +14,111 @@ import soapImg from '@/assets/recapQuiz/Shampoo_2.svg'
 import toyImg from '@/assets/recapQuiz/Frisbee.svg'
 import boneImg from '@/assets/equipment/bone.png'
 
+import type { MascotMessageKey } from './mascotMessages'
+
 export interface Answer {
   text: string
   image: string
   isCorrect: boolean
-  isIncorrect: number
+  mascotMessageKey: MascotMessageKey
 }
 
 export interface Quiz {
-  question: string
+  mascotMessageKey: MascotMessageKey
   answers: Answer[]
 }
 
 const quizData: Quiz[] = [
   {
-    question: 'Was sollte in der Tasche für Rocky sein? Ein Ball, Bücher oder ein Hundebett?',
+    mascotMessageKey: 'STAGE5_QUESTION1',
     answers: [
-      { text: 'Ball', image: ballImg, isCorrect: true, isIncorrect: 0 },
-      { text: 'Buch', image: bookImg, isCorrect: false, isIncorrect: 1 },
-      { text: 'Hundebett', image: dogBedImg, isCorrect: false, isIncorrect: 2 }
+      {
+        text: 'Ball',
+        image: ballImg,
+        isCorrect: true,
+        mascotMessageKey: 'STAGE5_CORRECT1'
+      },
+      {
+        text: 'Buch',
+        image: bookImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT1_1'
+      },
+      {
+        text: 'Hundebett',
+        image: dogBedImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT1_2'
+      }
     ]
   },
   {
-    question:
-      'Welches Futter sollte in Rockys Napf gelegt werden, um ihn zu füttern? Kuchen, Schokolade oder Hundefutter?',
+    mascotMessageKey: 'STAGE5_QUESTION2',
     answers: [
-      { text: 'Kuchen', image: cakeImg, isCorrect: false, isIncorrect: 1 },
-      { text: 'Schokolade', image: chocolateImg, isCorrect: false, isIncorrect: 2 },
-      { text: 'Hundefutter', image: dogFoodImg, isCorrect: true, isIncorrect: 0 }
+      {
+        text: 'Kuchen',
+        image: cakeImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT2_1'
+      },
+      {
+        text: 'Schokolade',
+        image: chocolateImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT2_2'
+      },
+      {
+        text: 'Hundefutter',
+        image: dogFoodImg,
+        isCorrect: true,
+        mascotMessageKey: 'STAGE5_CORRECT2'
+      }
     ]
   },
   {
-    question:
-      'Was muss man beim Spazierengehen mitnehmen? Ein Handy, eine Leine oder ein Kartenspiel?',
+    mascotMessageKey: 'STAGE5_QUESTION3',
     answers: [
-      { text: 'Handy', image: phoneImg, isCorrect: false, isIncorrect: 1 },
-      { text: 'Leine', image: leashImg, isCorrect: true, isIncorrect: 0 },
-      { text: 'Kartenspiel', image: cardGameImg, isCorrect: false, isIncorrect: 2 }
+      {
+        text: 'Handy',
+        image: phoneImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT3_1'
+      },
+      {
+        text: 'Leine',
+        image: leashImg,
+        isCorrect: true,
+        mascotMessageKey: 'STAGE5_CORRECT3'
+      },
+      {
+        text: 'Kartenspiel',
+        image: cardGameImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT3_2'
+      }
     ]
   },
   {
-    question:
-      'Wie bekommt man Rocky wieder sauber wenn er schmutzig ist? Mit Seife, mit Spielzeug oder mit einem Hundeknochen?',
+    mascotMessageKey: 'STAGE5_QUESTION4',
     answers: [
-      { text: 'Seife', image: soapImg, isCorrect: true, isIncorrect: 0 },
-      { text: 'Spielzeug', image: toyImg, isCorrect: false, isIncorrect: 1 },
-      { text: 'Hundeknochen', image: boneImg, isCorrect: false, isIncorrect: 2 }
+      {
+        text: 'Seife',
+        image: soapImg,
+        isCorrect: true,
+        mascotMessageKey: 'STAGE5_CORRECT4'
+      },
+      {
+        text: 'Spielzeug',
+        image: toyImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT4_1'
+      },
+      {
+        text: 'Hundeknochen',
+        image: boneImg,
+        isCorrect: false,
+        mascotMessageKey: 'STAGE5_INCORRECT4_2'
+      }
     ]
   }
 ]

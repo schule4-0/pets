@@ -2,12 +2,15 @@
   <div
     class="answer-card"
     :class="{
-      correct: wasClicked && answer.isCorrect,
-      incorrect: (wasClicked && !answer.isCorrect) || (!answer.isCorrect && correctAnswerSelected)
+      'answer-card--correct': wasClicked && answer.isCorrect,
+      'answer-card--incorrect': wasClicked && !answer.isCorrect,
+      'answer-card--other-incorrect': !wasClicked && correctAnswerSelected && !answer.isCorrect
     }"
     @click="selectAnswer"
   >
-    <img :src="answer.image" :alt="answer.text" class="answer-image" />
+    <figure class="answer-figure">
+      <img :src="answer.image" :alt="answer.text" class="answer-image" />
+    </figure>
   </div>
 </template>
 
@@ -15,6 +18,7 @@
 import { ref, watch } from 'vue'
 import type { Answer } from '@/config/quizConfig'
 
+// Define component properties
 const props = defineProps<{
   answer: Answer
   correctAnswerSelected: boolean
@@ -23,13 +27,15 @@ const props = defineProps<{
 const emit = defineEmits(['answer-selected'])
 const wasClicked = ref(false)
 
+// Method to handle answer selection
 const selectAnswer = () => {
   if (!wasClicked.value) {
     wasClicked.value = true
-    emit('answer-selected', props.answer.isCorrect, props.answer.isIncorrect)
+    emit('answer-selected', props.answer)
   }
 }
 
+// Reset `wasClicked` whenever the answer prop changes
 watch(
   () => props.answer,
   () => {
@@ -39,22 +45,28 @@ watch(
 )
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .answer-card {
-  margin-top: 40px;
+  margin-top: 2.5rem;
   background-color: var(--vt-c-white);
-  border-radius: 60px;
-  padding: 50px;
+  border-radius: 3.75rem;
+  padding: 3.125rem;
   cursor: pointer;
-  border: 3px solid #60668F;
+  border: 3px solid #60668f;
+
+  &--correct {
+    background-color: #b0dc64;
+  }
+
+  &--incorrect,
+  &--other-incorrect {
+    background-color: #ffa4a4;
+  }
 }
 
-.answer-card.correct {
-  background-color: #b0dc64;
-}
-
-.answer-card.incorrect {
-  background-color: #ffa4a4;
+.answer-figure {
+  margin: 0;
+  padding: 0;
 }
 
 .answer-image {

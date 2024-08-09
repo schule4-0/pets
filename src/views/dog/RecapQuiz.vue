@@ -1,14 +1,24 @@
 <template>
-  <div class="question-section">
+  <section class="quiz-section">
     <div v-if="hasQuizIntroductionFinished" class="progress-bar">
-      <button
-        v-for="(answered, index) in progress"
+      <div
+        v-for="(question, index) in quizData"
         :key="index"
-        :class="{ answered: answered }"
-        class="progress-buttons"
+        class="progress-item"
+        :class="{
+          'progress-item--active': index <= currentQuestionIndex,
+          'progress-item--answered': isCorrectAnswerSelected && index <= currentQuestionIndex
+        }"
       >
-        <img src="@/assets/icons/icon_check.svg" />
-      </button>
+        <img
+          v-if="
+            (isCorrectAnswerSelected && index == currentQuestionIndex) ||
+            index < currentQuestionIndex
+          "
+          src="@/assets/icons/icon_check.svg"
+          alt="Answered"
+        />
+      </div>
     </div>
 
     <MascotItem :quiz-appearance="true" />
@@ -18,191 +28,132 @@
         v-for="(answer, index) in currentQuestion.answers"
         :key="index"
         :answer="answer"
-        :correctAnswerSelected="correctAnswerSelected"
+        :correctAnswerSelected="isCorrectAnswerSelected"
         @answer-selected="handleAnswerSelected"
       />
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import MascotItem from '@/components/MascotItem.vue'
 import AnswerComponent from '@/components/QuizAnswer.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
-import quizData from '@/config/quizConfig'
-import { onMounted } from 'vue'
-import type { MascotMessageKey } from '@/config/mascotMessages'
+import quizData, { type Answer } from '@/config/quizConfig'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useAudioManager } from '@/stores/useAudioManager'
+import type { SoundIdentifier } from '@/config/soundEffectMappings'
 
+// Store and Composables
+const mascot = useMascotStore()
+const audioManager = useAudioManager()
 const { goToNextStage } = useStageNavigator()
 
+// Reactive state
 const currentQuestionIndex = ref(0)
-const isAnswerSelected = ref(false)
-const correctAnswerSelected = ref(false)
-
-const audioManager = useAudioManager()
-const mascot = useMascotStore()
-
+const isCorrectAnswerSelected = ref(false)
 const hasQuizIntroductionFinished = ref(false)
 
-const currentQuestion = computed(() => {
-  return quizData[currentQuestionIndex.value]
-})
+// Computed properties
+const currentQuestion = computed(() => quizData[currentQuestionIndex.value])
 
+// Lifecycle methods
 onMounted(() => {
   mascot.showMessage('STAGE5_INTRODUCTION', {
     showMascot: false,
-    onFinished: () => {
-      hasQuizIntroductionFinished.value = true
-      mascot.showMessage('STAGE5_QUESTION1', {
-        showMascot: false
-      })
-    }
+    onFinished: startQuiz
   })
 })
 
-const handleAnswerSelected = (isCorrect: boolean, isIncorrect: number) => {
-  if (isCorrect) {
-    isAnswerSelected.value = true
-    correctAnswerSelected.value = true
+// Methods
+const startQuiz = () => {
+  hasQuizIntroductionFinished.value = true
+  showQuestionMessage()
+}
 
-    const currentCorrectAnswerNumber = currentQuestionIndex.value + 1
-    const currentCorrectAnswerMessage =
-      `STAGE5_CORRECT${currentCorrectAnswerNumber}` as MascotMessageKey
+const handleAnswerSelected = (answer: Answer) => {
+  isCorrectAnswerSelected.value = answer.isCorrect
 
-    audioManager.playSound('CORRECT_BLING_SOUND')
+  const sound: SoundIdentifier = answer.isCorrect ? 'CORRECT_BLING_SOUND' : 'DOG_HOWLING'
+  audioManager.playSound(sound)
 
-    mascot.showMessage(currentCorrectAnswerMessage, {
-      showMascot: false,
-      onFinished: nextQuestion
-    })
-  } else {
-    const currentWrongAnswerNumber = currentQuestionIndex.value + 1
-    const currentWrongAnswerMessage =
-      `STAGE5_INCORRECT${currentWrongAnswerNumber}_${isIncorrect}` as MascotMessageKey
-    audioManager.playSound('DOG_HOWLING')
+  mascot.showMessage(answer.mascotMessageKey, {
+    showMascot: false,
+    onFinished: answer.isCorrect ? nextQuestion : showQuestionMessage
+  })
+}
 
-    mascot.showMessage(currentWrongAnswerMessage, {
-      showMascot: false,
-      onFinished: () => {
-        const currentQuestionNumber = currentQuestionIndex.value + 1
-        const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as MascotMessageKey
-        mascot.showMessage(currentQuestionMessage, {
-          showMascot: false
-        })
-      }
-    })
-  }
+const showQuestionMessage = () => {
+  mascot.showMessage(currentQuestion.value.mascotMessageKey, { showMascot: false })
 }
 
 const nextQuestion = () => {
-  isAnswerSelected.value = false
-  correctAnswerSelected.value = false
-
   if (currentQuestionIndex.value < quizData.length - 1) {
     currentQuestionIndex.value++
-    const currentQuestionNumber = currentQuestionIndex.value + 1
-    const currentQuestionMessage = `STAGE5_QUESTION${currentQuestionNumber}` as MascotMessageKey
-    mascot.showMessage(currentQuestionMessage, {
-      showMascot: false
-    })
+    resetQuestionState()
+    showQuestionMessage()
   } else {
-    hasQuizIntroductionFinished.value = false
-    mascot.showMessage('STAGE5_FINISH', {
-      showMascot: false,
-      onFinished: goToNextStage
-    })
+    finishQuiz()
   }
 }
 
-const progress = computed(() => {
-  const progressArray = []
-  for (let i = 0; i < quizData.length; i++) {
-    if (i <= currentQuestionIndex.value) {
-      progressArray[i] = true
-    } else {
-      progressArray[i] = false
-    }
-  }
-  return progressArray
-})
+const resetQuestionState = () => {
+  isCorrectAnswerSelected.value = false
+}
+
+const finishQuiz = () => {
+  hasQuizIntroductionFinished.value = false
+  mascot.showMessage('STAGE5_FINISH', {
+    showMascot: false,
+    onFinished: goToNextStage
+  })
+}
 </script>
 
-<style scoped>
-.question-section {
+<style scoped lang="scss">
+.quiz-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  img {
-    width: 5%;
-    margin-left: 98%;
-    fill: var(--color-text);
-  }
 }
 
 .answers-container {
   display: flex;
   justify-content: space-between;
-  gap: 40px;
+  gap: 2.5rem;
 }
 
 .progress-bar {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 70px;
-}
+  margin: 1.5rem 0 4rem;
 
-.progress-buttons {
-  width: 33px;
-  height: 33px;
-  border-radius: 50%;
-  margin: 0 5px;
-  background-color: var(--s40-color-secondary);
-  border: 2px solid #60668f;
-}
+  .progress-item {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin: 0.25rem;
+    background-color: var(--s40-color-secondary);
+    border: 2px solid #60668f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 
-.progress-buttons.answered {
-  background-color: var(--s40-color-primary);
-  display: flex;
-  justify-content: end;
+    &--active {
+      background-color: var(--s40-color-primary);
+    }
 
-  img {
-    width: 18px;
-    height: 28px;
-    object-fit: contain;
+    &--answered {
+      background-color: var(--s40-color-primary);
+    }
+
+    img {
+      width: 1.25rem;
+      display: block;
+    }
   }
-}
-
-.finish-button {
-  padding: 10px;
-  margin-top: 20px;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: var(--vt-c-white);
-  padding: 20px;
-  border-radius: 5px;
-  position: relative;
-  width: 500px;
 }
 </style>
