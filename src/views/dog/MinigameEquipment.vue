@@ -13,6 +13,7 @@
       :initialX="item.initialX"
       :initialY="item.initialY"
       :collected="item.collected"
+      :is-input-blocked="isGameFinished"
     />
 
     <ScoreBoard :items="collectableItems" />
@@ -38,6 +39,7 @@ const mascot = useMascotStore()
 const rewardStore = useRewardStore()
 const solutionImages = ref<string[]>([])
 const audioManager = useAudioManager()
+const isGameFinished = ref(false)
 
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
@@ -89,12 +91,18 @@ const collectItem = (id: number) => {
   })
 }
 
-const checkAllAcceptedItemsRemoved = () => {
+const checkInputBlock = () => {
   if (
     collectableItems.value.every(
       (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
     )
   ) {
+    isGameFinished.value = true
+  }
+}
+
+const checkWinning = () => {
+  if (isGameFinished.value) {
     rewardStore.show(solutionImages.value)
   }
 }
@@ -108,17 +116,18 @@ const handleDropInArea = (item: {
   if (item.type === 'accepted') {
     collectItem(item.id)
     audioManager.playSound('CORRECT_BLING_SOUND')
+    checkInputBlock()
     if (item.id === 1) {
       mascot.showMessage('STAGE1_BONE', {
-        onFinished: checkAllAcceptedItemsRemoved
+        onFinished: checkWinning
       })
     } else if (item.id === 2) {
       mascot.showMessage('STAGE1_FEEDING_BOWL', {
-        onFinished: checkAllAcceptedItemsRemoved
+        onFinished: checkWinning
       })
     } else if (item.id === 3) {
       mascot.showMessage('STAGE1_BALL', {
-        onFinished: checkAllAcceptedItemsRemoved
+        onFinished: checkWinning
       })
     }
   } else {
