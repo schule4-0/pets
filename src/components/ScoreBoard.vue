@@ -1,11 +1,11 @@
 <template>
   <div class="scoreboard">
     <img
-      v-for="item in props.items"
+      v-for="item in items"
       :key="item.id"
-      class="icon"
+      class="scoreboard__icon"
       :src="item.image"
-      :class="{ collected: item.collected }"
+      :class="{ 'scoreboard__icon--collected': item.collected }"
       alt="item"
     />
   </div>
@@ -18,30 +18,34 @@ interface Item {
   image: string
 }
 
-const props = defineProps<{
+defineProps<{
   items: Item[]
 }>()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .scoreboard {
+  height: 3.5rem;
   position: fixed;
-  top: 80px;
-  left: 20px;
+  top: 5rem;
+  left: 1.25rem;
   display: flex;
-  gap: 20px;
-  padding: 12px 20px;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.75rem 1.25rem;
   background-color: #ffffff;
-  border: 2px solid black;
-  border-radius: 20px;
+  border: 3px solid #60668f;
+  border-radius: 1.25rem;
   z-index: 100;
-}
 
-.icon {
-  width: 32px;
-  opacity: 0.3;
-}
-.icon.collected {
-  opacity: 1;
+  &__icon {
+    height: 80%;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+
+    &--collected {
+      opacity: 1;
+    }
+  }
 }
 </style>
