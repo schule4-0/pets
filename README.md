@@ -1,39 +1,62 @@
-# Schule 4.0 - Pets
+# Schule 4.0 - PETucation
 
-This template should help get you started developing with Vue 3 in Vite.
+**PETucation** is a web application aimed at teaching first graders how to care for pets responsibly through fun, interactive mini-games. It enhances learning by providing a hands-on experience rather than just reading or listening. The children are guided by Lisa, a virtual mascot, who helps them through the tasks and ensures they can easily follow along with voice instructions.
 
-## Recommended IDE Setup
+<p align="center">
+ <img src="./assets/images/PreviewEquipment.png" alt="Equipment" width="30%" />
+  <img src="./assets/images/PreviewCareTime.png" alt="Care Time" width="30%" />
+  <img src="./assets/images/PreviewQuiz.png" alt="Quiz" width="30%" />
+</p>
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Live Demo
 
-## Type Support for `.vue` Imports in TS
+Check out the live demo of the project: [Schule 4.0 - PETucation](https://pets.schule4-0.dev/)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Getting Started
 
-## Customize configuration
+### Prerequisites
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- Node.js (v14.0.0+ recommended)
+- npm (v6.0.0+ recommended)
 
-## Project Setup
+### Installation
 
-```sh
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/schule4-0/pets.git
+cd pets
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Development
 
-```sh
+Start the development server with hot-reloading:
+
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Production
 
-```sh
+Build the project for production:
+
+```bash
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Linting
 
-```sh
+Run ESLint to check for code style issues:
+
+```bash
 npm run lint
 ```
+
+## Contributing
+
+This project was developed as part of a university project at [Media University Stuttgart](https://www.hdm-stuttgart.de/), in cooperation with the [University of Education Weingarten](https://www.ph-weingarten.de/) and [Schule 4.0](https://www.schule4-0.de/).
+
+## License
+
+This project is licensed under the [GPL-3.0 License](./LICENSE).
