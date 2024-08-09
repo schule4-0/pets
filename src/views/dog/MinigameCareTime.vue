@@ -13,7 +13,7 @@
         @water-drop-counter="handleWaterDropChange"
         :width="dogSize"
         :height="dogSize"
-        @completed="() => rewardStore.show(solutionImages)"
+        @completed="handlegameOver"
       />
     </div>
   </div>
@@ -40,7 +40,6 @@ const bubbleCounter = ref(0)
 const waterDropCounter = ref(0)
 const maxWaterDropCounter = ref(0)
 const rewardStore = useRewardStore()
-const solutionImages = ref<string[]>([])
 
 let messageTimeOut: number
 
@@ -74,6 +73,12 @@ const progressObject = computed(() => {
   }
 })
 
+const handlegameOver = () => {
+  mascot.showMessage('STAGE4_WASHING_DONE', {
+    onFinished: () => rewardStore.show([imgShampoo, imgShowerHead, imgDryer])
+  })
+}
+
 const dogSize = computed(() => {
   const viewWidth = window.innerWidth
   const viewHeight = window.innerHeight
@@ -82,7 +87,6 @@ const dogSize = computed(() => {
 })
 
 onMounted(() => {
-  solutionImages.value = [imgShampoo, imgShowerHead, imgDryer]
   mascot.showMessage('STAGE4_INTRODUCTION', {
     onFinished: () => {
       mascot.showMessage('STAGE4_SHAMPOO_EXPLANATION')
