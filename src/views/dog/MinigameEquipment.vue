@@ -1,6 +1,8 @@
 <template>
   <div class="game-container">
-    <div class="drop-area-container">
+    <ScoreBoard :items="collectableItems" />
+
+    <div class="drop-area">
       <DropArea @droppedInArea="handleDropInArea" :image="backpackImg" width="10vw" />
     </div>
 
@@ -8,15 +10,12 @@
       v-for="item in items"
       :key="item.id"
       :id="item.id"
-      :type="item.type"
       :image="item.image"
       :initialX="item.initialX"
       :initialY="item.initialY"
       :collected="item.collected"
       :is-input-blocked="isGameFinished"
     />
-
-    <ScoreBoard :items="collectableItems" />
   </div>
 </template>
 
@@ -24,126 +23,76 @@
 import { ref, computed, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
-import bookImg from '@/assets/equipment/book.svg'
-import feedingBowlImg from '@/assets/equipment/dogfood.svg'
 import backpackImg from '@/assets/equipment/backpack_closed.svg'
-import boneImg from '@/assets/equipment/bone_border.png'
-import cardGameImg from '@/assets/equipment/Cardgame.svg'
-import ballImg from '@/assets/equipment/Ball.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useRewardStore } from '@/stores/useRewardStore'
 import ScoreBoard from '@/components/ScoreBoard.vue'
 import { useAudioManager } from '@/stores/useAudioManager'
+import minigameEquipmentItems, { type EquipmentItem } from '@/config/minigameEquipmentConfig'
 
+interface DraggableEquipmentItem extends EquipmentItem, DraggableItemType {}
+
+// Stores & Composables
 const mascot = useMascotStore()
 const rewardStore = useRewardStore()
-const solutionImages = ref<string[]>([])
 const audioManager = useAudioManager()
+
+// Reactive State
+const solutionImages = ref<string[]>([])
 const isGameFinished = ref(false)
 
+const items = ref<DraggableEquipmentItem[]>(
+  minigameEquipmentItems.map((dragItem) => ({ ...dragItem, collected: false }))
+)
+
+// Lifecycle methods
 onMounted(() => {
   mascot.showMessage('STAGE1_BACKPACK')
-  solutionImages.value = items.value
+  solutionImages.value = minigameEquipmentItems
     .filter((item) => item.type === 'accepted')
     .map((item) => item.image)
 })
 
-const items = ref<DraggableItemType[]>([
-  {
-    id: 1,
-    type: 'accepted',
-    image: boneImg,
-    initialX: 45,
-    initialY: 90,
-    collected: false,
-    message: 'STAGE1_BONE'
-  },
-  {
-    id: 2,
-    type: 'accepted',
-    image: feedingBowlImg,
-    initialX: 24,
-    initialY: 83,
-    collected: false,
-    message: 'STAGE1_FEEDING_BOWL'
-  },
-  {
-    id: 3,
-    type: 'accepted',
-    image: ballImg,
-    initialX: 34,
-    initialY: 54.5,
-    collected: false,
-    message: 'STAGE1_BALL'
-  },
-  { id: 5, type: 'rejected', image: bookImg, initialX: 60, initialY: 68, collected: false },
-  { id: 6, type: 'rejected', image: cardGameImg, initialX: 85, initialY: 15.5, collected: false }
-])
-
+// Computed properties
 const collectableItems = computed(() => items.value.filter((item) => item.type === 'accepted'))
 
+// Methods
+
 const collectItem = (id: number) => {
-  items.value = items.value.map((item) => {
-    if (item.id === id) {
-      return { ...item, collected: true }
-    }
-    return item
-  })
+  items.value = items.value.map((item) => (item.id === id ? { ...item, collected: true } : item))
 }
 
-const checkInputBlock = () => {
-  if (
-    collectableItems.value.every(
-      (item) => (item.type === 'accepted' && item.collected) || item.type === 'rejected'
-    )
-  ) {
+const checkGameCompletion = () => {
+  if (collectableItems.value.every((item) => item.collected)) {
     isGameFinished.value = true
-  }
-}
-
-const checkWinning = () => {
-  if (isGameFinished.value) {
     rewardStore.show(solutionImages.value)
   }
 }
 
-const handleDropInArea = (item: {
-  id: number
-  isWithin: boolean
-  type: 'accepted' | 'rejected'
-  message: string
-}) => {
+const handleDropInArea = (id: number) => {
+  const item = items.value.find((item) => item.id === id)
+  if (!item) return
+
   if (item.type === 'accepted') {
-    collectItem(item.id)
+    collectItem(id)
     audioManager.playSound('CORRECT_BLING_SOUND')
-    checkInputBlock()
-    if (item.id === 1) {
-      mascot.showMessage('STAGE1_BONE', {
-        onFinished: checkWinning
-      })
-    } else if (item.id === 2) {
-      mascot.showMessage('STAGE1_FEEDING_BOWL', {
-        onFinished: checkWinning
-      })
-    } else if (item.id === 3) {
-      mascot.showMessage('STAGE1_BALL', {
-        onFinished: checkWinning
-      })
-    }
+    mascot.showMessage(item.mascotMessageKey, {
+      onFinished: checkGameCompletion
+    })
   } else {
     audioManager.playSound('DOG_HOWLING')
-    mascot.showMessage('STAGE1_WRONG')
+    mascot.showMessage(item.mascotMessageKey)
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .game-container {
   position: relative;
   background-image: url('@/assets/equipment/Room.svg');
   background-size: cover;
   background-position: center;
-  padding: 20px;
+  padding: 1.25rem;
   width: 100%;
   height: 100%;
   display: flex;
@@ -152,12 +101,12 @@ const handleDropInArea = (item: {
   align-items: center;
 }
 
-.drop-area-container {
+.drop-area {
   position: absolute;
   bottom: 3vw;
   left: 3vw;
-  background-color: rgb(255, 255, 255, 0.7);
-  border-radius: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -14,13 +14,11 @@
     <DraggableItem
       class="boneImg"
       :id="1"
-      type="accepted"
       :image="boneImg"
       :initialX="44"
       :initialY="10"
       width="120px"
-      v-if="!wasBoneGiven"
-      :collected="false"
+      :collected="wasBoneGiven"
     />
   </div>
   <div class="drop-area-container">
@@ -61,16 +59,10 @@ onMounted(() => {
   solutionImages.value = rewardStore.solutionImages
 })
 
-const handleDropInArea = (item: {
-  id: number
-  isWithin: boolean
-  type: 'accepted' | 'rejected'
-}) => {
-  if (item.type === 'accepted') {
-    wasBoneGiven.value = true
-    audioManager.playSound('DOG_BARK')
-    displayNextButton()
-  }
+const handleDropInArea = () => {
+  wasBoneGiven.value = true
+  audioManager.playSound('DOG_BARK')
+  displayNextButton()
 }
 
 const displayNextButton = () => {
