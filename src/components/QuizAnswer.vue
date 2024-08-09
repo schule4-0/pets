@@ -18,7 +18,6 @@
 import { ref, watch } from 'vue'
 import type { Answer } from '@/config/quizConfig'
 
-// Define component properties
 const props = defineProps<{
   answer: Answer
   correctAnswerSelected: boolean
@@ -27,7 +26,6 @@ const props = defineProps<{
 const emit = defineEmits(['answer-selected'])
 const wasClicked = ref(false)
 
-// Method to handle answer selection
 const selectAnswer = () => {
   if (!wasClicked.value) {
     wasClicked.value = true
