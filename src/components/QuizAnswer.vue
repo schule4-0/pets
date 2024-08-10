@@ -27,7 +27,7 @@ const emit = defineEmits(['answer-selected'])
 const wasClicked = ref(false)
 
 const selectAnswer = () => {
-  if (!wasClicked.value) {
+  if (!wasClicked.value && !props.correctAnswerSelected) {
     wasClicked.value = true
     emit('answer-selected', props.answer)
   }
