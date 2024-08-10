@@ -53,7 +53,7 @@ Run ESLint to check for code style issues:
 npm run lint
 ```
 
-## Contributing
+## Contributors
 
 This project was developed as part of a university project at [Media University Stuttgart](https://www.hdm-stuttgart.de/), in cooperation with the [University of Education Weingarten](https://www.ph-weingarten.de/) and [Schule 4.0](https://www.schule4-0.de/).
 
