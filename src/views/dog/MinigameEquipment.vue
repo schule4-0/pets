@@ -60,12 +60,9 @@ const collectableItems = computed(() => items.value.filter((item) => item.type =
 
 const collectItem = (id: number) => {
   items.value = items.value.map((item) => (item.id === id ? { ...item, collected: true } : item))
-}
 
-const checkGameCompletion = () => {
   if (collectableItems.value.every((item) => item.collected)) {
     isGameFinished.value = true
-    rewardStore.show(solutionImages.value)
   }
 }
 
@@ -77,7 +74,9 @@ const handleDropInArea = (id: number) => {
     collectItem(id)
     audioManager.playSound('CORRECT_BLING_SOUND')
     mascot.showMessage(item.mascotMessageKey, {
-      onFinished: checkGameCompletion
+      onFinished: () => {
+        if (isGameFinished.value) rewardStore.show(solutionImages.value)
+      }
     })
   } else {
     audioManager.playSound('DOG_HOWLING')
