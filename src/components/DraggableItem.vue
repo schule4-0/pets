@@ -3,8 +3,7 @@
     v-if="!props.collected"
     ref="elementRef"
     :data-id="props.id"
-    :data-type="props.type"
-    :class="`draggable ${props.type}`"
+    :class="`draggable`"
     @mousedown="handleStartDrag"
     @touchstart="handleStartDrag"
     :style="{
@@ -31,12 +30,10 @@ import { useDraggable } from '@/composables/useDraggable'
 export interface DraggableItemType {
   id: number
   width?: string
-  type: 'accepted' | 'rejected'
   image: string
   initialX: number
   initialY: number
   collected: boolean
-  message?: string
   isInputBlocked?: boolean
 }
 

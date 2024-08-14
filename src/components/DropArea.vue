@@ -1,5 +1,5 @@
 <template>
-  <div ref="dropArea" :style="{ width: width }" class="drop-area">
+  <div ref="dropArea" :style="{ width: width }" class="drop-area-component">
     <img :src="image" alt="Drop Area Image" :style="{ width: '100%' }" />
   </div>
 </template>
@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   image: string
   width: string
 }>()
@@ -25,7 +25,6 @@ const handleDropEvent = (event: MouseEvent | TouchEvent) => {
   }
 
   const id = parseInt(target?.dataset.id || '-1')
-  const type = target?.dataset.type as 'accepted' | 'rejected'
 
   const bounds = dropArea.value?.getBoundingClientRect()
   const isWithin =
@@ -35,7 +34,7 @@ const handleDropEvent = (event: MouseEvent | TouchEvent) => {
     clientY <= (bounds?.bottom || 0)
 
   if (isWithin && id !== -1) {
-    emit('droppedInArea', { id, x: clientX, y: clientY, type })
+    emit('droppedInArea', id)
   }
 }
 
@@ -51,7 +50,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.drop-area {
+.drop-area-component {
   display: flex;
   justify-content: center;
   align-items: center;
