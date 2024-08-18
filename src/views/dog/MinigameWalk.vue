@@ -51,14 +51,14 @@ import AnimatedComponent from '@/components/minigame-walk/AnimatedComponent.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useGameState } from '@/composables/useGameState'
 import { useCharacterActions } from '@/composables/useCharacterActions'
-import imgIconPlay from '@/assets/minigame-walk/icon_play.svg'
-import imgIconArrowUp from '@/assets/minigame-walk/arrow_up.svg'
+import imgIconPlay from '@/assets/icons/icon_play.svg'
+import imgIconArrowUp from '@/assets/icons/icon_arrow_up.svg'
 import {
   useElementSpawning,
   type AnimatedComponentWithSpeedMultiplier
 } from '@/composables/useElementSpawning'
 import { useRewardStore } from '@/stores/useRewardStore'
-import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
+import dogLeashSvg from '@/assets/images/dog/equipment/dogleash.svg'
 import { useAudioManager } from '@/stores/useAudioManager'
 
 const mascot = useMascotStore()
@@ -303,7 +303,7 @@ onUnmounted(() => {
   position: absolute;
   bottom: 0;
   left: 0;
-  background-image: url('@/assets/minigame-walk/LoopedBackground.svg');
+  background-image: url('@/assets/images/dog/backgrounds/minigame-walk/bg_looped_walking_path.svg');
   background-size: auto 100%;
   background-repeat: repeat-x;
   background-position: center;
@@ -335,7 +335,7 @@ onUnmounted(() => {
   left: 0;
   height: 50vh;
   width: 100%;
-  background: url('@/assets/minigame-walk/skyline.svg');
+  background: url('@/assets/images/dog/backgrounds/minigame-walk/skyline.svg');
   background-size: auto 100%;
   background-repeat: repeat-x;
   z-index: 0;

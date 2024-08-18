@@ -1,12 +1,7 @@
 <template>
   <div class="container">
     <div class="background"></div>
-    <img
-      class="stationary-image"
-      src="@/assets/LisaFullBody.svg"
-      alt="Stationary"
-      style="height: 220px"
-    />
+    <img class="stationary-image" :src="imgLisaFullBody" alt="Stationary" style="height: 220px" />
     <img class="walking-image" :src="currentFrame" alt="Walking" style="height: 120px" />
   </div>
 </template>
@@ -14,10 +9,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { gsap } from 'gsap'
-import imgRockyStep1 from '@/assets/rocky/Rocky_step_1.svg'
-import imgRockyStep2 from '@/assets/rocky/Rocky_step_2.svg'
-import imgRockyStep3 from '@/assets/rocky/Rocky_step_3.svg'
-import imgRockySitting from '@/assets/rocky/Rocky_sitting.svg'
+import imgRockyStep1 from '@/assets/images/dog/rocky/Rocky_step_1.svg'
+import imgRockyStep2 from '@/assets/images/dog/rocky/Rocky_step_2.svg'
+import imgRockyStep3 from '@/assets/images/dog/rocky/Rocky_step_3.svg'
+import imgLisaFullBody from '@/assets/images/mascot/lisa_full_body.svg'
+import imgRockySitting from '@/assets/images/dog/rocky/Rocky_sitting.svg'
 import { useStageStore } from '@/stores/useStageStore'
 import { useStageNavigator } from '@/composables/useNavigation'
 import { useMascotStore } from '@/stores/useMascotStore'
@@ -108,7 +104,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/OnboardingBackgroundPark.svg');
+  background-image: url('@/assets/images/dog/backgrounds/bg_park.svg');
   background-size: cover;
   background-position: center;
   z-index: 1;

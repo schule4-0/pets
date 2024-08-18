@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
-import imgDogBowl from '@/assets/equipment/dogfood.svg'
+import imgDogBowl from '@/assets/images/dog/food/dogfood.svg'
 
 const emits = defineEmits(['startDrag'])
 const dogBowl = ref<HTMLDivElement | null>(null)

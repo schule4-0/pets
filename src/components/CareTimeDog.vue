@@ -180,9 +180,9 @@ import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import { storeToRefs } from 'pinia'
 import { useMascotStore } from '@/stores/useMascotStore'
-import imgShampoo from '@/assets/shampoo.svg'
-import imgShowerHead from '@/assets/Showerhead_water.svg'
-import imgDryer from '@/assets/dryer.png'
+import imgShampoo from '@/assets/images/dog/cleaning-tools/soap_with_bubbles.svg'
+import imgShowerHead from '@/assets/images/dog/cleaning-tools/showerhead_with_water.svg'
+import imgDryer from '@/assets/images/dog/cleaning-tools/dryer.svg'
 import { useAudioManager } from '@/stores/useAudioManager'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])

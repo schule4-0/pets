@@ -1,8 +1,8 @@
-import bookImg from '@/assets/equipment/book.svg'
-import feedingBowlImg from '@/assets/equipment/dogfood.svg'
-import boneImg from '@/assets/equipment/bone_border.png'
-import cardGameImg from '@/assets/equipment/Cardgame.svg'
-import ballImg from '@/assets/equipment/Ball.svg'
+import bookImg from '@/assets/images/dog/items-for-human/book.svg'
+import feedingBowlImg from '@/assets/images/dog/food/dogfood.svg'
+import boneImg from '@/assets/images/dog/equipment/bone.png'
+import cardGameImg from '@/assets/images/dog/items-for-human/cardgame.svg'
+import ballImg from '@/assets/images/dog/equipment/ball.svg'
 import type { MascotMessageKey } from '@/config/mascotMessages'
 
 export interface EquipmentItem {
