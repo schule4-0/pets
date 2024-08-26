@@ -184,6 +184,7 @@ import imgShampoo from '@/assets/images/dog/cleaning-tools/soap_with_bubbles.svg
 import imgShowerHead from '@/assets/images/dog/cleaning-tools/showerhead_with_water.svg'
 import imgDryer from '@/assets/images/dog/cleaning-tools/dryer.svg'
 import { useAudioManager } from '@/stores/useAudioManager'
+import { BUBBLE_COUNT_FULLY_SOAPED } from '@/config/minigameCareTime'
 
 const emit = defineEmits(['bubbleCounter', 'waterDropCounter'])
 
@@ -326,7 +327,7 @@ watch(
       stopAction()
       mascot.showMessage('STAGE4_IS_SHOWERED')
       currentState.value = 'drying'
-    } else if (bubbles.length === 100 && currState === 'shampooing') {
+    } else if (bubbles.length === BUBBLE_COUNT_FULLY_SOAPED && currState === 'shampooing') {
       // Fully shampooed dog => now switch to shower
       stopAction()
       mascot.showMessage('STAGE4_IS_SHAMPOOED')

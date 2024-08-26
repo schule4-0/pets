@@ -13,7 +13,7 @@
         @water-drop-counter="handleWaterDropChange"
         :width="dogSize"
         :height="dogSize"
-        @completed="handlegameOver"
+        @completed="handleGameOver"
       />
     </div>
   </div>
@@ -30,6 +30,7 @@ import imgDryer from '@/assets/images/dog/cleaning-tools/dryer.svg'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import { storeToRefs } from 'pinia'
 import { useRewardStore } from '@/stores/useRewardStore'
+import { BUBBLE_COUNT_FULLY_SOAPED } from '@/config/minigameCareTime'
 
 const mascot = useMascotStore()
 
@@ -55,25 +56,28 @@ const handleWaterDropChange = (counter: number) => {
 const progressObject = computed(() => {
   switch (currentState.value) {
     case 'shampooing':
-      return { imgSrc: imgShampoo, maxProgress: 100, currentProgress: bubbleCounter.value }
+      return {
+        imgSrc: imgShampoo,
+        maxProgress: BUBBLE_COUNT_FULLY_SOAPED,
+        currentProgress: bubbleCounter.value
+      }
     case 'showering':
       return {
         imgSrc: imgShowerHead,
-        maxProgress: 100,
-        currentProgress: 100 - bubbleCounter.value
+        maxProgress: BUBBLE_COUNT_FULLY_SOAPED,
+        currentProgress: BUBBLE_COUNT_FULLY_SOAPED - bubbleCounter.value
       }
     case 'drying':
+    default:
       return {
         imgSrc: imgDryer,
         maxProgress: maxWaterDropCounter.value,
         currentProgress: maxWaterDropCounter.value - waterDropCounter.value
       }
-    default:
-      return { imgSrc: imgDryer, maxProgress: 100, currentProgress: 100 }
   }
 })
 
-const handlegameOver = () => {
+const handleGameOver = () => {
   mascot.showMessage('STAGE4_WASHING_DONE', {
     onFinished: () => rewardStore.show([imgShampoo, imgShowerHead, imgDryer])
   })

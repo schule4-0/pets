@@ -60,6 +60,17 @@ import {
 import { useRewardStore } from '@/stores/useRewardStore'
 import dogLeashSvg from '@/assets/images/dog/equipment/dogleash.svg'
 import { useAudioManager } from '@/stores/useAudioManager'
+import {
+  BG_BUSH_SPAWN_INTERVAL,
+  CLOUD_SPAWN_INTERVAL,
+  ELEMENT_DESPAWN_POSITION_X,
+  ELEMENT_DISTANCE,
+  FG_BUSH_SPAWN_INTERVAL,
+  REQUIRED_OBSTACLE_JUMPS,
+  REQUIRED_POOP_COUNT,
+  ANIMATION_DURATION,
+  SPAWN_POO_PROBABILITY
+} from '@/config/minigameWalkConfig'
 
 const mascot = useMascotStore()
 const audioManager = useAudioManager()
@@ -133,7 +144,7 @@ const spawnObstacle = () => {
 }
 
 const spawnElement = () => {
-  if (gameState.pooCount < 3 && Math.random() < 0.65) {
+  if (gameState.pooCount < REQUIRED_POOP_COUNT && Math.random() < SPAWN_POO_PROBABILITY) {
     spawnPoo()
   } else if (!isGoalVisible.value) {
     spawnObstacle()
@@ -162,7 +173,10 @@ const handleJumpedOver = () => {
 }
 
 const checkGoalVisibility = () => {
-  if (gameState.pooCount >= 3 && gameState.stonesJumped >= 6) {
+  if (
+    gameState.pooCount >= REQUIRED_POOP_COUNT &&
+    gameState.stonesJumped >= REQUIRED_OBSTACLE_JUMPS
+  ) {
     isGoalVisible.value = true
     mascot.showMessage('STAGE3_SUPER')
     goalPositionX.value = window.innerWidth + 100
@@ -177,45 +191,49 @@ const handleCollision = () => {
 }
 
 const animateElements = () => {
-  const duration = 0.01
-  const distance = 4
   animatedElements.forEach((element, index) => {
     animationTimeline?.to(
       element,
-      { positionX: `-=${distance * element.speedMultiplier}`, duration },
+      { positionX: `-=${ELEMENT_DISTANCE * element.speedMultiplier}`, ANIMATION_DURATION },
       0
     )
-    if (element.positionX < -500) {
+    if (element.positionX < ELEMENT_DESPAWN_POSITION_X) {
       animatedElements.splice(index, 1)
     }
   })
 }
 
 const animateObstacles = () => {
-  const duration = 0.01
-  const distance = 4
   if (gameState.poo) {
-    animationTimeline?.to(gameState.poo, { positionX: `-=${distance}`, duration }, 0)
+    animationTimeline?.to(
+      gameState.poo,
+      { positionX: `-=${ELEMENT_DISTANCE}`, ANIMATION_DURATION },
+      0
+    )
   }
   if (isGoalVisible.value) {
-    animationTimeline?.to(goalPositionX, { value: `-=${distance}`, duration }, 0)
+    animationTimeline?.to(goalPositionX, { value: `-=${ELEMENT_DISTANCE}`, ANIMATION_DURATION }, 0)
   }
   if (gameState.obstacle) {
-    animationTimeline?.to(gameState.obstacle, { positionX: `-=${distance}`, duration }, 0)
+    animationTimeline?.to(
+      gameState.obstacle,
+      { positionX: `-=${ELEMENT_DISTANCE}`, ANIMATION_DURATION },
+      0
+    )
   }
 }
 
 const handleSpawning = () => {
   const currentTime = Date.now()
-  if (currentTime - lastElementSpawnTimes.cloud > 7500) {
+  if (currentTime - lastElementSpawnTimes.cloud > CLOUD_SPAWN_INTERVAL) {
     spawnElementWithConfig('cloud')
     lastElementSpawnTimes.cloud = currentTime
   }
-  if (currentTime - lastElementSpawnTimes.fgBush > 1000) {
+  if (currentTime - lastElementSpawnTimes.fgBush > FG_BUSH_SPAWN_INTERVAL) {
     spawnElementWithConfig('fgBush')
     lastElementSpawnTimes.fgBush = currentTime
   }
-  if (currentTime - lastElementSpawnTimes.bgBush > 1500) {
+  if (currentTime - lastElementSpawnTimes.bgBush > BG_BUSH_SPAWN_INTERVAL) {
     spawnElementWithConfig('bgBush')
     lastElementSpawnTimes.bgBush = currentTime
   }

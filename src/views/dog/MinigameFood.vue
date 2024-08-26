@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, watch } from 'vue'
-import { useNutritionMinigameStore, MAX_NUTRITION_GAME_SCORE } from '@/stores/nutritionGameStore'
+import { useNutritionMinigameStore } from '@/stores/nutritionGameStore'
 import DogBowl from '@/components/DogBowl.vue'
 import FoodItem from '@/components/FoodItem.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
@@ -21,6 +21,7 @@ import imgSausage from '@/assets/images/dog/food/sausage.svg'
 import imgSteak from '@/assets/images/dog/food/steak.svg'
 import imgCarrot from '@/assets/images/dog/food/carrot.svg'
 import { useRewardStore } from '@/stores/useRewardStore'
+import { MAX_NUTRITION_GAME_SCORE } from '@/config/minigameNutritionConfig'
 
 const mascot = useMascotStore()
 const rewardStore = useRewardStore()
