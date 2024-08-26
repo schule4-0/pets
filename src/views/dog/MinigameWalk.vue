@@ -191,10 +191,14 @@ const handleCollision = () => {
 }
 
 const animateElements = () => {
+  // Important: Redeclare duration and distance as local variables to ensure proper functionality
+  const duration = ANIMATION_DURATION
+  const distance = ELEMENT_DISTANCE
+
   animatedElements.forEach((element, index) => {
     animationTimeline?.to(
       element,
-      { positionX: `-=${ELEMENT_DISTANCE * element.speedMultiplier}`, ANIMATION_DURATION },
+      { positionX: `-=${distance * element.speedMultiplier}`, duration },
       0
     )
     if (element.positionX < ELEMENT_DESPAWN_POSITION_X) {
@@ -204,22 +208,18 @@ const animateElements = () => {
 }
 
 const animateObstacles = () => {
+  // Important: Redeclare duration and distance as local variables to ensure proper functionality.
+  const duration = ANIMATION_DURATION
+  const distance = ELEMENT_DISTANCE
+
   if (gameState.poo) {
-    animationTimeline?.to(
-      gameState.poo,
-      { positionX: `-=${ELEMENT_DISTANCE}`, ANIMATION_DURATION },
-      0
-    )
+    animationTimeline?.to(gameState.poo, { positionX: `-=${distance}`, duration }, 0)
   }
   if (isGoalVisible.value) {
-    animationTimeline?.to(goalPositionX, { value: `-=${ELEMENT_DISTANCE}`, ANIMATION_DURATION }, 0)
+    animationTimeline?.to(goalPositionX, { value: `-=${distance}`, duration }, 0)
   }
   if (gameState.obstacle) {
-    animationTimeline?.to(
-      gameState.obstacle,
-      { positionX: `-=${ELEMENT_DISTANCE}`, ANIMATION_DURATION },
-      0
-    )
+    animationTimeline?.to(gameState.obstacle, { positionX: `-=${distance}`, duration }, 0)
   }
 }
 
