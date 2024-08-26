@@ -4,7 +4,7 @@ import dogBedImg from '@/assets/images/dog/equipment/dogbed.svg'
 
 import cakeImg from '@/assets/images/dog/food/cake.svg'
 import chocolateImg from '@/assets/images/dog/food/chocolate.svg'
-import dogFoodImg from '@/assets/images/dog/food/dogfood.svg'
+import dogFoodImg from '@/assets/images/dog/food/dogfood_can.svg'
 
 import phoneImg from '@/assets/images/dog/items-for-human/phone.svg'
 import leashImg from '@/assets/images/dog/equipment/dogleash.svg'
