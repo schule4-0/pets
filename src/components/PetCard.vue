@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import type { Pet } from '@/config/petsConfig'
 import { useRouter } from 'vue-router'
-import iconLock from '@/assets/icon_lock.svg'
+import iconLock from '@/assets/icons/icon_lock.svg'
 import { useAudioManager } from '@/stores/useAudioManager'
 
 const props = defineProps<{

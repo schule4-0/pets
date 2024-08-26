@@ -1,6 +1,6 @@
-import dogImg from '@/assets/dog.png'
-import bunnyImg from '@/assets/bunny.png'
-import catImg from '@/assets/cat.png'
+import dogImg from '@/assets/images/thumbnails/thumbnail_dog.png'
+import bunnyImg from '@/assets/images/thumbnails/thumbnail_bunny.png'
+import catImg from '@/assets/images/thumbnails/thumbnail_bunny.png'
 
 export interface Pet {
   name: string

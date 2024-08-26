@@ -1,18 +1,18 @@
-import ballImg from '@/assets/recapQuiz/Ball.svg'
-import bookImg from '@/assets/recapQuiz/Book.svg'
-import dogBedImg from '@/assets/recapQuiz/Dogbed.svg'
+import ballImg from '@/assets/images/dog/equipment/ball.svg'
+import bookImg from '@/assets/images/dog/items-for-human/book.svg'
+import dogBedImg from '@/assets/images/dog/equipment/dogbed.svg'
 
-import cakeImg from '@/assets/recapQuiz/Cake.svg'
-import chocolateImg from '@/assets/recapQuiz/Chocolate.svg'
-import dogFoodImg from '@/assets/recapQuiz/Dogfood.svg'
+import cakeImg from '@/assets/images/dog/food/cake.svg'
+import chocolateImg from '@/assets/images/dog/food/chocolate.svg'
+import dogFoodImg from '@/assets/images/dog/food/dogfood_can.svg'
 
-import phoneImg from '@/assets/recapQuiz/Phone.svg'
-import leashImg from '@/assets/recapQuiz/Dogleash.svg'
-import cardGameImg from '@/assets/recapQuiz/Cardgame.svg'
+import phoneImg from '@/assets/images/dog/items-for-human/phone.svg'
+import leashImg from '@/assets/images/dog/equipment/dogleash.svg'
+import cardGameImg from '@/assets/images/dog/items-for-human/cardgame.svg'
 
-import soapImg from '@/assets/recapQuiz/Shampoo_2.svg'
-import toyImg from '@/assets/recapQuiz/Frisbee.svg'
-import boneImg from '@/assets/equipment/bone.png'
+import soapImg from '@/assets/images/dog/cleaning-tools/soap.svg'
+import toyImg from '@/assets/images/dog/equipment/frisbee.svg'
+import boneImg from '@/assets/images/dog/equipment/bone.png'
 
 import type { MascotMessageKey } from './mascotMessages'
 

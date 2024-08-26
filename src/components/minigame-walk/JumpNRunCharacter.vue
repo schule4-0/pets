@@ -7,12 +7,12 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import gsap from 'gsap'
-import rockySit from '@/assets/rocky/Rocky_sitting.svg'
-import rockyStep1 from '@/assets/rocky/Rocky_step_1.svg'
-import rockyStep2 from '@/assets/rocky/Rocky_step_2.svg'
-import rockyStep3 from '@/assets/rocky/Rocky_step_3.svg'
-import rockyPoop from '@/assets/rocky/Rocky_sitting.svg'
-import rockyHurt from '@/assets/rocky/Rocky_lying_back.svg'
+import rockySit from '@/assets/images/dog/rocky/Rocky_sitting.svg'
+import rockyStep1 from '@/assets/images/dog/rocky/Rocky_step_1.svg'
+import rockyStep2 from '@/assets/images/dog/rocky/Rocky_step_2.svg'
+import rockyStep3 from '@/assets/images/dog/rocky/Rocky_step_3.svg'
+import rockyPoop from '@/assets/images/dog/rocky/Rocky_sitting.svg'
+import rockyHurt from '@/assets/images/dog/rocky/Rocky_lying_back.svg'
 
 const globalConfig = {
   jumpHeight: -250,

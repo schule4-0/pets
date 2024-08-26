@@ -36,8 +36,8 @@ import { ref, onMounted } from 'vue'
 import DraggableItem from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
 import { useStageNavigator } from '@/composables/useNavigation'
-import boneImg from '@/assets/equipment/bone_border.png'
-import cartoondogImg from '@/assets/rocky/Rocky_happy.svg'
+import boneImg from '@/assets/images/dog/equipment/bone.png'
+import cartoondogImg from '@/assets/images/dog/rocky/Rocky_happy.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useRewardStore } from '@/stores/useRewardStore'
 import { useAudioManager } from '@/stores/useAudioManager'
@@ -84,8 +84,8 @@ const handleNextButtonClick = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--s40-color-contrast) url('@/assets/RewardSysBackground.png') no-repeat center
-    center;
+  background: var(--s40-color-contrast) url('@/assets/images/dog/backgrounds/bg_reward_system.svg')
+    no-repeat center center;
   background-size: cover;
   display: flex;
   flex-direction: column;

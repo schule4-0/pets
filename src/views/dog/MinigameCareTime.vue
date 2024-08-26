@@ -24,9 +24,9 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import CareTimeDog from '@/components/CareTimeDog.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
-import imgShampoo from '@/assets/shampoo.svg'
-import imgShowerHead from '@/assets/Showerhead_water.svg'
-import imgDryer from '@/assets/dryer.png'
+import imgShampoo from '@/assets/images/dog/cleaning-tools/soap.svg'
+import imgShowerHead from '@/assets/images/dog/cleaning-tools/showerhead_with_water.svg'
+import imgDryer from '@/assets/images/dog/cleaning-tools/dryer.svg'
 import { useCareTimeToolStore } from '@/stores/careTimeToolStore'
 import { storeToRefs } from 'pinia'
 import { useRewardStore } from '@/stores/useRewardStore'
@@ -105,7 +105,7 @@ onUnmounted(() => {
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/BathBlank.svg');
+  background-image: url('@/assets/images/dog/backgrounds/bg_bath.svg');
   background-size: cover;
   background-position: center;
 }

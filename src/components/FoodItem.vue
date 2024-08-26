@@ -11,12 +11,12 @@ import {
   type Food,
   NUTRITION_GAME_FALL_DURATION
 } from '@/stores/nutritionGameStore'
-import imgSausage from '@/assets/sausage.svg'
-import imgSteak from '@/assets/steak.svg'
-import imgCarrot from '@/assets/carrot.svg'
-import imgChocolate from '@/assets/chocolate.svg'
-import imgPhone from '@/assets/phone.svg'
-import imgPoop from '@/assets/poop.svg'
+import imgSausage from '@/assets/images/dog/food/sausage.svg'
+import imgSteak from '@/assets/images/dog/food/steak.svg'
+import imgCarrot from '@/assets/images/dog/food/carrot.svg'
+import imgChocolate from '@/assets/images/dog/food/chocolate.svg'
+import imgPhone from '@/assets/images/dog/items-for-human/phone.svg'
+import imgPoop from '@/assets/images/dog/poop.svg'
 import gsap from 'gsap'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useAudioManager } from '@/stores/useAudioManager'
