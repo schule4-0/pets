@@ -12,6 +12,12 @@
 
 Check out the live demo of the project: [Schule 4.0 - PETucation](https://pets.schule4-0.dev/)
 
+## User Guide
+
+[View the User Guide](/docs/Guide.pdf) (German)
+
+Discover how to use the app effectively, including pre-requisites for children, lesson integration tips, and follow-up activities. The guide also provides additional resources to enhance the learning experience.
+
 ## Getting Started
 
 ### Prerequisites
