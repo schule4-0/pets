@@ -63,6 +63,12 @@ npm run lint
 
 This project was developed as part of a university project at [Media University Stuttgart](https://www.hdm-stuttgart.de/), in cooperation with the [University of Education Weingarten](https://www.ph-weingarten.de/) and [Schule 4.0](https://www.schule4-0.de/).
 
+## Contributing
+
+This project was developed for a university course and is now complete on our end. However, we've made it open source so others can continue to enhance and expand it.
+
+For ideas on how you can contribute, check out our [Contribution Ideas](./docs/CONTRIBUTING.md). Your contributions can help make this tool even better for teaching children about pet care.
+
 ## License
 
 This project is licensed under the [GPL-3.0 License](./LICENSE).
