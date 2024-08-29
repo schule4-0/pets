@@ -14,9 +14,9 @@ Check out the live demo of the project: [Schule 4.0 - PETucation](https://pets.s
 
 ## User Guide
 
-[View the User Guide](/docs/Guide.pdf) (German)
+Discover how to effectively use this app in your lessons. The guide provides essential information on what children should know beforehand, tips for integrating the app into your curriculum, and ideas for activities after using the app. It also includes additional resources.
 
-Discover how to use the app effectively, including pre-requisites for children, lesson integration tips, and follow-up activities. The guide also provides additional resources to enhance the learning experience.
+[View the User Guide](/docs/Guide.pdf) (German)
 
 ## Getting Started
 
