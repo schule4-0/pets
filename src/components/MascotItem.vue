@@ -11,7 +11,11 @@
         <p>{{ mascot.getMessageString(mascot.mascotResourceKey) }}</p>
       </div>
     </transition>
-    <img src="../assets/mascot/Lisa.svg" alt="Lisa" @click="mascot.repeatLastMessage" />
+    <img
+      src="@/assets/images/mascot/lisa_upper_body.svg"
+      alt="Lisa"
+      @click="mascot.repeatLastMessage"
+    />
   </div>
 </template>
 

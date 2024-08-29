@@ -51,15 +51,26 @@ import AnimatedComponent from '@/components/minigame-walk/AnimatedComponent.vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useGameState } from '@/composables/useGameState'
 import { useCharacterActions } from '@/composables/useCharacterActions'
-import imgIconPlay from '@/assets/minigame-walk/icon_play.svg'
-import imgIconArrowUp from '@/assets/minigame-walk/arrow_up.svg'
+import imgIconPlay from '@/assets/icons/icon_play.svg'
+import imgIconArrowUp from '@/assets/icons/icon_arrow_up.svg'
 import {
   useElementSpawning,
   type AnimatedComponentWithSpeedMultiplier
 } from '@/composables/useElementSpawning'
 import { useRewardStore } from '@/stores/useRewardStore'
-import dogLeashSvg from '@/assets/recapQuiz/Dogleash.svg'
+import dogLeashSvg from '@/assets/images/dog/equipment/dogleash.svg'
 import { useAudioManager } from '@/stores/useAudioManager'
+import {
+  BG_BUSH_SPAWN_INTERVAL,
+  CLOUD_SPAWN_INTERVAL,
+  ELEMENT_DESPAWN_POSITION_X,
+  ELEMENT_DISTANCE,
+  FG_BUSH_SPAWN_INTERVAL,
+  REQUIRED_OBSTACLE_JUMPS,
+  REQUIRED_POOP_COUNT,
+  ANIMATION_DURATION,
+  SPAWN_POO_PROBABILITY
+} from '@/config/minigameWalkConfig'
 
 const mascot = useMascotStore()
 const audioManager = useAudioManager()
@@ -133,7 +144,7 @@ const spawnObstacle = () => {
 }
 
 const spawnElement = () => {
-  if (gameState.pooCount < 3 && Math.random() < 0.65) {
+  if (gameState.pooCount < REQUIRED_POOP_COUNT && Math.random() < SPAWN_POO_PROBABILITY) {
     spawnPoo()
   } else if (!isGoalVisible.value) {
     spawnObstacle()
@@ -162,7 +173,10 @@ const handleJumpedOver = () => {
 }
 
 const checkGoalVisibility = () => {
-  if (gameState.pooCount >= 3 && gameState.stonesJumped >= 6) {
+  if (
+    gameState.pooCount >= REQUIRED_POOP_COUNT &&
+    gameState.stonesJumped >= REQUIRED_OBSTACLE_JUMPS
+  ) {
     isGoalVisible.value = true
     mascot.showMessage('STAGE3_SUPER')
     goalPositionX.value = window.innerWidth + 100
@@ -177,23 +191,27 @@ const handleCollision = () => {
 }
 
 const animateElements = () => {
-  const duration = 0.01
-  const distance = 4
+  // Important: Redeclare duration and distance as local variables to ensure proper functionality
+  const duration = ANIMATION_DURATION
+  const distance = ELEMENT_DISTANCE
+
   animatedElements.forEach((element, index) => {
     animationTimeline?.to(
       element,
       { positionX: `-=${distance * element.speedMultiplier}`, duration },
       0
     )
-    if (element.positionX < -500) {
+    if (element.positionX < ELEMENT_DESPAWN_POSITION_X) {
       animatedElements.splice(index, 1)
     }
   })
 }
 
 const animateObstacles = () => {
-  const duration = 0.01
-  const distance = 4
+  // Important: Redeclare duration and distance as local variables to ensure proper functionality.
+  const duration = ANIMATION_DURATION
+  const distance = ELEMENT_DISTANCE
+
   if (gameState.poo) {
     animationTimeline?.to(gameState.poo, { positionX: `-=${distance}`, duration }, 0)
   }
@@ -207,15 +225,15 @@ const animateObstacles = () => {
 
 const handleSpawning = () => {
   const currentTime = Date.now()
-  if (currentTime - lastElementSpawnTimes.cloud > 7500) {
+  if (currentTime - lastElementSpawnTimes.cloud > CLOUD_SPAWN_INTERVAL) {
     spawnElementWithConfig('cloud')
     lastElementSpawnTimes.cloud = currentTime
   }
-  if (currentTime - lastElementSpawnTimes.fgBush > 1000) {
+  if (currentTime - lastElementSpawnTimes.fgBush > FG_BUSH_SPAWN_INTERVAL) {
     spawnElementWithConfig('fgBush')
     lastElementSpawnTimes.fgBush = currentTime
   }
-  if (currentTime - lastElementSpawnTimes.bgBush > 1500) {
+  if (currentTime - lastElementSpawnTimes.bgBush > BG_BUSH_SPAWN_INTERVAL) {
     spawnElementWithConfig('bgBush')
     lastElementSpawnTimes.bgBush = currentTime
   }
@@ -303,7 +321,7 @@ onUnmounted(() => {
   position: absolute;
   bottom: 0;
   left: 0;
-  background-image: url('@/assets/minigame-walk/LoopedBackground.svg');
+  background-image: url('@/assets/images/dog/backgrounds/minigame-walk/bg_looped_walking_path.svg');
   background-size: auto 100%;
   background-repeat: repeat-x;
   background-position: center;
@@ -335,7 +353,7 @@ onUnmounted(() => {
   left: 0;
   height: 50vh;
   width: 100%;
-  background: url('@/assets/minigame-walk/skyline.svg');
+  background: url('@/assets/images/dog/backgrounds/minigame-walk/skyline.svg');
   background-size: auto 100%;
   background-repeat: repeat-x;
   z-index: 0;

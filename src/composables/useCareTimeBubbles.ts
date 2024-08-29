@@ -204,7 +204,7 @@ export const useCareTimeBubbles = () => {
   }
 
   const removeWaterDrops = (x: number, y: number) => {
-    const radius = 30 // Radius around the touch/mouse point to remove water drops
+    const radius = 38 // Radius around the touch/mouse point to remove water drops
     const waterDrops = waterDropLayer.value?.querySelectorAll('.waterdrop-container')
 
     if (waterDrops) {
@@ -213,8 +213,8 @@ export const useCareTimeBubbles = () => {
         if (transform) {
           const position = parseTransform(transform)
           if (position) {
-            const dropX = position.x + 65 // Should be on the left of dryer
-            const dropY = position.y + 32 // Adjusting for the initial translation in createWaterDrop
+            const dropX = position.x + 80 // Should be on the left of dryer
+            const dropY = position.y + 48 // Adjusting for the initial translation in createWaterDrop
             const distance = Math.sqrt((dropX - x) ** 2 + (dropY - y) ** 2)
 
             if (distance < radius) {

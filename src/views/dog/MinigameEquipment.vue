@@ -23,7 +23,7 @@
 import { ref, computed, onMounted } from 'vue'
 import DraggableItem, { type DraggableItemType } from '@/components/DraggableItem.vue'
 import DropArea from '@/components/DropArea.vue'
-import backpackImg from '@/assets/equipment/backpack_closed.svg'
+import backpackImg from '@/assets/images/dog/backpack/backpack_closed.svg'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useRewardStore } from '@/stores/useRewardStore'
 import ScoreBoard from '@/components/ScoreBoard.vue'
@@ -88,7 +88,7 @@ const handleDropInArea = (id: number) => {
 <style scoped lang="scss">
 .game-container {
   position: relative;
-  background-image: url('@/assets/equipment/Room.svg');
+  background-image: url('@/assets/images/dog/backgrounds/bg_living_room.svg');
   background-size: cover;
   background-position: center;
   padding: 1.25rem;

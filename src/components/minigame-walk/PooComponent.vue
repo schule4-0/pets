@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import PooImg from '@/assets/poop.svg'
+import PooImg from '@/assets/images/dog/poop.svg'
 
 export interface PooType {
   positionX: number

@@ -1,35 +1,24 @@
 <template>
   <div class="container">
     <div class="background"></div>
-    <img
-      class="stationary-image"
-      src="@/assets/LisaFullBody.svg"
-      alt="Stationary"
-      style="height: 420px"
-    />
-    <img
-      class="walking-image"
-      src="@/assets/rocky/Rocky_sitting.svg"
-      alt="Sitting"
-      style="height: 230px"
-    />
+    <img class="stationary-image" :src="imgLisaFullBody" alt="Lisa" style="height: 420px" />
+    <img class="walking-image" :src="imgRockySitting" alt="Rocky Sitting" style="height: 230px" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { useMascotStore } from '@/stores/useMascotStore'
 import { useStageStore } from '@/stores/useStageStore'
 import { useRouter } from 'vue-router'
+import imgLisaFullBody from '@/assets/images/mascot/lisa_full_body.svg'
+import imgRockySitting from '@/assets/images/dog/rocky/Rocky_sitting.svg'
 
 const router = useRouter()
 const mascot = useMascotStore()
 const stageTransition = useStageStore()
 
-const isMounted = ref(false) // Hotfix: stop playing mascot message
-
 onMounted(() => {
-  isMounted.value = true
   setTimeout(() => {
     mascot.showMessage('GAME_FINISHED', {
       showMascot: false,
@@ -43,7 +32,6 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  isMounted.value = false
   mascot.cancelMessage()
 })
 </script>
@@ -62,7 +50,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/equipment/Room.svg');
+  background-image: url('@/assets/images/dog/backgrounds/bg_living_room.svg');
   background-size: cover;
   background-position: center;
   z-index: 1;

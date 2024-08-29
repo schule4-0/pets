@@ -1,6 +1,6 @@
 import type { ObstacleType } from '@/components/minigame-walk/ObstacleItem.vue'
 import type { PooType } from '@/components/minigame-walk/PooComponent.vue'
-import imgPoo from '@/assets/poop.svg'
+import imgPoo from '@/assets/images/dog/poop.svg'
 import { ref, reactive, computed } from 'vue'
 
 export const useGameState = () => {

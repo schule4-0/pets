@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import StoneImg from '@/assets/minigame-walk/stone.png'
+import StoneImg from '@/assets/images/dog/backgrounds/minigame-walk/stone.png'
 import type JumpNRunCharacter from './JumpNRunCharacter.vue'
 
 export interface ObstacleType {

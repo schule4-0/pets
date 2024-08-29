@@ -10,7 +10,6 @@ export const useRewardStore = defineStore('rewardStore', () => {
 
   const show = (images: string[]) => {
     solutionImages.value = images
-    console.log(router.currentRoute.value.params.stageId)
     router.push({
       name: 'dog-reward',
       params: {
