@@ -28,7 +28,7 @@ const currentFrame = ref(frames[0])
 const walking = ref(true)
 const isMounted = ref(false) // Hotfix: stop playing mascot message
 let animationInterval: any
-let dogWalkTimeout: number
+let dogWalkTimeout: ReturnType<typeof setTimeout>
 let gsapAnimation: gsap.core.Tween
 
 const animateWalking = () => {

@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { nextTick } from 'vue'
 import { useCareTimeBubbles } from '@/composables/useCareTimeBubbles'
 
 // Properly mock GSAP with named exports
