@@ -154,7 +154,6 @@ export const useCareTimeBubbles = () => {
     }
 
     const id = waterDropPositions.value.length
-    const width = Math.random() * 28 + 10
     const opacity = Math.random() * 0.3 + 0.3 // Random opacity between 0.5 and 1
 
     // Create the group element to contain the water drop
